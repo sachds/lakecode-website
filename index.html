@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lakecode — Terminal-native Databricks Mission Control</title>
+  <meta name="description" content="Lakecode is a terminal-native Databricks agent that turns UI workflows into repeatable runbooks with plan mode, evidence, and safe execution.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#commands">Commands</a>
+        <a href="#security">Security</a>
+        <a href="#faq">FAQ</a>
+        <a href="#docs">Docs</a>
+        <a href="#install" class="btn btn-sm">Install</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Terminal-native Databricks agent</div>
+      <h1>Databricks runbooks<br>in your terminal.</h1>
+      <p class="hero-sub">
+        Databricks work too often lives in the UI: chasing failed runs, checking logs, tweaking compute, hunting permissions, verifying outputs, and explaining spend. Lakecode turns those UI workflows into repeatable terminal workflows with <strong>plan &rarr; execute &rarr; evidence</strong>.
+      </p>
+      <div class="hero-actions">
+        <a href="#install" class="btn btn-primary">Install Lakecode</a>
+        <a href="#commands" class="btn btn-secondary">See commands</a>
+      </div>
+      <div class="hero-terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode /prove sales.orders</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line dim">  Collecting evidence for sales.orders...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Schema snapshot &mdash; 14 columns</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Row count &mdash; 2,847,312</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Null analysis &mdash; 0 critical nulls</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Freshness &mdash; last update 23 min ago</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Duplicate check &mdash; 0 duplicates on PK</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Numeric stats &mdash; revenue within range</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Sample rows &mdash; 5 rows attached</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Health: PASS</strong> &mdash; Evidence pack saved to ./evidence/</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What it does -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>What it does</h2>
+        <p>Lakecode is a terminal-first Databricks engineering agent that helps you:</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <h3>Debug &amp; monitor jobs</h3>
+          <ul>
+            <li>Check job config + recent runs</li>
+            <li>Pull run output and logs</li>
+            <li>Analyze failures and suggest root causes with context (run metadata + query history)</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Prove data outputs</h3>
+          <ul>
+            <li>Generate an evidence pack: schema, row counts, nulls, freshness, duplicates, numeric stats, sampling</li>
+            <li>Produce a plain-English health assessment you can paste into a PR or incident ticket</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Understand spend &amp; risk</h3>
+          <ul>
+            <li>Top spend breakdown from system billing data</li>
+            <li>Detect spikes and explain what changed vs baseline</li>
+            <li>Audit jobs for missing timeouts, SLA risk, failure patterns, and runtime variability</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          </div>
+          <h3>Deploy &amp; execute</h3>
+          <ul>
+            <li>Deploy a local file into the workspace</li>
+            <li>Trigger a job run and poll until completion</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>How it works</h2>
+        <p>Lakecode isn't "just a model + tools." It's a workflow engine that turns Databricks work into repeatable runbooks.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Builds workspace context automatically</h3>
+            <p>On startup, lakecode generates a cached workspace profile (catalogs, schemas, table counts, warehouses, recent failures) so it can reason with the same context you'd normally hunt down in the UI.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Executes deterministic workflows first</h3>
+            <p>Most steps are deterministic: SQL queries, API calls, log pulls, metadata inspection. These run through a step-based workflow engine with retries, abort handling, and progress updates.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Uses the LLM only where it adds value</h3>
+            <p>Lakecode uses an LLM for interpreting error logs, ranking likely root causes, writing clean summaries, and turning raw outputs into actionable reports.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Stays safe by default</h3>
+            <p>Plan/approval logic for complex or risky work, plus guardrails that prevent common mistakes (like treating function schemas as tables).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Produces evidence</h3>
+            <p>For workflows like <code>/prove</code>, lakecode produces an evidence pack (schema, metrics, samples, assessments) so the outcome is shareable and reproducible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands -->
+  <section id="commands" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Commands</h2>
+        <p>Opinionated runbooks for real engineer workflows.</p>
+      </div>
+      <div class="commands-grid">
+        <div class="command-group">
+          <h3>Debugging &amp; Monitoring</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/status job &lt;id&gt;</code>
+              <span>Job config + last 5 runs</span>
+            </div>
+            <div class="command">
+              <code>/logs &lt;run-id&gt;</code>
+              <span>Run output + error analysis</span>
+            </div>
+            <div class="command">
+              <code>/debug job &lt;id&gt;</code>
+              <span>End-to-end diagnosis: config &rarr; failed run &rarr; errors &rarr; query history &rarr; root-cause summary</span>
+            </div>
+            <div class="command">
+              <code>/queries job &lt;id&gt;</code>
+              <span>SQL query history for the latest run</span>
+            </div>
+            <div class="command">
+              <code>/queries run &lt;run-id&gt;</code>
+              <span>SQL query history for a specific run</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Data Quality</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/prove &lt;table&gt;</code>
+              <span>Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Platform Ops</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/audit jobs</code>
+              <span>Scans jobs for SLA gaps, missing timeouts, runtime variability, failures; outputs risk-scored report</span>
+            </div>
+            <div class="command">
+              <code>/cost top</code>
+              <span>Top spend drivers from billing system tables</span>
+            </div>
+            <div class="command">
+              <code>/cost spike</code>
+              <span>Compare day vs baseline; identify likely drivers</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Deployment</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/deploy &lt;local&gt; &lt;ws-path&gt;</code>
+              <span>Import file into workspace</span>
+            </div>
+            <div class="command">
+              <code>/run job &lt;id&gt;</code>
+              <span>Trigger job run + poll completion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why lakecode -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why lakecode</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Workflows, not just tools</h3>
+          <p>Lakecode ships opinionated runbooks for real engineer workflows: diagnose a failure, prove correctness, explain a cost spike, audit operational risk, deploy safely.</p>
+        </div>
+        <div class="why-card">
+          <h3>Proof beats "it ran"</h3>
+          <p>Lakecode generates evidence you can attach to a PR, incident, or audit trail &mdash; not just a success/fail status.</p>
+        </div>
+        <div class="why-card">
+          <h3>Less context switching</h3>
+          <p>Instead of bouncing between Jobs UI, cluster logs, UC permissions, SQL editor, and dashboards, lakecode collects the context and turns it into a single actionable report.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Roadmap</h2>
+      </div>
+      <div class="roadmap-grid">
+        <div class="roadmap-col">
+          <h3 class="roadmap-heading available">Available now</h3>
+          <ul class="roadmap-list">
+            <li>Workflow engine (deterministic + LLM steps)</li>
+            <li>Workspace profiling + conventions + skill injection</li>
+            <li>All core commands: /status, /logs, /debug, /queries, /prove, /audit, /cost, /deploy, /run</li>
+            <li>Plan mode + guardrails + tool truncation + conversation compaction</li>
+          </ul>
+        </div>
+        <div class="roadmap-col">
+          <h3 class="roadmap-heading coming">Coming next</h3>
+          <ul class="roadmap-list coming-list">
+            <li>Sessions + resume</li>
+            <li>Non-interactive mode for CI/scripts</li>
+            <li>Evidence pack scaffolding for every workflow</li>
+            <li>Watch mode (/watch job, /watch pipeline)</li>
+            <li>Drift detection + bundle adoption</li>
+            <li>Unity Catalog governance workflows</li>
+            <li>Optional model routing via Databricks AI Gateway</li>
+            <li>MLflow tracing for workflow/tool/model calls</li>
+            <li>MCP ecosystem management commands</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security -->
+  <section id="security" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Security &amp; trust</h2>
+      </div>
+      <div class="security-grid">
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>Runs locally</h3>
+          <p>Lakecode runs on your machine and connects to Databricks using your existing authentication (for example via the Databricks CLI profile).</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Respects Unity Catalog permissions</h3>
+          <p>Lakecode only sees what your Databricks identity can see. If you don't have access to a catalog, schema, or table, lakecode won't either.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+          </div>
+          <h3>Safe by default</h3>
+          <p>Plan/approval logic for complex or risky operations, plus guardrails that prevent common high-cost or high-risk mistakes.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Evidence &amp; auditability</h3>
+          <p>Workflows produce reproducible artifacts so teams can share results instead of relying on screenshots and Slack messages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section id="install" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Get started</h2>
+        <p>Install lakecode and start running workflows in minutes.</p>
+      </div>
+      <div class="install-block">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span> pip install lakecode</div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line dim">  Welcome to lakecode. Profiling workspace...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Connected via profile: DEFAULT</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Workspace profile cached (3 catalogs, 12 schemas, 847 tables)</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line">  Ready. Type a command or describe what you need.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>FAQ</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is lakecode just a Databricks CLI wrapper?</summary>
+          <p>No. Lakecode uses Databricks APIs and SQL to collect facts, but the value is the workflow engine: it chains steps, manages context, and produces a consistent report/evidence outcome.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need to know Databricks APIs?</summary>
+          <p>No. You describe the goal ("debug this job", "prove this table"), and lakecode executes the steps and explains results.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does lakecode modify my workspace?</summary>
+          <p>Some commands are read-only; others (like /deploy or /run job) perform actions. Lakecode is designed to be safe and explicit about what it's doing.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What models does it support?</summary>
+          <p>Lakecode supports multiple model adapters (Anthropic + OpenAI today), and you can choose what to use based on your preferences and environment.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is this a replacement for Databricks Assistant / AI Dev Kit?</summary>
+          <p>Think of lakecode as terminal-native Databricks runbooks + mission control, optimized for reproducibility and evidence &mdash; whereas Assistant/AI Dev Kit are primarily tool/assistant building blocks.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Docs -->
+  <section id="docs" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Documentation</h2>
+      </div>
+      <div class="docs-grid">
+        <div class="doc-card">
+          <h3>Overview</h3>
+          <p>What lakecode is and what problem it solves &mdash; turning UI-driven Databricks work into repeatable, auditable workflows.</p>
+          <a href="#docs-overview" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>How it works</h3>
+          <p>The step-based workflow engine: deterministic steps, LLM steps, data passing, retries, and abort handling.</p>
+          <a href="#docs-how" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Workflows &amp; commands</h3>
+          <p>Complete reference for all available commands across debugging, data quality, platform ops, and deployment.</p>
+          <a href="#commands" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Evidence packs</h3>
+          <p>What evidence packs are, how /prove uses them today, and the roadmap for structured JSON outputs and replay plans.</p>
+          <a href="#docs-evidence" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Configuration</h3>
+          <p>Conventions files, skills injection, default catalogs/schemas, naming patterns, and team standards.</p>
+          <a href="#docs-config" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Safety &amp; plan mode</h3>
+          <p>Plan/approval flow, guardrails, output truncation, and the roadmap for policy packs and org settings.</p>
+          <a href="#docs-safety" class="doc-link">Read &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Docs content (inline for now) -->
+  <section id="docs-overview" class="section section-alt docs-section">
+    <div class="container">
+      <div class="docs-content">
+        <h2>Docs: Overview</h2>
+        <h3>What is lakecode?</h3>
+        <p>Lakecode is a terminal-native Databricks engineering agent. It turns UI-driven Databricks work &mdash; debugging runs, validating data, analyzing spend, auditing jobs &mdash; into repeatable workflows you can run from the terminal.</p>
+        <h3>What problem does it solve?</h3>
+        <p>Databricks is powerful, but many critical workflows remain:</p>
+        <ul>
+          <li>UI-dependent</li>
+          <li>Stateful</li>
+          <li>Hard to reproduce</li>
+          <li>Hard to audit</li>
+        </ul>
+        <p>Lakecode makes those workflows explicit and repeatable, producing evidence you can share.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs-how" class="section docs-section">
+    <div class="container">
+      <div class="docs-content">
+        <h2>Docs: How it works</h2>
+        <p>Lakecode is built around a step-based workflow engine:</p>
+        <ul>
+          <li><strong>Deterministic steps:</strong> SQL execution, REST API calls, log fetches, metadata inspection</li>
+          <li><strong>LLM steps:</strong> interpretation, summarization, prioritization, recommendations</li>
+        </ul>
+        <p>Each workflow can:</p>
+        <ul>
+          <li>Pass data between steps</li>
+          <li>Report progress</li>
+          <li>Retry on transient errors</li>
+          <li>Abort cleanly</li>
+        </ul>
+        <p>Lakecode also maintains a lightweight workspace profile to reduce "where is that job/table/schema?" context switching.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs-evidence" class="section section-alt docs-section">
+    <div class="container">
+      <div class="docs-content">
+        <h2>Docs: Evidence packs</h2>
+        <h3>What is an evidence pack?</h3>
+        <p>An evidence pack is a set of outputs (metrics, schema snapshots, samples, summaries) produced by a workflow so the result can be shared and reviewed.</p>
+        <h3>Today</h3>
+        <p><code>/prove</code> produces a table health evidence pack.</p>
+        <h3>Coming soon</h3>
+        <p>Lakecode will standardize evidence packs across every workflow (debug, cost, governance, deploy), including structured JSON outputs and replay plans.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs-config" class="section docs-section">
+    <div class="container">
+      <div class="docs-content">
+        <h2>Docs: Configuration</h2>
+        <h3>Conventions</h3>
+        <p>Lakecode loads conventions from:</p>
+        <ul>
+          <li><code>~/.lakecode/conventions.md</code></li>
+          <li><code>.lakecode/conventions.md</code> (project-level)</li>
+        </ul>
+        <p>Use conventions to teach lakecode:</p>
+        <ul>
+          <li>Default catalog/schema</li>
+          <li>Naming patterns</li>
+          <li>Preferred warehouses</li>
+          <li>Team standards</li>
+        </ul>
+        <h3>Skills injection</h3>
+        <p>Lakecode can load relevant Databricks skills based on keywords in your requests. Skills are treated as guidance; workflows remain deterministic where possible.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs-safety" class="section section-alt docs-section">
+    <div class="container">
+      <div class="docs-content">
+        <h2>Docs: Safety &amp; plan mode</h2>
+        <p>Lakecode is designed to be safe by default:</p>
+        <ul>
+          <li>Plan/approval flow for complex tasks</li>
+          <li>Guardrails for common mistakes</li>
+          <li>Output truncation to avoid flooding prompts and logs</li>
+        </ul>
+        <p>As more write-capable workflows are added, policy packs and org-managed settings will become first-class.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <h2>Make Databricks work scriptable, explicit, and auditable.</h2>
+      <p>Stop chasing UI workflows. Start producing evidence.</p>
+      <div class="hero-actions">
+        <a href="#install" class="btn btn-primary">Install Lakecode</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native Databricks agent that turns UI workflows into repeatable runbooks with plan mode, evidence, and safe execution.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#commands">Commands</a>
+          <a href="#security">Security</a>
+          <a href="#install">Install</a>
+        </div>
+        <div class="footer-col">
+          <h4>Docs</h4>
+          <a href="#docs-overview">Overview</a>
+          <a href="#docs-how">How it works</a>
+          <a href="#docs-config">Configuration</a>
+          <a href="#docs-safety">Safety</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
