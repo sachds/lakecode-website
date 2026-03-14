@@ -21,10 +21,32 @@
   --green: #22c55e;
   --yellow: #eab308;
   --red: #ef4444;
+  --nav-bg: rgba(10, 10, 11, 0.8);
+  --terminal-bar-bg: rgba(0, 0, 0, 0.3);
   --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono: 'JetBrains Mono', 'Fira Code', monospace;
   --radius: 12px;
   --radius-sm: 8px;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-alt: #f4f4f5;
+  --surface: #f9fafb;
+  --surface-hover: #f0f0f2;
+  --border: #e4e4e7;
+  --border-light: #d4d4d8;
+  --text: #18181b;
+  --text-secondary: #52525b;
+  --text-dim: #71717a;
+  --accent: #4f46e5;
+  --accent-hover: #6366f1;
+  --accent-glow: rgba(79, 70, 229, 0.1);
+  --green: #16a34a;
+  --yellow: #ca8a04;
+  --red: #dc2626;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --terminal-bar-bg: rgba(0, 0, 0, 0.05);
 }
 
 html {
@@ -38,6 +60,7 @@ body {
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
 }
 
 a {
@@ -76,7 +99,7 @@ code {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(10, 10, 11, 0.8);
+  background: var(--nav-bg);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
@@ -142,6 +165,38 @@ code {
   border-radius: 1px;
   transition: 0.2s;
 }
+
+/* ── Theme Toggle ── */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--border-light);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  width: 18px;
+  height: 18px;
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 /* ── Buttons ── */
 .btn {
@@ -251,7 +306,7 @@ code {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--terminal-bar-bg);
   border-bottom: 1px solid var(--border);
 }
 
