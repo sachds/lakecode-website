@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Lakecode</title>
-  <meta name="description" content="Manage your Lakecode account, plan, and usage.">
+  <meta name="description" content="Manage your Lakecode account and credits.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -61,27 +61,30 @@
       <!-- Dashboard content -->
       <div id="dash-content" style="display:none;">
         <div class="dash-grid">
+          <!-- Credit Balance -->
+          <div class="dash-card">
+            <h3>Credit Balance</h3>
+            <div class="dash-value" id="dash-balance">—</div>
+            <a href="/pricing" class="dash-action" id="dash-buy-link">Buy credits</a>
+            <div id="dash-low-balance" class="dash-warning" style="display:none;">
+              Balance is low. <a href="/pricing">Top up</a>
+            </div>
+          </div>
+
+          <!-- Daily Free Credits -->
+          <div class="dash-card">
+            <h3>Free Credits Today</h3>
+            <div class="dash-value" id="dash-daily">—</div>
+            <div class="usage-bar">
+              <div class="usage-fill" id="dash-daily-fill"></div>
+            </div>
+            <p class="dash-meta">Resets at midnight UTC</p>
+          </div>
+
           <!-- Plan -->
           <div class="dash-card">
             <h3>Plan</h3>
             <div class="dash-value" id="dash-plan">—</div>
-            <a href="/pricing" class="dash-action" id="dash-plan-action">View plans</a>
-          </div>
-
-          <!-- Token Usage -->
-          <div class="dash-card">
-            <h3>Token usage</h3>
-            <div class="dash-value" id="dash-tokens">—</div>
-            <div class="usage-bar">
-              <div class="usage-fill" id="dash-usage-fill"></div>
-            </div>
-            <p class="dash-meta" id="dash-usage-detail"></p>
-          </div>
-
-          <!-- Period Reset -->
-          <div class="dash-card">
-            <h3>Period resets</h3>
-            <div class="dash-value" id="dash-reset">—</div>
             <p class="dash-meta" id="dash-member-since"></p>
           </div>
         </div>
@@ -141,7 +144,6 @@
       if (key.startsWith('lk_')) {
         localStorage.setItem('lk_key', key);
       }
-      // Clean URL
       history.replaceState(null, '', '/dashboard');
     }
 
@@ -161,7 +163,6 @@
         });
 
         if (!res.ok) {
-          // Key is invalid — clear it
           localStorage.removeItem('lk_key');
           document.getElementById('dash-loading').style.display = 'none';
           document.getElementById('dash-noauth').style.display = '';
@@ -173,33 +174,31 @@
         // Email
         document.getElementById('dash-email').textContent = data.email;
 
-        // Plan
-        const planEl = document.getElementById('dash-plan');
-        const planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
-        planEl.textContent = planLabel;
-        if (data.plan === 'pro') {
-          planEl.classList.add('plan-pro');
-          document.getElementById('dash-plan-action').textContent = 'Manage plan';
+        // Credit Balance
+        const balanceDollars = (data.credit_balance_cents / 100).toFixed(2);
+        document.getElementById('dash-balance').textContent = `$${balanceDollars}`;
+
+        // Low balance warning
+        if (data.plan === 'paid' && data.credit_balance_cents < 500) {
+          document.getElementById('dash-low-balance').style.display = '';
         }
 
-        // Tokens
-        const used = data.token_usage || 0;
-        const limit = data.token_limit || 100000;
-        const pct = Math.min((used / limit) * 100, 100);
-        document.getElementById('dash-tokens').textContent = `${formatNumber(used)} / ${formatNumber(limit)}`;
-        document.getElementById('dash-usage-fill').style.width = `${pct}%`;
-        if (pct > 80) document.getElementById('dash-usage-fill').classList.add('usage-warn');
-        if (pct > 95) document.getElementById('dash-usage-fill').classList.add('usage-crit');
-        document.getElementById('dash-usage-detail').textContent = `${pct.toFixed(1)}% used this period`;
+        // Daily free credits
+        const dailyUsed = data.daily_free_used_cents || 0;
+        const dailyAllowance = data.daily_free_allowance_cents || 100;
+        const dailyRemaining = Math.max(0, dailyAllowance - dailyUsed);
+        const dailyPct = Math.min((dailyUsed / dailyAllowance) * 100, 100);
+        document.getElementById('dash-daily').textContent =
+          `$${(dailyRemaining / 100).toFixed(2)} / $${(dailyAllowance / 100).toFixed(2)}`;
+        document.getElementById('dash-daily-fill').style.width = `${dailyPct}%`;
+        if (dailyPct > 80) document.getElementById('dash-daily-fill').classList.add('usage-warn');
+        if (dailyPct > 95) document.getElementById('dash-daily-fill').classList.add('usage-crit');
 
-        // Reset
-        if (data.period_reset_at) {
-          const resetDate = new Date(data.period_reset_at);
-          document.getElementById('dash-reset').textContent = resetDate.toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
-        } else {
-          document.getElementById('dash-reset').textContent = '—';
+        // Plan
+        const planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
+        document.getElementById('dash-plan').textContent = planLabel;
+        if (data.plan === 'paid') {
+          document.getElementById('dash-plan').classList.add('plan-pro');
         }
 
         // Member since
@@ -219,12 +218,6 @@
       } catch {
         document.getElementById('dash-loading').innerHTML = '<p>Failed to load account. Please try again.</p>';
       }
-    }
-
-    function formatNumber(n) {
-      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-      if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
-      return n.toString();
     }
 
     // Copy key
