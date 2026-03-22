@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — Lakecode</title>
+  <meta name="description" content="Lakecode pricing plans. Free tier for individuals, Pro for teams and heavy usage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/pricing" class="active">Pricing</a>
+        <a href="/signin" class="btn btn-sm">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Pricing -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Simple, transparent pricing</h1>
+      <p class="page-sub">Start free. Upgrade when you need more.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="pricing-grid">
+        <!-- Free -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>Free</h3>
+            <div class="pricing-price">
+              <span class="price-amount">$0</span>
+              <span class="price-period">/month</span>
+            </div>
+            <p class="pricing-desc">For individuals getting started with lakecode.</p>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="check">&#10003;</span> All core commands</li>
+            <li><span class="check">&#10003;</span> Workspace profiling</li>
+            <li><span class="check">&#10003;</span> Conventions &amp; skills</li>
+            <li><span class="check">&#10003;</span> Plan mode &amp; guardrails</li>
+            <li><span class="check">&#10003;</span> 100K tokens / month</li>
+            <li><span class="check">&#10003;</span> Community support</li>
+          </ul>
+          <a href="/signin" class="btn btn-secondary btn-full">Get Started</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-header">
+            <h3>Pro</h3>
+            <div class="pricing-price">
+              <span class="price-amount">$29</span>
+              <span class="price-period">/month</span>
+            </div>
+            <p class="pricing-desc">For engineers and teams who rely on lakecode daily.</p>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="check">&#10003;</span> Everything in Free</li>
+            <li><span class="check">&#10003;</span> 10M tokens / month</li>
+            <li><span class="check">&#10003;</span> Priority model routing</li>
+            <li><span class="check">&#10003;</span> Evidence pack export (JSON)</li>
+            <li><span class="check">&#10003;</span> Non-interactive / CI mode</li>
+            <li><span class="check">&#10003;</span> Priority support</li>
+          </ul>
+          <a href="#" id="upgrade-btn" class="btn btn-primary btn-full">Upgrade to Pro</a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="pricing-faq">
+        <h2>Questions</h2>
+        <details class="faq-item">
+          <summary>Can I use my own API keys instead?</summary>
+          <p>Yes. Lakecode supports BYOK (bring your own key) for Anthropic and OpenAI. The token limits above apply to the lakecode proxy; your own keys are unlimited.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What happens when I hit the token limit?</summary>
+          <p>Lakecode will let you know you've reached the limit. You can upgrade to Pro or switch to your own API keys to continue.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I cancel anytime?</summary>
+          <p>Yes. Cancel from your dashboard at any time. You'll keep Pro access until the end of the billing period, then revert to Free.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do you offer team pricing?</summary>
+          <p>Not yet, but it's on the roadmap. Reach out if you have a team of 5+ and we'll work something out.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native Databricks agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const API_URL = 'https://api.lakecode.dev';
+
+    // Check if user is already signed in
+    const existingKey = localStorage.getItem('lk_key');
+
+    document.getElementById('upgrade-btn').addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      if (!existingKey) {
+        // Not signed in — redirect to sign in, then come back
+        localStorage.setItem('lk_redirect', '/pricing');
+        window.location.href = '/signin';
+        return;
+      }
+
+      // Signed in — create Stripe Checkout session
+      const btn = e.target;
+      btn.textContent = 'Redirecting...';
+      btn.style.pointerEvents = 'none';
+
+      try {
+        const res = await fetch(`${API_URL}/stripe/checkout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': existingKey,
+          },
+          body: JSON.stringify({ return_url: window.location.origin + '/dashboard' }),
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          btn.textContent = 'Upgrade to Pro';
+          btn.style.pointerEvents = '';
+          alert('Something went wrong. Please try again.');
+        }
+      } catch {
+        btn.textContent = 'Upgrade to Pro';
+        btn.style.pointerEvents = '';
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

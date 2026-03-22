@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Lakecode</title>
+  <meta name="description" content="Manage your Lakecode account, plan, and usage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/dashboard" class="active">Dashboard</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Dashboard</h1>
+      <p class="page-sub" id="dash-email">Loading...</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Loading state -->
+      <div id="dash-loading" class="dash-loading">
+        <p>Loading your account...</p>
+      </div>
+
+      <!-- Not signed in -->
+      <div id="dash-noauth" class="dash-noauth" style="display:none;">
+        <div class="signin-card">
+          <h2>Not signed in</h2>
+          <p>Sign in to view your dashboard.</p>
+          <a href="/signin" class="btn btn-primary" style="margin-top: 16px;">Sign in</a>
+        </div>
+      </div>
+
+      <!-- Dashboard content -->
+      <div id="dash-content" style="display:none;">
+        <div class="dash-grid">
+          <!-- Plan -->
+          <div class="dash-card">
+            <h3>Plan</h3>
+            <div class="dash-value" id="dash-plan">—</div>
+            <a href="/pricing" class="dash-action" id="dash-plan-action">View plans</a>
+          </div>
+
+          <!-- Token Usage -->
+          <div class="dash-card">
+            <h3>Token usage</h3>
+            <div class="dash-value" id="dash-tokens">—</div>
+            <div class="usage-bar">
+              <div class="usage-fill" id="dash-usage-fill"></div>
+            </div>
+            <p class="dash-meta" id="dash-usage-detail"></p>
+          </div>
+
+          <!-- Period Reset -->
+          <div class="dash-card">
+            <h3>Period resets</h3>
+            <div class="dash-value" id="dash-reset">—</div>
+            <p class="dash-meta" id="dash-member-since"></p>
+          </div>
+        </div>
+
+        <!-- License Key -->
+        <div class="dash-card dash-card-wide">
+          <h3>License key</h3>
+          <p class="dash-meta">Use this key to authenticate the CLI. Run <code>lakecode login</code> or set it manually.</p>
+          <div class="key-display">
+            <code id="dash-key" class="key-value">lk_...</code>
+            <button class="btn btn-sm btn-secondary" id="copy-key">Copy</button>
+          </div>
+        </div>
+
+        <!-- Sign out -->
+        <div style="margin-top: 32px;">
+          <button class="btn btn-secondary" id="signout-btn">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native Databricks agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const API_URL = 'https://api.lakecode.dev';
+
+    // Check for key in URL fragment (from OAuth redirect)
+    const hash = window.location.hash;
+    if (hash.startsWith('#key=')) {
+      const key = hash.slice(5);
+      if (key.startsWith('lk_')) {
+        localStorage.setItem('lk_key', key);
+      }
+      // Clean URL
+      history.replaceState(null, '', '/dashboard');
+    }
+
+    const lkKey = localStorage.getItem('lk_key');
+
+    if (!lkKey) {
+      document.getElementById('dash-loading').style.display = 'none';
+      document.getElementById('dash-noauth').style.display = '';
+    } else {
+      loadDashboard(lkKey);
+    }
+
+    async function loadDashboard(key) {
+      try {
+        const res = await fetch(`${API_URL}/account`, {
+          headers: { 'x-api-key': key },
+        });
+
+        if (!res.ok) {
+          // Key is invalid — clear it
+          localStorage.removeItem('lk_key');
+          document.getElementById('dash-loading').style.display = 'none';
+          document.getElementById('dash-noauth').style.display = '';
+          return;
+        }
+
+        const data = await res.json();
+
+        // Email
+        document.getElementById('dash-email').textContent = data.email;
+
+        // Plan
+        const planEl = document.getElementById('dash-plan');
+        const planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
+        planEl.textContent = planLabel;
+        if (data.plan === 'pro') {
+          planEl.classList.add('plan-pro');
+          document.getElementById('dash-plan-action').textContent = 'Manage plan';
+        }
+
+        // Tokens
+        const used = data.token_usage || 0;
+        const limit = data.token_limit || 100000;
+        const pct = Math.min((used / limit) * 100, 100);
+        document.getElementById('dash-tokens').textContent = `${formatNumber(used)} / ${formatNumber(limit)}`;
+        document.getElementById('dash-usage-fill').style.width = `${pct}%`;
+        if (pct > 80) document.getElementById('dash-usage-fill').classList.add('usage-warn');
+        if (pct > 95) document.getElementById('dash-usage-fill').classList.add('usage-crit');
+        document.getElementById('dash-usage-detail').textContent = `${pct.toFixed(1)}% used this period`;
+
+        // Reset
+        if (data.period_reset_at) {
+          const resetDate = new Date(data.period_reset_at);
+          document.getElementById('dash-reset').textContent = resetDate.toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+        } else {
+          document.getElementById('dash-reset').textContent = '—';
+        }
+
+        // Member since
+        if (data.created_at) {
+          const created = new Date(data.created_at);
+          document.getElementById('dash-member-since').textContent = `Member since ${created.toLocaleDateString('en-US', {
+            month: 'short', year: 'numeric'
+          })}`;
+        }
+
+        // Key
+        document.getElementById('dash-key').textContent = key;
+
+        // Show content
+        document.getElementById('dash-loading').style.display = 'none';
+        document.getElementById('dash-content').style.display = '';
+      } catch {
+        document.getElementById('dash-loading').innerHTML = '<p>Failed to load account. Please try again.</p>';
+      }
+    }
+
+    function formatNumber(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+      return n.toString();
+    }
+
+    // Copy key
+    document.getElementById('copy-key').addEventListener('click', () => {
+      const key = document.getElementById('dash-key').textContent;
+      navigator.clipboard.writeText(key).then(() => {
+        const btn = document.getElementById('copy-key');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    // Sign out
+    document.getElementById('signout-btn').addEventListener('click', () => {
+      localStorage.removeItem('lk_key');
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
