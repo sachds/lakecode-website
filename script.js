@@ -18,6 +18,19 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('theme', next);
 });
 
+// Auth-aware nav: swap "Sign in" for "Dashboard" if logged in
+const navAuthBtn = document.querySelector('.nav-auth-btn');
+if (navAuthBtn) {
+  const hasKey = !!localStorage.getItem('lk_key');
+  if (hasKey) {
+    navAuthBtn.href = '/dashboard';
+    navAuthBtn.textContent = 'Dashboard';
+  } else {
+    navAuthBtn.href = '/signin';
+    navAuthBtn.textContent = 'Sign in';
+  }
+}
+
 // Mobile nav toggle
 const toggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
