@@ -16,72 +16,32 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       max-width: 900px;
-      margin: 0 auto 20px;
+      margin: 0 auto;
     }
     .docs-nav-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      transition: border-color 0.2s;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
       display: block;
       color: var(--text);
     }
     .docs-nav-card:hover {
       border-color: var(--accent);
       color: var(--text);
+      transform: translateY(-2px);
     }
     .docs-nav-card h3 {
       font-size: 0.9375rem;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .docs-nav-card p {
       font-size: 0.8125rem;
       color: var(--text-secondary);
       line-height: 1.5;
-    }
-    .docs-content pre {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      overflow-x: auto;
-      margin-bottom: 16px;
-      font-family: var(--mono);
-      font-size: 0.8125rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    .docs-content pre code {
-      background: none;
-      border: none;
-      padding: 0;
-      font-size: inherit;
-    }
-    .docs-content h2 {
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-    }
-    .docs-content h2:first-child {
-      padding-top: 0;
-      border-top: none;
-    }
-    .cmd-ref {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 16px;
-    }
-    .cmd-ref code {
-      color: var(--accent-hover);
-      background: var(--accent-glow);
-      border-color: rgba(99, 102, 241, 0.2);
-    }
-    .cmd-ref p {
-      margin-bottom: 0;
-      margin-top: 8px;
+      margin: 0;
     }
     @media (max-width: 768px) {
       .docs-nav-grid {
@@ -124,348 +84,46 @@
   <section class="page-hero">
     <div class="container">
       <h1>Documentation</h1>
-      <p class="page-sub">Everything you need to install, configure, and use Lakecode with your Databricks workspace.</p>
+      <p class="page-sub">Everything you need to install, configure, and use Lakecode with your Databricks or Snowflake workspace.</p>
     </div>
   </section>
 
-  <!-- Quick nav cards -->
-  <section style="padding: 0 0 40px;">
+  <!-- Doc cards -->
+  <section class="section">
     <div class="container">
       <div class="docs-nav-grid">
-        <a href="#getting-started" class="docs-nav-card">
+        <a href="/docs/getting-started" class="docs-nav-card">
           <h3>Getting Started</h3>
           <p>Install, login, and run your first command.</p>
         </a>
-        <a href="#authentication" class="docs-nav-card">
+        <a href="/docs/authentication" class="docs-nav-card">
           <h3>Authentication</h3>
           <p>OAuth, license keys, and BYOK.</p>
         </a>
-        <a href="#commands" class="docs-nav-card">
+        <a href="/docs/commands" class="docs-nav-card">
           <h3>Commands</h3>
           <p>Full reference for every slash command.</p>
         </a>
-        <a href="#configuration" class="docs-nav-card">
+        <a href="/docs/configuration" class="docs-nav-card">
           <h3>Configuration</h3>
           <p>Conventions, skills, and environment.</p>
         </a>
-        <a href="#billing" class="docs-nav-card">
+        <a href="/docs/billing" class="docs-nav-card">
           <h3>Billing &amp; Credits</h3>
           <p>Free tier, auto-reload, and cost model.</p>
         </a>
-        <a href="#evidence" class="docs-nav-card">
+        <a href="/docs/evidence" class="docs-nav-card">
           <h3>Evidence Packs</h3>
           <p>Structured outputs for audits and PRs.</p>
         </a>
-        <a href="#security" class="docs-nav-card">
+        <a href="/docs/security" class="docs-nav-card">
           <h3>Security &amp; Safety</h3>
           <p>Permissions, plan mode, and guardrails.</p>
         </a>
-        <a href="#architecture" class="docs-nav-card">
+        <a href="/docs/architecture" class="docs-nav-card">
           <h3>Architecture</h3>
           <p>How the proxy, auth, and CLI fit together.</p>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Documentation content -->
-  <section class="section">
-    <div class="container">
-      <div class="docs-content">
-
-        <!-- Getting Started -->
-        <h2 id="getting-started">Getting Started</h2>
-
-        <h3>Install</h3>
-        <p>Lakecode is distributed via PyPI. Install it in any Python 3.9+ environment:</p>
-        <pre><code>pip install lakecode</code></pre>
-        <p>This installs the <code>lakecode</code> CLI globally. Verify it works:</p>
-        <pre><code>lakecode --version</code></pre>
-
-        <h3>Login</h3>
-        <p>Authenticate with your Google account. This grants Lakecode access to manage your credits and proxy AI requests on your behalf.</p>
-        <pre><code>lakecode login</code></pre>
-        <p>This opens your default browser for Google OAuth sign-in. Once authorized, a license key is saved locally and used for all subsequent requests.</p>
-        <p>If you are on a headless server or SSH session where a browser is not available, use the device flow instead:</p>
-        <pre><code>lakecode login --device</code></pre>
-        <p>This prints a URL and a code. Open the URL on any device, enter the code, and sign in with Google. The CLI will detect the authorization and save your key automatically.</p>
-
-        <h3>First command</h3>
-        <p>Run your first evidence pack against any table in your Databricks workspace:</p>
-        <pre><code>lakecode /prove my_catalog.my_schema.my_table</code></pre>
-        <p>This generates a full health assessment: schema snapshot, row counts, null analysis, freshness, duplicates, numeric stats, and sample rows.</p>
-
-        <h3>Workspace profiling</h3>
-        <p>On first run, Lakecode automatically profiles your Databricks workspace. It discovers catalogs, schemas, tables, and warehouses available to your account. This profile is cached locally so future commands have instant context about your environment. You do not need to configure anything &mdash; it happens automatically.</p>
-
-        <!-- Authentication -->
-        <h2 id="authentication">Authentication</h2>
-
-        <h3>Google OAuth</h3>
-        <p>Lakecode uses Google OAuth as the primary sign-in method. There are two flows:</p>
-        <ul>
-          <li><strong>Web flow</strong> (default) &mdash; <code>lakecode login</code> opens a browser tab. Best for local development machines.</li>
-          <li><strong>Device flow</strong> &mdash; <code>lakecode login --device</code> prints a URL + code. Best for headless servers, SSH sessions, or CI environments.</li>
-        </ul>
-        <p>Both flows result in a license key being saved to your local machine. You stay signed in until the key expires or you explicitly sign out.</p>
-
-        <h3>License keys</h3>
-        <p>After OAuth, Lakecode issues a license key in the format <code>lk_&lt;base64url&gt;</code>. The key is an Ed25519-signed payload containing your email, plan type, and expiry date. It is stored locally and sent with every request to the proxy, which verifies the signature server-side.</p>
-        <p>You can view your current key on the <a href="/dashboard">dashboard</a> or by running:</p>
-        <pre><code>lakecode /status</code></pre>
-
-        <h3>Bring Your Own Key (BYOK)</h3>
-        <p>If you prefer to use your own AI provider keys and bypass the Lakecode proxy entirely, set one of these environment variables:</p>
-        <pre><code># Use your own Anthropic key
-export ANTHROPIC_API_KEY=sk-ant-...
-
-# Or use your own OpenAI key
-export OPENAI_API_KEY=sk-...</code></pre>
-        <p>When a BYOK key is set, Lakecode routes requests directly to the provider. No credits are consumed, no proxy is involved, and billing is handled entirely by your provider account.</p>
-
-        <!-- Commands Reference -->
-        <h2 id="commands">Commands Reference</h2>
-        <p>All commands are invoked as slash commands within the Lakecode CLI. Each command connects to your Databricks workspace using your existing CLI profile and auth.</p>
-
-        <h3>Observability</h3>
-
-        <div class="cmd-ref">
-          <code>/status job &lt;id&gt;</code>
-          <p>Retrieves the job configuration and its last 5 runs. Use this as a quick health check for any job &mdash; see the schedule, cluster config, and recent run outcomes at a glance.</p>
-          <pre><code>lakecode /status job 123456</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/logs &lt;run-id&gt;</code>
-          <p>Fetches the full output of a specific run, including stdout, stderr, and error tracebacks. Lakecode analyzes the errors and highlights the root cause.</p>
-          <pre><code>lakecode /logs 78901234</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/debug job &lt;id&gt;</code>
-          <p>Full diagnosis workflow: pulls the job config, finds the most recent failed run, extracts errors, checks query history, and produces a root cause analysis. This is the single command for &ldquo;why is this job broken?&rdquo;</p>
-          <pre><code>lakecode /debug job 123456</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/queries job &lt;id&gt;</code>
-          <p>Retrieves the SQL query history for the latest run of a job. Useful for understanding what queries a job executed and how long each took.</p>
-          <pre><code>lakecode /queries job 123456</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/queries run &lt;run-id&gt;</code>
-          <p>Retrieves the SQL query history for a specific run. Use this when you need to inspect queries from a particular execution, not just the latest.</p>
-          <pre><code>lakecode /queries run 78901234</code></pre>
-        </div>
-
-        <h3>Data Quality</h3>
-
-        <div class="cmd-ref">
-          <code>/prove &lt;table&gt;</code>
-          <p>Generates a comprehensive evidence pack for a table: schema snapshot, row count, null analysis, freshness check, duplicate detection, numeric statistics, sample rows, and an overall health assessment. Results are saved to the <code>./evidence/</code> directory.</p>
-          <pre><code>lakecode /prove my_catalog.my_schema.my_table</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/audit jobs</code>
-          <p>Scans all jobs in your workspace for SLA gaps, missing timeout configurations, and recurring failures. Produces a risk-scored report so you can prioritize which jobs need attention.</p>
-          <pre><code>lakecode /audit jobs</code></pre>
-        </div>
-
-        <h3>Cost Analysis</h3>
-
-        <div class="cmd-ref">
-          <code>/cost top</code>
-          <p>Queries your Databricks billing tables and identifies the top spend drivers &mdash; which jobs, clusters, or warehouses are costing the most.</p>
-          <pre><code>lakecode /cost top</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/cost spike</code>
-          <p>Compares today&rsquo;s spend against a baseline period to detect cost spikes. Identifies the specific drivers behind any increase.</p>
-          <pre><code>lakecode /cost spike</code></pre>
-        </div>
-
-        <h3>Deployment &amp; Execution</h3>
-
-        <div class="cmd-ref">
-          <code>/deploy &lt;local-path&gt; &lt;workspace-path&gt;</code>
-          <p>Imports a local file (notebook, SQL, Python) into your Databricks workspace at the specified path.</p>
-          <pre><code>lakecode /deploy ./notebooks/etl.py /Workspace/production/etl</code></pre>
-        </div>
-
-        <div class="cmd-ref">
-          <code>/run job &lt;id&gt;</code>
-          <p>Triggers a job run and polls for completion. Shows real-time status updates until the run finishes or fails.</p>
-          <pre><code>lakecode /run job 123456</code></pre>
-        </div>
-
-        <!-- Configuration -->
-        <h2 id="configuration">Configuration</h2>
-
-        <h3>Conventions files</h3>
-        <p>Lakecode reads conventions files to understand your team&rsquo;s standards and preferences. There are two levels:</p>
-        <ul>
-          <li><strong>Global</strong> &mdash; <code>~/.lakecode/conventions.md</code> applies to all projects on your machine.</li>
-          <li><strong>Project</strong> &mdash; <code>.lakecode/conventions.md</code> in your project root applies only to that project. Project conventions override global ones.</li>
-        </ul>
-        <p>Conventions are written in plain Markdown. Lakecode reads them before every command to tailor its behavior. Example:</p>
-        <pre><code># Team Conventions
-
-## Default catalog and schema
-Always use `analytics.prod` as the default catalog.schema unless specified.
-
-## Naming patterns
-- Tables: snake_case, prefixed with source (e.g., stripe_charges)
-- Jobs: kebab-case with team prefix (e.g., data-eng-daily-refresh)
-
-## Preferred warehouse
-Use the `analytics-medium` SQL warehouse for ad-hoc queries.
-
-## Standards
-- All tables must have a `_loaded_at` timestamp column
-- Partition by date for tables over 1B rows
-- Tag all jobs with team name and SLA tier</code></pre>
-
-        <h3>Skills injection</h3>
-        <p>Lakecode ships with a library of Databricks-specific skills (Unity Catalog, Delta Lake, workflows, SQL warehouses, etc.). When you run a command, Lakecode detects relevant keywords and injects the appropriate skills into the AI context. This means the AI always has deep, current knowledge about the Databricks features involved in your query &mdash; without you configuring anything.</p>
-
-        <h3>Environment variables</h3>
-        <p>Lakecode uses the standard Databricks CLI environment variables for workspace connectivity:</p>
-        <ul>
-          <li><code>DATABRICKS_HOST</code> &mdash; Your workspace URL (e.g., <code>https://dbc-abc123.cloud.databricks.com</code>)</li>
-          <li><code>DATABRICKS_TOKEN</code> &mdash; A personal access token for your workspace</li>
-          <li><code>ANTHROPIC_API_KEY</code> &mdash; (Optional) Your own Anthropic key for BYOK mode</li>
-          <li><code>OPENAI_API_KEY</code> &mdash; (Optional) Your own OpenAI key for BYOK mode</li>
-        </ul>
-        <p>If you have a Databricks CLI profile configured (<code>~/.databrickscfg</code>), Lakecode will use it automatically. Environment variables take precedence over the config file.</p>
-
-        <!-- Billing & Credits -->
-        <h2 id="billing">Billing &amp; Credits</h2>
-
-        <h3>Free tier</h3>
-        <p>Every account receives <strong>free daily credits</strong>. Credits reset at midnight UTC. No credit card is required. This is enough for a few commands per day, depending on complexity.</p>
-
-        <h3>Pro plan</h3>
-        <p>For heavier usage, add a payment method on your <a href="/dashboard">dashboard</a>. Once a card is on file, auto-reload kicks in:</p>
-        <ul>
-          <li>Default reload amount is <strong>$49</strong> (adjustable to any amount $5+)</li>
-          <li>When your balance drops below <strong>20% of your reload amount</strong>, your card is charged automatically</li>
-          <li>You can pause, adjust, or manually trigger reloads from the dashboard</li>
-          <li>Free daily credits still apply &mdash; they are used first before paid credits</li>
-        </ul>
-
-        <h3>Cost model</h3>
-        <p>Each request is billed based on actual AI tokens consumed (input + output). Costs vary by command complexity:</p>
-        <ul>
-          <li><strong>Simple commands</strong> (<code>/status</code>, <code>/logs</code>) &mdash; typically $0.05&ndash;$0.10</li>
-          <li><strong>Medium commands</strong> (<code>/prove</code>, <code>/queries</code>) &mdash; typically $0.10&ndash;$0.30</li>
-          <li><strong>Complex workflows</strong> (<code>/debug</code>, <code>/audit</code>) &mdash; typically $0.30&ndash;$0.80</li>
-        </ul>
-        <p>Exact costs depend on the amount of data the AI needs to process (number of tables, query history length, error verbosity, etc.).</p>
-
-        <h3>BYOK and billing</h3>
-        <p>If you set <code>ANTHROPIC_API_KEY</code> or <code>OPENAI_API_KEY</code>, requests go directly to the provider. No Lakecode credits are consumed and no proxy markup applies. You are billed directly by Anthropic or OpenAI at their standard rates.</p>
-
-        <h3>Dashboard</h3>
-        <p>Manage everything from your <a href="/dashboard">dashboard</a>: current balance, reload settings, charge history, and license key. The dashboard updates in real time as you use commands.</p>
-
-        <!-- Evidence Packs -->
-        <h2 id="evidence">Evidence Packs</h2>
-
-        <h3>What are evidence packs?</h3>
-        <p>Evidence packs are structured, machine-readable outputs from Lakecode workflows. They capture the data quality metrics and diagnostics that the AI gathered during execution, formatted as standalone artifacts you can share, attach, or archive.</p>
-
-        <h3>The /prove evidence pack</h3>
-        <p>When you run <code>/prove</code> on a table, Lakecode generates an evidence pack containing:</p>
-        <ul>
-          <li><strong>Schema snapshot</strong> &mdash; Column names, types, and nullability as of the check time</li>
-          <li><strong>Row count</strong> &mdash; Total rows in the table</li>
-          <li><strong>Null analysis</strong> &mdash; Per-column null counts and percentages</li>
-          <li><strong>Freshness check</strong> &mdash; When the table was last updated, how stale it is</li>
-          <li><strong>Duplicate detection</strong> &mdash; Checks for duplicate rows on key columns</li>
-          <li><strong>Numeric statistics</strong> &mdash; Min, max, mean, stddev for numeric columns</li>
-          <li><strong>Sample rows</strong> &mdash; A small sample of actual data for visual inspection</li>
-          <li><strong>Health assessment</strong> &mdash; An overall pass/warn/fail verdict with explanations</li>
-        </ul>
-
-        <h3>Output location</h3>
-        <p>Evidence packs are saved to the <code>./evidence/</code> directory in your current working directory. Each pack is timestamped and named after the table.</p>
-
-        <h3>Use cases</h3>
-        <ul>
-          <li><strong>Pull requests</strong> &mdash; Attach evidence packs to PRs that modify table schemas or ETL logic as proof that downstream data is healthy.</li>
-          <li><strong>Incident response</strong> &mdash; Attach to incident tickets to document the state of affected tables at the time of investigation.</li>
-          <li><strong>Audit trails</strong> &mdash; Keep a history of data quality checks for compliance and governance.</li>
-          <li><strong>Stakeholder communication</strong> &mdash; Share structured metrics with non-technical stakeholders instead of raw query output.</li>
-        </ul>
-
-        <!-- Security & Safety -->
-        <h2 id="security">Security &amp; Safety</h2>
-
-        <h3>Local execution</h3>
-        <p>Lakecode runs entirely on your machine. It connects to Databricks using your existing CLI profile and credentials. Your Databricks token never leaves your machine &mdash; it is used locally to make API calls directly to your workspace.</p>
-
-        <h3>Permissions</h3>
-        <p>Lakecode respects Unity Catalog permissions. If your Databricks account cannot access a catalog, schema, or table, neither can Lakecode. There is no privilege escalation.</p>
-
-        <h3>Plan mode</h3>
-        <p>For complex or potentially risky operations, Lakecode enters plan mode. Before executing, it shows you exactly what it intends to do and asks for confirmation. This prevents accidental modifications to production resources.</p>
-
-        <h3>Guardrails</h3>
-        <p>Built-in guardrails prevent common mistakes: dropping tables without confirmation, running unbounded queries, or deploying to production paths without explicit intent. These guardrails are always active and cannot be disabled.</p>
-
-        <h3>Proxy security</h3>
-        <ul>
-          <li>License keys are Ed25519 signed and verified server-side on every request</li>
-          <li>The proxy does not log request or response content &mdash; only metadata (user ID, token counts, timestamps) for billing</li>
-          <li>Payments are handled by Stripe (PCI DSS compliant) &mdash; Lakecode never sees your card number</li>
-          <li>Revoked keys are checked against a KV store on every request for instant invalidation</li>
-        </ul>
-
-        <!-- Architecture -->
-        <h2 id="architecture">Architecture</h2>
-
-        <h3>System overview</h3>
-        <p>Lakecode consists of three components that work together:</p>
-        <ul>
-          <li><strong>CLI</strong> &mdash; The Python package installed on your machine. Handles Databricks API calls, workspace profiling, skills injection, and user interaction.</li>
-          <li><strong>Proxy Worker</strong> &mdash; A Cloudflare Worker that sits between the CLI and Anthropic&rsquo;s API. Validates license keys, tracks token usage, deducts credits, and forwards requests.</li>
-          <li><strong>Auth Worker</strong> &mdash; A Cloudflare Worker that handles Google OAuth flows, license key generation, Stripe payment processing, and billing webhooks.</li>
-        </ul>
-
-        <h3>Request flow</h3>
-        <pre><code>CLI (your machine)
- |
- |-- Databricks API calls (direct, using your token)
- |
- |-- AI requests --> Proxy Worker (Cloudflare)
-                      |-- Verify license key (Ed25519)
-                      |-- Check balance / deduct credits
-                      |-- Forward to Anthropic API
-                      |-- Return response to CLI</code></pre>
-
-        <h3>Data storage</h3>
-        <ul>
-          <li><strong>D1 (SQLite)</strong> &mdash; User records, balances, charge history, and reload settings</li>
-          <li><strong>KV</strong> &mdash; Key revocation lists and reload flags for fast edge lookups</li>
-          <li><strong>Local cache</strong> &mdash; Workspace profiles (catalogs, schemas, tables, warehouses) are cached on your machine for fast context loading</li>
-        </ul>
-
-        <h3>License key structure</h3>
-        <p>A license key (<code>lk_&lt;base64url&gt;</code>) is an Ed25519-signed payload containing:</p>
-        <ul>
-          <li>User email</li>
-          <li>Plan type (free or pro)</li>
-          <li>Expiry timestamp</li>
-          <li>Issuer signature</li>
-        </ul>
-        <p>The signing key is held by the Auth Worker. The corresponding public key is embedded in the Proxy Worker for verification. Keys cannot be forged or tampered with.</p>
-
-        <h3>Workspace profiling</h3>
-        <p>On first run (or when the cache is stale), Lakecode calls the Databricks REST API to discover your workspace topology: catalogs, schemas, tables, and SQL warehouses. This profile is cached locally in <code>~/.lakecode/</code> and refreshed periodically. It allows the AI to understand your environment without you having to describe it every time.</p>
-
       </div>
     </div>
   </section>
@@ -487,7 +145,7 @@ Use the `analytics-medium` SQL warehouse for ad-hoc queries.
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
-        <p>Terminal-native Databricks agent.</p>
+        <p>Terminal-native data platform agent.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">

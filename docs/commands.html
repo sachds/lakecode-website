@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commands Reference — Lakecode Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / Commands Reference</div>
+      <h1>Commands Reference</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands" class="current">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <div class="docs-content">
+
+            <p>All commands are invoked as slash commands within the Lakecode CLI. Each command connects to your Databricks or Snowflake workspace using your existing CLI profile and auth.</p>
+
+            <h3>Observability</h3>
+
+            <div class="cmd-ref">
+              <code>/status job &lt;id&gt;</code>
+              <p>Retrieves the job configuration and its last 5 runs. Use this as a quick health check for any job &mdash; see the schedule, cluster config, and recent run outcomes at a glance.</p>
+              <pre><code>lakecode /status job 123456</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/logs &lt;run-id&gt;</code>
+              <p>Fetches the full output of a specific run, including stdout, stderr, and error tracebacks. Lakecode analyzes the errors and highlights the root cause.</p>
+              <pre><code>lakecode /logs 78901234</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/debug job &lt;id&gt;</code>
+              <p>Full diagnosis workflow: pulls the job config, finds the most recent failed run, extracts errors, checks query history, and produces a root cause analysis. This is the single command for &ldquo;why is this job broken?&rdquo;</p>
+              <pre><code>lakecode /debug job 123456</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/queries job &lt;id&gt;</code>
+              <p>Retrieves the SQL query history for the latest run of a job. Useful for understanding what queries a job executed and how long each took.</p>
+              <pre><code>lakecode /queries job 123456</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/queries run &lt;run-id&gt;</code>
+              <p>Retrieves the SQL query history for a specific run. Use this when you need to inspect queries from a particular execution, not just the latest.</p>
+              <pre><code>lakecode /queries run 78901234</code></pre>
+            </div>
+
+            <h3>Data Quality</h3>
+
+            <div class="cmd-ref">
+              <code>/prove &lt;table&gt;</code>
+              <p>Generates a comprehensive evidence pack for a table: schema snapshot, row count, null analysis, freshness check, duplicate detection, numeric statistics, sample rows, and an overall health assessment. Results are saved to the <code>./evidence/</code> directory.</p>
+              <pre><code>lakecode /prove my_catalog.my_schema.my_table</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/audit jobs</code>
+              <p>Scans all jobs in your workspace for SLA gaps, missing timeout configurations, and recurring failures. Produces a risk-scored report so you can prioritize which jobs need attention.</p>
+              <pre><code>lakecode /audit jobs</code></pre>
+            </div>
+
+            <h3>Cost Analysis</h3>
+
+            <div class="cmd-ref">
+              <code>/cost top</code>
+              <p>Queries your platform billing tables and identifies the top spend drivers &mdash; which jobs, clusters, or warehouses are costing the most.</p>
+              <pre><code>lakecode /cost top</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/cost spike</code>
+              <p>Compares today&rsquo;s spend against a baseline period to detect cost spikes. Identifies the specific drivers behind any increase.</p>
+              <pre><code>lakecode /cost spike</code></pre>
+            </div>
+
+            <h3>Deployment &amp; Execution</h3>
+
+            <div class="cmd-ref">
+              <code>/deploy &lt;local-path&gt; &lt;workspace-path&gt;</code>
+              <p>Imports a local file (notebook, SQL, Python) into your Databricks workspace at the specified path.</p>
+              <pre><code>lakecode /deploy ./notebooks/etl.py /Workspace/production/etl</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/run job &lt;id&gt;</code>
+              <p>Triggers a job run and polls for completion. Shows real-time status updates until the run finishes or fails.</p>
+              <pre><code>lakecode /run job 123456</code></pre>
+            </div>
+
+          </div>
+
+          <div class="docs-pager">
+            <a href="/docs/authentication">
+              <span class="docs-pager-label">&larr; Previous</span>
+              <span class="docs-pager-title">Authentication</span>
+            </a>
+            <a href="/docs/configuration" class="next">
+              <span class="docs-pager-label">Next &rarr;</span>
+              <span class="docs-pager-title">Configuration</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

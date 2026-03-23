@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security &amp; Safety — Lakecode Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / Security &amp; Safety</div>
+      <h1>Security &amp; Safety</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security" class="current">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <div class="docs-content">
+
+            <h3>Local execution</h3>
+            <p>Lakecode runs entirely on your machine. It connects to Databricks or Snowflake using your existing CLI profile and credentials. Your tokens never leave your machine &mdash; they are used locally to make API calls directly to your workspace.</p>
+
+            <h3>Permissions</h3>
+            <p>Lakecode respects your platform's permission model &mdash; Unity Catalog for Databricks, RBAC for Snowflake. If your account cannot access a catalog, schema, or table, neither can Lakecode. There is no privilege escalation.</p>
+
+            <h3>Plan mode</h3>
+            <p>For complex or potentially risky operations, Lakecode enters plan mode. Before executing, it shows you exactly what it intends to do and asks for confirmation. This prevents accidental modifications to production resources.</p>
+
+            <h3>Guardrails</h3>
+            <p>Built-in guardrails prevent common mistakes: dropping tables without confirmation, running unbounded queries, or deploying to production paths without explicit intent. These guardrails are always active and cannot be disabled.</p>
+
+            <h3>Proxy security</h3>
+            <ul>
+              <li>License keys are Ed25519 signed and verified server-side on every request</li>
+              <li>The proxy does not log request or response content &mdash; only metadata (user ID, token counts, timestamps) for billing</li>
+              <li>Payments are handled by Stripe (PCI DSS compliant) &mdash; Lakecode never sees your card number</li>
+              <li>Revoked keys are checked against a KV store on every request for instant invalidation</li>
+            </ul>
+
+          </div>
+
+          <div class="docs-pager">
+            <a href="/docs/evidence">
+              <span class="docs-pager-label">&larr; Previous</span>
+              <span class="docs-pager-title">Evidence Packs</span>
+            </a>
+            <a href="/docs/architecture" class="next">
+              <span class="docs-pager-label">Next &rarr;</span>
+              <span class="docs-pager-title">Architecture</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

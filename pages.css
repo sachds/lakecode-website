@@ -1,3 +1,253 @@
+/* ── Documentation layout ── */
+.docs-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+.docs-sidebar h4 {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.docs-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.docs-sidebar-nav a {
+  display: block;
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.docs-sidebar-nav a:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.docs-sidebar-nav a.current {
+  color: var(--text);
+  background: var(--surface);
+  border-left-color: var(--accent);
+  font-weight: 500;
+}
+
+.docs-main {
+  min-width: 0;
+}
+
+.docs-breadcrumb {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.docs-breadcrumb a {
+  color: var(--text-secondary);
+}
+
+.docs-breadcrumb a:hover {
+  color: var(--text);
+}
+
+.docs-content {
+  line-height: 1.7;
+}
+
+.docs-content h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.docs-content h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.docs-content h3 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.docs-content p {
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.docs-content ul,
+.docs-content ol {
+  margin-bottom: 14px;
+  padding-left: 20px;
+}
+
+.docs-content li {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.docs-content code {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.docs-content pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.docs-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.docs-content strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cmd-ref {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.cmd-ref code {
+  color: var(--accent-hover);
+  background: var(--accent-glow);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.cmd-ref p {
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+
+/* Prev / Next navigation */
+.docs-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.docs-pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  transition: border-color 0.2s;
+  min-width: 0;
+  flex: 1;
+  max-width: 50%;
+}
+
+.docs-pager a:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.docs-pager a.next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.docs-pager-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docs-pager-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .docs-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .docs-sidebar {
+    position: static;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+
+  .docs-sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .docs-sidebar-nav a {
+    border-left: none;
+    padding: 6px 10px;
+    font-size: 0.8125rem;
+  }
+
+  .docs-pager {
+    flex-direction: column;
+  }
+
+  .docs-pager a {
+    max-width: 100%;
+  }
+}
+
 /* ── Shared page styles (pricing, signin, dashboard) ── */
 
 /* Page hero */

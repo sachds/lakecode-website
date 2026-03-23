@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration — Lakecode Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / Configuration</div>
+      <h1>Configuration</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration" class="current">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <div class="docs-content">
+
+            <h3>Conventions files</h3>
+            <p>Lakecode reads conventions files to understand your team&rsquo;s standards and preferences. There are two levels:</p>
+            <ul>
+              <li><strong>Global</strong> &mdash; <code>~/.lakecode/conventions.md</code> applies to all projects on your machine.</li>
+              <li><strong>Project</strong> &mdash; <code>.lakecode/conventions.md</code> in your project root applies only to that project. Project conventions override global ones.</li>
+            </ul>
+            <p>Conventions are written in plain Markdown. Lakecode reads them before every command to tailor its behavior. Example:</p>
+            <pre><code># Team Conventions
+
+## Default catalog and schema
+Always use `analytics.prod` as the default catalog.schema unless specified.
+
+## Naming patterns
+- Tables: snake_case, prefixed with source (e.g., stripe_charges)
+- Jobs: kebab-case with team prefix (e.g., data-eng-daily-refresh)
+
+## Preferred warehouse
+Use the `analytics-medium` SQL warehouse for ad-hoc queries.
+
+## Standards
+- All tables must have a `_loaded_at` timestamp column
+- Partition by date for tables over 1B rows
+- Tag all jobs with team name and SLA tier</code></pre>
+
+            <h3>Skills injection</h3>
+            <p>Lakecode ships with a library of platform-specific skills (Unity Catalog, Delta Lake, Snowflake Streams, Tasks, Cortex, and more). When you run a command, Lakecode detects relevant keywords and injects the appropriate skills into the AI context. This means the AI always has deep, current knowledge about the platform features involved in your query &mdash; without you configuring anything.</p>
+
+            <h3>Environment variables</h3>
+            <p>Lakecode uses standard environment variables for workspace connectivity:</p>
+            <ul>
+              <li><code>DATABRICKS_HOST</code> &mdash; Your workspace URL (e.g., <code>https://dbc-abc123.cloud.databricks.com</code>)</li>
+              <li><code>DATABRICKS_TOKEN</code> &mdash; A personal access token for your workspace</li>
+              <li><code>SNOWFLAKE_ACCOUNT</code> &mdash; Your Snowflake account identifier</li>
+              <li><code>SNOWFLAKE_USER</code> &mdash; Your Snowflake username</li>
+              <li><code>ANTHROPIC_API_KEY</code> &mdash; (Optional) Your own Anthropic key for BYOK mode</li>
+              <li><code>OPENAI_API_KEY</code> &mdash; (Optional) Your own OpenAI key for BYOK mode</li>
+            </ul>
+            <p>If you have a Databricks CLI profile (<code>~/.databrickscfg</code>) or Snowflake connection (<code>~/.snowflake/config.toml</code>), Lakecode will use it automatically. Environment variables take precedence over the config file.</p>
+
+          </div>
+
+          <div class="docs-pager">
+            <a href="/docs/commands">
+              <span class="docs-pager-label">&larr; Previous</span>
+              <span class="docs-pager-title">Commands</span>
+            </a>
+            <a href="/docs/billing" class="next">
+              <span class="docs-pager-label">Next &rarr;</span>
+              <span class="docs-pager-title">Billing &amp; Credits</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
