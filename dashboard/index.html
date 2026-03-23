@@ -131,7 +131,7 @@
   <div class="container">
     <div class="header">
       <div class="logo">lakecode</div>
-      <a href="/auth" class="btn" id="login-link">Sign In</a>
+      <a href="/auth" class="btn" id="nav-auth-link">Sign In</a>
     </div>
 
     <!-- Login prompt (shown when no key stored) -->
@@ -185,7 +185,6 @@
         <div class="key-display" id="license-key">lk_...</div>
         <div class="btn-group">
           <button class="btn" onclick="copyKey()">Copy Key</button>
-          <button class="btn" onclick="logout()">Sign Out</button>
         </div>
       </div>
     </div>
@@ -221,12 +220,23 @@
     function showLogin() {
       document.getElementById('login-view').classList.remove('hidden');
       document.getElementById('dashboard-view').classList.add('hidden');
+
+      // Nav: reset to Sign In
+      const navLink = document.getElementById('nav-auth-link');
+      navLink.textContent = 'Sign In';
+      navLink.href = '/auth';
+      navLink.onclick = null;
     }
 
     function showDashboard(data, key) {
       document.getElementById('login-view').classList.add('hidden');
       document.getElementById('dashboard-view').classList.remove('hidden');
-      document.getElementById('login-link').textContent = data.email;
+
+      // Nav: switch to Sign Out
+      const navLink = document.getElementById('nav-auth-link');
+      navLink.textContent = 'Sign Out';
+      navLink.href = '#';
+      navLink.onclick = function(e) { e.preventDefault(); logout(); };
 
       // Plan badge
       const badge = document.getElementById('plan-badge');
