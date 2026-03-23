@@ -63,6 +63,39 @@
       <!-- Dashboard content -->
       <div id="dash-content" style="display:none;">
 
+        <!-- Quickstart banner (shown for new users) -->
+        <div id="dash-quickstart" class="dash-card dash-card-wide" style="display:none; border-color: var(--accent); background: var(--surface);">
+          <h3 style="color: var(--text); text-transform: none; letter-spacing: normal; font-size: 1.125rem; margin-bottom: 4px;">Welcome to Lakecode</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 16px;">Get set up in three steps:</p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="color: var(--accent); font-weight: 700; font-size: 0.875rem; flex-shrink: 0;">1.</span>
+              <div>
+                <p style="color: var(--text); font-size: 0.875rem; margin: 0;">Install the CLI</p>
+                <pre style="background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-top: 6px; font-family: var(--mono); font-size: 0.8125rem; color: var(--text-secondary); overflow-x: auto;">npm install -g lakecode</pre>
+              </div>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="color: var(--accent); font-weight: 700; font-size: 0.875rem; flex-shrink: 0;">2.</span>
+              <div>
+                <p style="color: var(--text); font-size: 0.875rem; margin: 0;">Sign in from your terminal</p>
+                <pre style="background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-top: 6px; font-family: var(--mono); font-size: 0.8125rem; color: var(--text-secondary); overflow-x: auto;">lakecode login</pre>
+              </div>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="color: var(--accent); font-weight: 700; font-size: 0.875rem; flex-shrink: 0;">3.</span>
+              <div>
+                <p style="color: var(--text); font-size: 0.875rem; margin: 0;">Run your first command</p>
+                <pre style="background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-top: 6px; font-family: var(--mono); font-size: 0.8125rem; color: var(--text-secondary); overflow-x: auto;">lakecode /prove my_catalog.my_schema.my_table</pre>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; display: flex; gap: 12px; align-items: center;">
+            <a href="/docs/getting-started" class="btn btn-sm btn-secondary">Full docs</a>
+            <button class="btn btn-sm" id="dismiss-quickstart" style="color: var(--text-dim); background: none; border: none; font-size: 0.8125rem; cursor: pointer;">Dismiss</button>
+          </div>
+        </div>
+
         <!-- Stats row -->
         <div class="dash-grid">
           <div class="dash-card">
@@ -301,6 +334,12 @@
         // Key
         document.getElementById('dash-key').textContent = key;
 
+        // Show quickstart for new users (no charges, not dismissed before)
+        const dismissed = localStorage.getItem('lk_quickstart_dismissed');
+        if (!dismissed && (!chargesData.charges || chargesData.charges.length === 0)) {
+          document.getElementById('dash-quickstart').style.display = '';
+        }
+
         // Show content
         document.getElementById('dash-loading').style.display = 'none';
         document.getElementById('dash-content').style.display = '';
@@ -447,6 +486,12 @@
         btn.textContent = 'Copied!';
         setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
       });
+    });
+
+    // Dismiss quickstart
+    document.getElementById('dismiss-quickstart').addEventListener('click', () => {
+      localStorage.setItem('lk_quickstart_dismissed', '1');
+      document.getElementById('dash-quickstart').style.display = 'none';
     });
 
     // Sign out
