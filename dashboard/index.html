@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lakecode — Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container { max-width: 600px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 1rem;
+    }
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .stat:last-child { border-bottom: none; }
+    .stat-label { color: #888; font-size: 0.875rem; }
+    .stat-value { font-weight: 500; }
+    .plan-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .plan-free { background: #333; color: #888; }
+    .plan-pro { background: #1e3a2f; color: #4ade80; }
+    .plan-trial { background: #3b2f1e; color: #f59e0b; }
+    .progress-bar {
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .progress-green { background: #4ade80; }
+    .progress-yellow { background: #f59e0b; }
+    .progress-red { background: #ef4444; }
+    .key-display {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      background: #111;
+      padding: 0.75rem;
+      border-radius: 6px;
+      word-break: break-all;
+      color: #888;
+      margin-top: 0.5rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: transparent;
+      color: #e5e5e5;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #222; }
+    .btn-primary {
+      background: #166534;
+      border-color: #166534;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #15803d; }
+    .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .login-prompt {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .login-prompt p { color: #888; margin-bottom: 1rem; }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #111;
+      color: #e5e5e5;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      margin-bottom: 0.75rem;
+    }
+    .muted { color: #666; font-size: 0.75rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">lakecode</div>
+      <a href="/auth" class="btn" id="login-link">Sign In</a>
+    </div>
+
+    <!-- Login prompt (shown when no key stored) -->
+    <div id="login-view" class="login-prompt">
+      <p>Enter your license key to view your dashboard.</p>
+      <input type="text" id="key-input" placeholder="lk_eyJ..." />
+      <button class="btn btn-primary" onclick="submitKey()">View Dashboard</button>
+      <p class="muted" style="margin-top: 1rem;">
+        Get your key: run <code>lakecode login</code> or check your email.
+      </p>
+    </div>
+
+    <!-- Dashboard (shown after auth) -->
+    <div id="dashboard-view" class="hidden">
+      <!-- Plan -->
+      <div class="card">
+        <div class="card-title">Plan</div>
+        <div class="stat">
+          <span class="stat-label">Current plan</span>
+          <span id="plan-badge" class="plan-badge plan-free">FREE</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Email</span>
+          <span class="stat-value" id="email">—</span>
+        </div>
+        <div class="btn-group">
+          <a href="#" class="btn" id="billing-link" onclick="openBillingPortal(); return false;">Manage Billing</a>
+          <a href="https://lakecode.ai/pricing" class="btn btn-primary" id="upgrade-link">Upgrade to Pro</a>
+        </div>
+      </div>
+
+      <!-- Usage -->
+      <div class="card">
+        <div class="card-title">Token Usage (this period)</div>
+        <div class="stat">
+          <span class="stat-label">Tokens used</span>
+          <span class="stat-value" id="usage-text">0 / 100,000</span>
+        </div>
+        <div class="progress-bar">
+          <div id="usage-bar" class="progress-fill progress-green" style="width: 0%"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Period resets</span>
+          <span class="stat-value" id="reset-date">—</span>
+        </div>
+      </div>
+
+      <!-- License Key -->
+      <div class="card">
+        <div class="card-title">License Key</div>
+        <div class="key-display" id="license-key">lk_...</div>
+        <div class="btn-group">
+          <button class="btn" onclick="copyKey()">Copy Key</button>
+          <button class="btn" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://api.lakecode.ai';
+    let storedKey = localStorage.getItem('lakecode_key');
+
+    async function loadDashboard(key) {
+      try {
+        const res = await fetch(`${API_URL}/account`, {
+          headers: { 'x-api-key': key }
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('lakecode_key');
+            showLogin();
+            return;
+          }
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        showDashboard(data, key);
+      } catch (err) {
+        console.error('Dashboard load failed:', err);
+        showLogin();
+      }
+    }
+
+    function showLogin() {
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('dashboard-view').classList.add('hidden');
+    }
+
+    function showDashboard(data, key) {
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('login-link').textContent = data.email;
+
+      // Plan badge
+      const badge = document.getElementById('plan-badge');
+      badge.textContent = data.plan.toUpperCase();
+      badge.className = `plan-badge plan-${data.plan}`;
+
+      // Email
+      document.getElementById('email').textContent = data.email;
+
+      // Usage
+      const pct = Math.min(100, (data.token_usage / data.token_limit) * 100);
+      document.getElementById('usage-text').textContent =
+        `${data.token_usage.toLocaleString()} / ${data.token_limit.toLocaleString()}`;
+      const bar = document.getElementById('usage-bar');
+      bar.style.width = `${pct}%`;
+      bar.className = `progress-fill ${pct > 90 ? 'progress-red' : pct > 70 ? 'progress-yellow' : 'progress-green'}`;
+
+      // Reset date
+      document.getElementById('reset-date').textContent =
+        data.period_reset_at || 'End of month';
+
+      // License key
+      document.getElementById('license-key').textContent =
+        key.slice(0, 20) + '...' + key.slice(-10);
+
+      // Hide upgrade button for pro users
+      if (data.plan === 'pro') {
+        document.getElementById('upgrade-link').classList.add('hidden');
+      }
+    }
+
+    function submitKey() {
+      const key = document.getElementById('key-input').value.trim();
+      if (key && key.startsWith('lk_')) {
+        localStorage.setItem('lakecode_key', key);
+        storedKey = key;
+        loadDashboard(key);
+      }
+    }
+
+    function copyKey() {
+      if (storedKey) {
+        navigator.clipboard.writeText(storedKey);
+      }
+    }
+
+    async function openBillingPortal() {
+      if (!storedKey) return;
+      try {
+        const res = await fetch(`${API_URL}/stripe/portal`, {
+          method: 'POST',
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.message || 'Could not open billing portal. Set up a payment method first.');
+        }
+      } catch {
+        alert('Could not reach server. Please try again.');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('lakecode_key');
+      storedKey = null;
+      showLogin();
+    }
+
+    // Check URL fragment for key from OAuth redirect (e.g. /dashboard#key=lk_...)
+    const fragment = window.location.hash;
+    if (fragment.startsWith('#key=')) {
+      const keyFromUrl = fragment.slice(5);
+      if (keyFromUrl.startsWith('lk_')) {
+        localStorage.setItem('lakecode_key', keyFromUrl);
+        storedKey = keyFromUrl;
+        // Clean the fragment from the URL so key isn't visible/bookmarkable
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    // Auto-load if key stored
+    if (storedKey) {
+      loadDashboard(storedKey);
+    }
+  </script>
+</body>
+</html>
