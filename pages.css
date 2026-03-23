@@ -369,23 +369,22 @@
 
 .reload-controls {
   display: flex;
-  align-items: flex-end;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
   flex-wrap: wrap;
 }
 
 .reload-field {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
 }
 
 .reload-field label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-dim);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .reload-input-wrap {
@@ -409,7 +408,7 @@
 }
 
 .reload-input-wrap input {
-  width: 64px;
+  width: 52px;
   background: none;
   border: none;
   outline: none;
@@ -423,6 +422,12 @@
   -webkit-appearance: none;
 }
 
+.reload-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+}
+
 .reload-toggle-btn {
   position: relative;
   width: 44px;
@@ -433,6 +438,7 @@
   transition: background 0.2s;
   background: var(--border);
   padding: 0;
+  flex-shrink: 0;
 }
 
 .reload-toggle-btn.active {
@@ -458,7 +464,6 @@
 .reload-status {
   font-size: 0.8125rem;
   color: var(--text-dim);
-  margin-top: 2px;
 }
 
 .reload-status.on {
@@ -468,9 +473,6 @@
 .reload-actions {
   display: flex;
   gap: 8px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
 }
 
 .reload-setup-cta {
