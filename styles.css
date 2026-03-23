@@ -281,6 +281,58 @@ code {
   color: var(--text);
 }
 
+.hero-install {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.install-cmd {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.install-cmd:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+
+.install-cmd code {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.install-cmd .terminal-prompt {
+  color: var(--green);
+  margin-right: 6px;
+}
+
+.install-cmd .copy-hint,
+.install-cmd .copy-done {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  transition: opacity 0.2s;
+}
+
+.install-cmd .copy-done {
+  display: none;
+  color: var(--green);
+}
+
+.install-cmd.copied .copy-hint { display: none; }
+.install-cmd.copied .copy-done { display: inline; }
+
 .hero-actions {
   display: flex;
   gap: 12px;

@@ -43,6 +43,13 @@
       <p class="hero-sub">
         An AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy &mdash; without leaving your terminal.
       </p>
+      <div class="hero-install">
+        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
+          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
+          <span class="copy-hint">click to copy</span>
+          <span class="copy-done">copied!</span>
+        </div>
+      </div>
       <div class="hero-actions">
         <a href="/signin" class="btn btn-primary">Get Started Free</a>
         <a href="/docs" class="btn btn-secondary">View Docs</a>
