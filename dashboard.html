@@ -64,17 +64,16 @@
           <!-- Credit Balance -->
           <div class="dash-card">
             <h3>Credit Balance</h3>
-            <div class="dash-value" id="dash-balance">—</div>
-            <a href="/pricing" class="dash-action" id="dash-buy-link">Buy credits</a>
+            <div class="dash-value" id="dash-balance">--</div>
             <div id="dash-low-balance" class="dash-warning" style="display:none;">
-              Balance is low. <a href="/pricing">Top up</a>
+              Balance is low. Auto-reload will top up soon.
             </div>
           </div>
 
           <!-- Daily Free Credits -->
           <div class="dash-card">
             <h3>Free Credits Today</h3>
-            <div class="dash-value" id="dash-daily">—</div>
+            <div class="dash-value" id="dash-daily">--</div>
             <div class="usage-bar">
               <div class="usage-fill" id="dash-daily-fill"></div>
             </div>
@@ -84,8 +83,52 @@
           <!-- Plan -->
           <div class="dash-card">
             <h3>Plan</h3>
-            <div class="dash-value" id="dash-plan">—</div>
+            <div class="dash-value" id="dash-plan">--</div>
             <p class="dash-meta" id="dash-member-since"></p>
+          </div>
+        </div>
+
+        <!-- Auto-Reload Settings -->
+        <div class="dash-card dash-card-wide" id="reload-section">
+          <h3>Auto-Reload</h3>
+          <div id="reload-setup" style="display:none;">
+            <p class="dash-meta">Add a payment method to enable auto-reload. Your card is charged when your balance drops below 20% of the reload amount.</p>
+            <button class="btn btn-primary" id="add-payment-btn" style="margin-top: 12px;">Add Payment Method</button>
+          </div>
+          <div id="reload-active" style="display:none;">
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+              <div>
+                <label class="dash-meta" for="reload-amount">Reload amount</label>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                  <span>$</span>
+                  <input type="number" id="reload-amount" min="5" step="1" style="width: 80px; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem;">
+                </div>
+              </div>
+              <div>
+                <label class="dash-meta">Auto-reload</label>
+                <div style="margin-top: 4px;">
+                  <button class="btn btn-sm" id="reload-toggle">--</button>
+                </div>
+              </div>
+              <div>
+                <label class="dash-meta">&nbsp;</label>
+                <div style="margin-top: 4px;">
+                  <button class="btn btn-sm btn-secondary" id="save-reload-btn">Save</button>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 12px; display: flex; gap: 8px;">
+              <button class="btn btn-sm btn-secondary" id="manual-reload-btn">Reload Now</button>
+              <button class="btn btn-sm btn-secondary" id="update-payment-btn">Update Payment Method</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charge History -->
+        <div class="dash-card dash-card-wide">
+          <h3>Charge History</h3>
+          <div id="charge-history">
+            <p class="dash-meta">No charges yet.</p>
           </div>
         </div>
 
@@ -156,36 +199,46 @@
       loadDashboard(lkKey);
     }
 
+    let accountData = null;
+
     async function loadDashboard(key) {
       try {
-        const res = await fetch(`${API_URL}/account`, {
-          headers: { 'x-api-key': key },
-        });
+        const [accountRes, chargesRes] = await Promise.all([
+          fetch(`${API_URL}/account`, { headers: { 'x-api-key': key } }),
+          fetch(`${API_URL}/account/charges`, { headers: { 'x-api-key': key } }),
+        ]);
 
-        if (!res.ok) {
+        if (!accountRes.ok) {
           localStorage.removeItem('lk_key');
           document.getElementById('dash-loading').style.display = 'none';
           document.getElementById('dash-noauth').style.display = '';
           return;
         }
 
-        const data = await res.json();
+        accountData = await accountRes.json();
+        const chargesData = chargesRes.ok ? await chargesRes.json() : { charges: [] };
 
         // Email
-        document.getElementById('dash-email').textContent = data.email;
+        document.getElementById('dash-email').textContent = accountData.email;
 
         // Credit Balance
-        const balanceDollars = (data.credit_balance_cents / 100).toFixed(2);
+        const balanceDollars = (accountData.credit_balance_cents / 100).toFixed(2);
         document.getElementById('dash-balance').textContent = `$${balanceDollars}`;
 
         // Low balance warning
-        if (data.plan === 'paid' && data.credit_balance_cents < 500) {
+        if (accountData.has_payment_method && accountData.auto_reload_enabled) {
+          const threshold = accountData.reload_amount_cents * 0.2;
+          if (accountData.credit_balance_cents < threshold) {
+            document.getElementById('dash-low-balance').style.display = '';
+          }
+        } else if (accountData.plan === 'paid' && accountData.credit_balance_cents < 500) {
+          document.getElementById('dash-low-balance').textContent = 'Balance is low.';
           document.getElementById('dash-low-balance').style.display = '';
         }
 
         // Daily free credits
-        const dailyUsed = data.daily_free_used_cents || 0;
-        const dailyAllowance = data.daily_free_allowance_cents || 100;
+        const dailyUsed = accountData.daily_free_used_cents || 0;
+        const dailyAllowance = accountData.daily_free_allowance_cents || 100;
         const dailyRemaining = Math.max(0, dailyAllowance - dailyUsed);
         const dailyPct = Math.min((dailyUsed / dailyAllowance) * 100, 100);
         document.getElementById('dash-daily').textContent =
@@ -195,18 +248,48 @@
         if (dailyPct > 95) document.getElementById('dash-daily-fill').classList.add('usage-crit');
 
         // Plan
-        const planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
+        const planLabel = accountData.plan.charAt(0).toUpperCase() + accountData.plan.slice(1);
         document.getElementById('dash-plan').textContent = planLabel;
-        if (data.plan === 'paid') {
+        if (accountData.plan === 'paid') {
           document.getElementById('dash-plan').classList.add('plan-pro');
         }
 
         // Member since
-        if (data.created_at) {
-          const created = new Date(data.created_at);
+        if (accountData.created_at) {
+          const created = new Date(accountData.created_at);
           document.getElementById('dash-member-since').textContent = `Member since ${created.toLocaleDateString('en-US', {
             month: 'short', year: 'numeric'
           })}`;
+        }
+
+        // Auto-reload section
+        if (accountData.has_payment_method) {
+          document.getElementById('reload-setup').style.display = 'none';
+          document.getElementById('reload-active').style.display = '';
+          document.getElementById('reload-amount').value = Math.round(accountData.reload_amount_cents / 100);
+          updateReloadToggle(accountData.auto_reload_enabled);
+        } else {
+          document.getElementById('reload-setup').style.display = '';
+          document.getElementById('reload-active').style.display = 'none';
+        }
+
+        // Charge history
+        if (chargesData.charges && chargesData.charges.length > 0) {
+          const rows = chargesData.charges.map(c => {
+            const date = new Date(c.created_at).toLocaleDateString('en-US', {
+              month: 'short', day: 'numeric', year: 'numeric'
+            });
+            const amount = (c.amount_cents / 100).toFixed(2);
+            const statusBadge = c.status === 'succeeded'
+              ? '<span style="color: var(--primary);">Succeeded</span>'
+              : `<span style="color: #f87171;">${c.status}</span>`;
+            return `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <span>${date}</span>
+              <span>$${amount}</span>
+              <span>${statusBadge}</span>
+            </div>`;
+          }).join('');
+          document.getElementById('charge-history').innerHTML = rows;
         }
 
         // Key
@@ -219,6 +302,127 @@
         document.getElementById('dash-loading').innerHTML = '<p>Failed to load account. Please try again.</p>';
       }
     }
+
+    function updateReloadToggle(enabled) {
+      const btn = document.getElementById('reload-toggle');
+      btn.textContent = enabled ? 'Enabled' : 'Disabled';
+      btn.className = enabled ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+    }
+
+    // Reload toggle
+    document.getElementById('reload-toggle').addEventListener('click', () => {
+      if (!accountData) return;
+      accountData.auto_reload_enabled = !accountData.auto_reload_enabled;
+      updateReloadToggle(accountData.auto_reload_enabled);
+    });
+
+    // Save reload settings
+    document.getElementById('save-reload-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('save-reload-btn');
+      const amountDollars = parseInt(document.getElementById('reload-amount').value, 10);
+      if (isNaN(amountDollars) || amountDollars < 5) {
+        alert('Minimum reload amount is $5.');
+        return;
+      }
+
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/account/reload-settings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': lkKey,
+          },
+          body: JSON.stringify({
+            reload_amount_cents: amountDollars * 100,
+            auto_reload_enabled: accountData.auto_reload_enabled,
+          }),
+        });
+
+        if (res.ok) {
+          btn.textContent = 'Saved!';
+          setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 2000);
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to save settings.');
+          btn.textContent = 'Save';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Something went wrong. Please try again.');
+        btn.textContent = 'Save';
+        btn.disabled = false;
+      }
+    });
+
+    // Add / Update payment method
+    async function setupPaymentMethod() {
+      const btn = event.target;
+      btn.textContent = 'Redirecting...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/stripe/setup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': lkKey,
+          },
+          body: JSON.stringify({
+            return_url: window.location.origin + '/dashboard',
+          }),
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Something went wrong.');
+          btn.textContent = 'Add Payment Method';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Something went wrong. Please try again.');
+        btn.textContent = 'Add Payment Method';
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('add-payment-btn').addEventListener('click', setupPaymentMethod);
+    document.getElementById('update-payment-btn').addEventListener('click', setupPaymentMethod);
+
+    // Manual reload
+    document.getElementById('manual-reload-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('manual-reload-btn');
+      btn.textContent = 'Reloading...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/account/reload`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': lkKey,
+          },
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          btn.textContent = 'Done!';
+          setTimeout(() => { window.location.reload(); }, 1000);
+        } else {
+          alert(data.error || 'Reload failed.');
+          btn.textContent = 'Reload Now';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Something went wrong. Please try again.');
+        btn.textContent = 'Reload Now';
+        btn.disabled = false;
+      }
+    });
 
     // Copy key
     document.getElementById('copy-key').addEventListener('click', () => {

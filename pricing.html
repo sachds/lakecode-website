@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Lakecode</title>
-  <meta name="description" content="Lakecode pricing. Free daily credits plus credit packs for heavy usage.">
+  <meta name="description" content="Lakecode pricing. Free daily credits plus auto-reload for heavy usage.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,99 +39,68 @@
   <section class="page-hero">
     <div class="container">
       <h1>Pay for what you use</h1>
-      <p class="page-sub">Free daily credits to get started. Buy more when you need them.</p>
+      <p class="page-sub">Free daily credits to get started. Add a payment method and your balance auto-reloads.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <!-- Free tier -->
-      <div class="free-tier-banner">
-        <div class="free-tier-content">
-          <h3>Free tier</h3>
-          <p>Every account gets <strong>$1.00/day</strong> in free credits &mdash; enough for 1&ndash;2 commands. Resets daily at midnight UTC. No credit card required.</p>
-        </div>
-        <a href="/signin" class="btn btn-secondary">Get Started Free</a>
-      </div>
-
-      <!-- Credit packs -->
-      <div class="section-header" style="margin-top: 64px;">
-        <h2>Credit packs</h2>
-        <p>One-time purchase. Credits never expire. Use them whenever you need.</p>
-      </div>
-
-      <div class="pricing-grid three-col">
-        <!-- Starter -->
+      <div class="pricing-grid" style="max-width: 700px; margin: 0 auto;">
+        <!-- Free -->
         <div class="pricing-card">
           <div class="pricing-header">
-            <h3>Starter</h3>
+            <h3>Free</h3>
             <div class="pricing-price">
-              <span class="price-amount">$30</span>
+              <span class="price-amount">$0</span>
             </div>
-            <p class="pricing-desc">Best for trying it out.</p>
+            <p class="pricing-desc">Try lakecode with no commitment.</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> $30 in credits</li>
-            <li><span class="check">&#10003;</span> ~50 commands</li>
-            <li><span class="check">&#10003;</span> Never expires</li>
+            <li><span class="check">&#10003;</span> $1.00/day in free credits</li>
+            <li><span class="check">&#10003;</span> Resets daily at midnight UTC</li>
             <li><span class="check">&#10003;</span> All features included</li>
+            <li><span class="check">&#10003;</span> No credit card required</li>
           </ul>
-          <button class="btn btn-secondary btn-full buy-btn" data-pack="starter">Buy Starter</button>
+          <a href="/signin" class="btn btn-secondary btn-full">Get Started Free</a>
         </div>
 
-        <!-- Builder -->
+        <!-- Paid -->
         <div class="pricing-card featured">
-          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-badge">Recommended</div>
           <div class="pricing-header">
-            <h3>Builder</h3>
+            <h3>Pay as you go</h3>
             <div class="pricing-price">
-              <span class="price-amount">$100</span>
+              <span class="price-amount">$49</span>
+              <span class="price-period">default reload</span>
             </div>
-            <p class="pricing-desc">For daily use.</p>
+            <p class="pricing-desc">Add a card, set your reload amount, never run out.</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> $100 in credits</li>
-            <li><span class="check">&#10003;</span> ~170 commands</li>
-            <li><span class="check">&#10003;</span> Never expires</li>
-            <li><span class="check">&#10003;</span> All features included</li>
+            <li><span class="check">&#10003;</span> $1.00/day free credits included</li>
+            <li><span class="check">&#10003;</span> Auto-reload when balance is low</li>
+            <li><span class="check">&#10003;</span> Set any reload amount ($5+)</li>
+            <li><span class="check">&#10003;</span> Pause or adjust anytime</li>
+            <li><span class="check">&#10003;</span> Full charge history on dashboard</li>
           </ul>
-          <button class="btn btn-primary btn-full buy-btn" data-pack="builder">Buy Builder</button>
-        </div>
-
-        <!-- Team -->
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <h3>Team</h3>
-            <div class="pricing-price">
-              <span class="price-amount">$300</span>
-            </div>
-            <p class="pricing-desc">For teams and heavy usage.</p>
-          </div>
-          <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> $300 in credits</li>
-            <li><span class="check">&#10003;</span> ~500 commands</li>
-            <li><span class="check">&#10003;</span> Never expires</li>
-            <li><span class="check">&#10003;</span> All features included</li>
-          </ul>
-          <button class="btn btn-secondary btn-full buy-btn" data-pack="team">Buy Team</button>
+          <a href="/signin" class="btn btn-primary btn-full" id="setup-btn">Add Payment Method</a>
         </div>
       </div>
 
-      <!-- How credits work -->
+      <!-- How it works -->
       <div class="credits-explainer">
-        <h3>How credits work</h3>
+        <h3>How auto-reload works</h3>
         <div class="explainer-grid">
           <div class="explainer-item">
-            <strong>Usage-based</strong>
-            <p>Each command costs based on the actual AI tokens used. Simple commands cost less, complex ones cost more.</p>
+            <strong>1. Add a payment method</strong>
+            <p>Securely save a card via Stripe. Your first reload amount is charged immediately.</p>
           </div>
           <div class="explainer-item">
-            <strong>Free daily allowance</strong>
-            <p>Everyone gets $1.00/day in free credits. If you have purchased credits, free credits are used first.</p>
+            <strong>2. Use lakecode normally</strong>
+            <p>Each command deducts from your balance based on actual AI tokens used. Free credits are used first.</p>
           </div>
           <div class="explainer-item">
-            <strong>No surprises</strong>
-            <p>Credits are pre-purchased. You'll never get an unexpected bill. Top up when you need more.</p>
+            <strong>3. Auto top-up</strong>
+            <p>When your balance drops below 20% of your reload amount, we automatically charge your card and add credits.</p>
           </div>
         </div>
       </div>
@@ -145,11 +114,11 @@
         </details>
         <details class="faq-item">
           <summary>What happens when I run out of credits?</summary>
-          <p>Free daily credits reset at midnight UTC. If you've used your daily free credits and your purchased balance is zero, you'll be prompted to buy more credits.</p>
+          <p>If auto-reload is enabled, your card is charged and credits are added automatically. If disabled, free daily credits reset at midnight UTC. With no balance remaining, you'll be prompted to add a payment method.</p>
         </details>
         <details class="faq-item">
-          <summary>Do credits expire?</summary>
-          <p>No. Purchased credits never expire. Use them whenever you need.</p>
+          <summary>Can I change or pause auto-reload?</summary>
+          <p>Yes. On your dashboard you can change the reload amount, toggle auto-reload on or off, or manually trigger a reload anytime.</p>
         </details>
         <details class="faq-item">
           <summary>How much does a typical command cost?</summary>
@@ -191,51 +160,13 @@
 
   <script src="script.js"></script>
   <script>
-    const API_URL = 'https://api.lakecode.ai';
+    // If signed in, redirect "Add Payment Method" to dashboard setup flow
     const existingKey = localStorage.getItem('lk_key');
-
-    document.querySelectorAll('.buy-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const pack = btn.dataset.pack;
-
-        if (!existingKey) {
-          localStorage.setItem('lk_redirect', '/pricing');
-          window.location.href = '/signin';
-          return;
-        }
-
-        const originalText = btn.textContent;
-        btn.textContent = 'Redirecting...';
-        btn.style.pointerEvents = 'none';
-
-        try {
-          const res = await fetch(`${API_URL}/stripe/checkout`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': existingKey,
-            },
-            body: JSON.stringify({
-              pack,
-              return_url: window.location.origin + '/dashboard',
-            }),
-          });
-
-          const data = await res.json();
-          if (data.url) {
-            window.location.href = data.url;
-          } else {
-            btn.textContent = originalText;
-            btn.style.pointerEvents = '';
-            alert(data.error || 'Something went wrong. Please try again.');
-          }
-        } catch {
-          btn.textContent = originalText;
-          btn.style.pointerEvents = '';
-          alert('Something went wrong. Please try again.');
-        }
-      });
-    });
+    if (existingKey) {
+      const setupBtn = document.getElementById('setup-btn');
+      setupBtn.href = '/dashboard';
+      setupBtn.textContent = 'Go to Dashboard';
+    }
   </script>
 </body>
 </html>
