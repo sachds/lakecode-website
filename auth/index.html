@@ -75,6 +75,19 @@
       color: #333;
     }
     .btn-google svg { width: 18px; height: 18px; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #444;
+      color: #e5e5e5;
+      margin-top: 0.75rem;
+    }
+    .btn-outline:hover { background: #222; }
+    .btn-dashboard {
+      background: #166534;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .btn-dashboard:hover { background: #15803d; }
     .success-icon {
       font-size: 3rem;
       margin-bottom: 1rem;
@@ -83,6 +96,11 @@
       font-size: 1.125rem;
       color: #4ade80;
       margin-bottom: 0.5rem;
+    }
+    .logged-in-email {
+      font-size: 0.875rem;
+      color: #4ade80;
+      margin-bottom: 1rem;
     }
     .muted { color: #666; font-size: 0.8125rem; }
     .hidden { display: none; }
@@ -93,7 +111,7 @@
     <div class="logo">lakecode</div>
     <div class="subtitle">Databricks-native AI CLI</div>
 
-    <!-- Sign-in view -->
+    <!-- Sign-in view (device flow) -->
     <div id="signin-view" class="card">
       <div class="user-code-label">Your verification code</div>
       <div class="user-code" id="user-code">--------</div>
@@ -104,11 +122,20 @@
       </a>
     </div>
 
-    <!-- Success view -->
+    <!-- Already logged in view -->
+    <div id="logged-in-view" class="card hidden">
+      <div class="success-icon">&#10003;</div>
+      <div class="logged-in-email" id="logged-in-email"></div>
+      <a href="/dashboard" class="btn btn-dashboard">Go to Dashboard</a>
+      <button class="btn btn-outline" onclick="signOut()">Sign Out</button>
+    </div>
+
+    <!-- Success view (post-auth) -->
     <div id="success-view" class="card hidden">
-      <div class="success-icon">✓</div>
+      <div class="success-icon">&#10003;</div>
       <div class="success-text">You're authenticated!</div>
-      <p class="muted">Return to your terminal — the CLI is receiving your credentials now.</p>
+      <p class="muted" style="margin-bottom: 1rem;">Return to your terminal — the CLI is receiving your credentials now.</p>
+      <a href="/dashboard" class="btn btn-dashboard">Go to Dashboard</a>
     </div>
 
     <p class="muted">By signing in, you agree to the lakecode Terms of Service.</p>
@@ -118,25 +145,47 @@
     const API_URL = 'https://api.lakecode.ai';
     const params = new URLSearchParams(window.location.search);
     const userCode = params.get('user_code');
-
-    // Display user code
-    if (userCode) {
-      document.getElementById('user-code').textContent =
-        userCode.slice(0, 4) + '-' + userCode.slice(4);
-    }
-
-    // Build Google OAuth URL
-    // The auth server handles the actual OAuth — we redirect to a Google auth URL
-    // that uses our callback endpoint, with state = user_code
-    const googleBtn = document.getElementById('google-btn');
-    if (userCode) {
-      googleBtn.href = `${API_URL}/auth/start?state=${userCode}`;
-    }
+    const storedKey = localStorage.getItem('lakecode_key');
 
     // Check if this is the success page
     if (window.location.pathname.includes('/auth/success') || params.get('success') === '1') {
       document.getElementById('signin-view').classList.add('hidden');
       document.getElementById('success-view').classList.remove('hidden');
+    }
+    // If user has a device code, show sign-in view
+    else if (userCode) {
+      document.getElementById('user-code').textContent =
+        userCode.slice(0, 4) + '-' + userCode.slice(4);
+
+      const googleBtn = document.getElementById('google-btn');
+      googleBtn.href = `${API_URL}/auth/start?state=${userCode}`;
+    }
+    // If already logged in, show logged-in view
+    else if (storedKey) {
+      document.getElementById('signin-view').classList.add('hidden');
+      document.getElementById('logged-in-view').classList.remove('hidden');
+
+      // Try to fetch email from account
+      fetch(`${API_URL}/account`, { headers: { 'x-api-key': storedKey } })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+          document.getElementById('logged-in-email').textContent = `Signed in as ${data.email}`;
+        })
+        .catch(() => {
+          document.getElementById('logged-in-email').textContent = 'Signed in';
+        });
+    }
+    // No code and not logged in — show sign-in with web flow
+    else {
+      const googleBtn = document.getElementById('google-btn');
+      googleBtn.href = `${API_URL}/auth/start?state=web`;
+      document.querySelector('.user-code-label').classList.add('hidden');
+      document.querySelector('.user-code').classList.add('hidden');
+    }
+
+    function signOut() {
+      localStorage.removeItem('lakecode_key');
+      window.location.reload();
     }
   </script>
 </body>
