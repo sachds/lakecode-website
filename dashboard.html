@@ -60,8 +60,9 @@
 
       <!-- Dashboard content -->
       <div id="dash-content" style="display:none;">
+
+        <!-- Stats row -->
         <div class="dash-grid">
-          <!-- Credit Balance -->
           <div class="dash-card">
             <h3>Credit Balance</h3>
             <div class="dash-value" id="dash-balance">--</div>
@@ -70,7 +71,6 @@
             </div>
           </div>
 
-          <!-- Daily Free Credits -->
           <div class="dash-card">
             <h3>Free Credits Today</h3>
             <div class="dash-value" id="dash-daily">--</div>
@@ -80,7 +80,6 @@
             <p class="dash-meta">Resets at midnight UTC</p>
           </div>
 
-          <!-- Plan -->
           <div class="dash-card">
             <h3>Plan</h3>
             <div class="dash-value" id="dash-plan">--</div>
@@ -88,36 +87,41 @@
           </div>
         </div>
 
-        <!-- Auto-Reload Settings -->
+        <!-- Auto-Reload -->
         <div class="dash-card dash-card-wide" id="reload-section">
           <h3>Auto-Reload</h3>
+
+          <!-- No payment method -->
           <div id="reload-setup" style="display:none;">
-            <p class="dash-meta">Add a payment method to enable auto-reload. Your card is charged when your balance drops below 20% of the reload amount.</p>
-            <button class="btn btn-primary" id="add-payment-btn" style="margin-top: 12px;">Add Payment Method</button>
-          </div>
-          <div id="reload-active" style="display:none;">
-            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-              <div>
-                <label class="dash-meta" for="reload-amount">Reload amount</label>
-                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                  <span>$</span>
-                  <input type="number" id="reload-amount" min="5" step="1" style="width: 80px; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem;">
-                </div>
+            <div class="reload-setup-cta">
+              <div class="reload-setup-text">
+                <p><strong>Never run out of credits.</strong> Add a payment method and your balance will automatically top up when it gets low.</p>
               </div>
-              <div>
-                <label class="dash-meta">Auto-reload</label>
-                <div style="margin-top: 4px;">
-                  <button class="btn btn-sm" id="reload-toggle">--</button>
-                </div>
-              </div>
-              <div>
-                <label class="dash-meta">&nbsp;</label>
-                <div style="margin-top: 4px;">
-                  <button class="btn btn-sm btn-secondary" id="save-reload-btn">Save</button>
-                </div>
-              </div>
+              <button class="btn btn-primary" id="add-payment-btn">Add Payment Method</button>
             </div>
-            <div style="margin-top: 12px; display: flex; gap: 8px;">
+          </div>
+
+          <!-- Has payment method -->
+          <div id="reload-active" style="display:none;">
+            <div class="reload-controls">
+              <div class="reload-field">
+                <label for="reload-amount">Reload amount</label>
+                <div class="reload-input-wrap">
+                  <span>$</span>
+                  <input type="number" id="reload-amount" min="5" step="1">
+                </div>
+              </div>
+
+              <div class="reload-field">
+                <label>Auto-reload</label>
+                <button class="reload-toggle-btn" id="reload-toggle" aria-label="Toggle auto-reload"></button>
+                <span class="reload-status" id="reload-status">Off</span>
+              </div>
+
+              <button class="btn btn-sm btn-primary" id="save-reload-btn">Save Settings</button>
+            </div>
+
+            <div class="reload-actions">
               <button class="btn btn-sm btn-secondary" id="manual-reload-btn">Reload Now</button>
               <button class="btn btn-sm btn-secondary" id="update-payment-btn">Update Payment Method</button>
             </div>
@@ -128,13 +132,13 @@
         <div class="dash-card dash-card-wide">
           <h3>Charge History</h3>
           <div id="charge-history">
-            <p class="dash-meta">No charges yet.</p>
+            <p class="charge-empty">No charges yet</p>
           </div>
         </div>
 
         <!-- License Key -->
         <div class="dash-card dash-card-wide">
-          <h3>License key</h3>
+          <h3>License Key</h3>
           <p class="dash-meta">Use this key to authenticate the CLI. Run <code>lakecode login</code> or set it manually.</p>
           <div class="key-display">
             <code id="dash-key" class="key-value">lk_...</code>
@@ -142,8 +146,8 @@
           </div>
         </div>
 
-        <!-- Sign out -->
-        <div style="margin-top: 32px;">
+        <!-- Footer actions -->
+        <div class="dash-footer">
           <button class="btn btn-secondary" id="signout-btn">Sign out</button>
         </div>
       </div>
@@ -280,16 +284,15 @@
               month: 'short', day: 'numeric', year: 'numeric'
             });
             const amount = (c.amount_cents / 100).toFixed(2);
-            const statusBadge = c.status === 'succeeded'
-              ? '<span style="color: var(--primary);">Succeeded</span>'
-              : `<span style="color: #f87171;">${c.status}</span>`;
-            return `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-              <span>${date}</span>
-              <span>$${amount}</span>
-              <span>${statusBadge}</span>
+            const statusClass = c.status === 'succeeded' ? 'succeeded' : 'failed';
+            const statusLabel = c.status === 'succeeded' ? 'Paid' : 'Failed';
+            return `<div class="charge-row">
+              <span class="charge-date">${date}</span>
+              <span class="charge-amount">$${amount}</span>
+              <span class="charge-status ${statusClass}">${statusLabel}</span>
             </div>`;
           }).join('');
-          document.getElementById('charge-history').innerHTML = rows;
+          document.getElementById('charge-history').innerHTML = `<div class="charge-table">${rows}</div>`;
         }
 
         // Key
@@ -305,8 +308,16 @@
 
     function updateReloadToggle(enabled) {
       const btn = document.getElementById('reload-toggle');
-      btn.textContent = enabled ? 'Enabled' : 'Disabled';
-      btn.className = enabled ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+      const status = document.getElementById('reload-status');
+      if (enabled) {
+        btn.classList.add('active');
+        status.textContent = 'On';
+        status.className = 'reload-status on';
+      } else {
+        btn.classList.remove('active');
+        status.textContent = 'Off';
+        status.className = 'reload-status';
+      }
     }
 
     // Reload toggle
@@ -343,23 +354,24 @@
 
         if (res.ok) {
           btn.textContent = 'Saved!';
-          setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 2000);
+          setTimeout(() => { btn.textContent = 'Save Settings'; btn.disabled = false; }, 2000);
         } else {
           const data = await res.json();
           alert(data.error || 'Failed to save settings.');
-          btn.textContent = 'Save';
+          btn.textContent = 'Save Settings';
           btn.disabled = false;
         }
       } catch {
         alert('Something went wrong. Please try again.');
-        btn.textContent = 'Save';
+        btn.textContent = 'Save Settings';
         btn.disabled = false;
       }
     });
 
     // Add / Update payment method
-    async function setupPaymentMethod() {
-      const btn = event.target;
+    async function setupPaymentMethod(e) {
+      const btn = e.currentTarget;
+      const originalText = btn.textContent;
       btn.textContent = 'Redirecting...';
       btn.disabled = true;
 
@@ -380,12 +392,12 @@
           window.location.href = data.url;
         } else {
           alert(data.error || 'Something went wrong.');
-          btn.textContent = 'Add Payment Method';
+          btn.textContent = originalText;
           btn.disabled = false;
         }
       } catch {
         alert('Something went wrong. Please try again.');
-        btn.textContent = 'Add Payment Method';
+        btn.textContent = originalText;
         btn.disabled = false;
       }
     }
