@@ -25,6 +25,7 @@
       font-weight: 700;
       color: #fff;
       font-family: 'SF Mono', 'Fira Code', monospace;
+      text-decoration: none;
     }
     .card {
       background: #1a1a1a;
@@ -106,7 +107,15 @@
       color: #fff;
     }
     .btn-primary:hover { background: #15803d; }
-    .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .btn-upgrade {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #fff;
+      font-size: 0.875rem;
+      padding: 0.625rem 1.25rem;
+    }
+    .btn-upgrade:hover { background: #6d28d9; }
+    .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
     .login-prompt {
       text-align: center;
       padding: 3rem 1rem;
@@ -125,13 +134,48 @@
     }
     .muted { color: #666; font-size: 0.75rem; }
     .hidden { display: none; }
+    .upgrade-banner {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border: 1px solid #4338ca;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .upgrade-banner h3 {
+      color: #c4b5fd;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .upgrade-banner p {
+      color: #a5b4fc;
+      font-size: 0.8125rem;
+      margin-bottom: 1rem;
+    }
+    .upgrade-banner .btn-upgrade { width: 100%; }
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      margin-bottom: 1rem;
+    }
+    .alert-success {
+      background: #1e3a2f;
+      border: 1px solid #166534;
+      color: #4ade80;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">lakecode</div>
+      <a href="/" class="logo">lakecode</a>
       <a href="/auth" class="btn" id="nav-auth-link">Sign In</a>
+    </div>
+
+    <!-- Setup complete alert -->
+    <div id="setup-alert" class="alert alert-success hidden">
+      Payment method saved. You've been upgraded to Pro!
     </div>
 
     <!-- Login prompt (shown when no key stored) -->
@@ -146,6 +190,16 @@
 
     <!-- Dashboard (shown after auth) -->
     <div id="dashboard-view" class="hidden">
+
+      <!-- Upgrade banner (free users only) -->
+      <div id="upgrade-banner" class="upgrade-banner hidden">
+        <h3>Upgrade to Pro</h3>
+        <p>Get unlimited usage with auto-reloading credits. Pay only for what you use.</p>
+        <button class="btn btn-upgrade" onclick="upgradeToPro()" id="upgrade-btn">
+          Add Payment Method & Upgrade
+        </button>
+      </div>
+
       <!-- Plan -->
       <div class="card">
         <div class="card-title">Plan</div>
@@ -157,25 +211,28 @@
           <span class="stat-label">Email</span>
           <span class="stat-value" id="email">—</span>
         </div>
-        <div class="btn-group">
+        <div class="btn-group" id="billing-actions">
           <a href="#" class="btn" id="billing-link" onclick="openBillingPortal(); return false;">Manage Billing</a>
-          <a href="https://lakecode.ai/pricing" class="btn btn-primary" id="upgrade-link">Upgrade to Pro</a>
         </div>
       </div>
 
-      <!-- Usage -->
+      <!-- Credits -->
       <div class="card">
-        <div class="card-title">Token Usage (this period)</div>
-        <div class="stat">
-          <span class="stat-label">Tokens used</span>
-          <span class="stat-value" id="usage-text">0 / 100,000</span>
+        <div class="card-title">Credits</div>
+        <div class="stat" id="daily-free-stat">
+          <span class="stat-label">Free daily allowance used</span>
+          <span class="stat-value" id="daily-usage-text">$0.00 / $1.00</span>
         </div>
-        <div class="progress-bar">
-          <div id="usage-bar" class="progress-fill progress-green" style="width: 0%"></div>
+        <div class="progress-bar" id="daily-progress">
+          <div id="daily-bar" class="progress-fill progress-green" style="width: 0%"></div>
         </div>
-        <div class="stat">
-          <span class="stat-label">Period resets</span>
-          <span class="stat-value" id="reset-date">—</span>
+        <div class="stat" id="balance-stat">
+          <span class="stat-label">Credit balance</span>
+          <span class="stat-value" id="balance-text">$0.00</span>
+        </div>
+        <div class="stat" id="reload-stat" class="hidden">
+          <span class="stat-label">Auto-reload</span>
+          <span class="stat-value" id="reload-text">—</span>
         </div>
       </div>
 
@@ -221,7 +278,6 @@
       document.getElementById('login-view').classList.remove('hidden');
       document.getElementById('dashboard-view').classList.add('hidden');
 
-      // Nav: reset to Sign In
       const navLink = document.getElementById('nav-auth-link');
       navLink.textContent = 'Sign In';
       navLink.href = '/auth';
@@ -246,26 +302,50 @@
       // Email
       document.getElementById('email').textContent = data.email;
 
-      // Usage
-      const pct = Math.min(100, (data.token_usage / data.token_limit) * 100);
-      document.getElementById('usage-text').textContent =
-        `${data.token_usage.toLocaleString()} / ${data.token_limit.toLocaleString()}`;
-      const bar = document.getElementById('usage-bar');
-      bar.style.width = `${pct}%`;
-      bar.className = `progress-fill ${pct > 90 ? 'progress-red' : pct > 70 ? 'progress-yellow' : 'progress-green'}`;
+      // Upgrade banner: show for free/trial users, hide for pro
+      const upgradeBanner = document.getElementById('upgrade-banner');
+      if (data.plan === 'free' || data.plan === 'trial') {
+        upgradeBanner.classList.remove('hidden');
+      } else {
+        upgradeBanner.classList.add('hidden');
+      }
 
-      // Reset date
-      document.getElementById('reset-date').textContent =
-        data.period_reset_at || 'End of month';
+      // Billing actions: show manage billing only for pro users with payment method
+      const billingLink = document.getElementById('billing-link');
+      if (data.has_payment_method) {
+        billingLink.classList.remove('hidden');
+      } else {
+        billingLink.classList.add('hidden');
+      }
+
+      // Daily free usage
+      const dailyUsed = data.daily_free_used_cents || 0;
+      const dailyLimit = data.daily_free_allowance_cents || 100;
+      const dailyPct = Math.min(100, (dailyUsed / dailyLimit) * 100);
+      document.getElementById('daily-usage-text').textContent =
+        `$${(dailyUsed / 100).toFixed(2)} / $${(dailyLimit / 100).toFixed(2)}`;
+      const dailyBar = document.getElementById('daily-bar');
+      dailyBar.style.width = `${dailyPct}%`;
+      dailyBar.className = `progress-fill ${dailyPct > 90 ? 'progress-red' : dailyPct > 70 ? 'progress-yellow' : 'progress-green'}`;
+
+      // Credit balance
+      const balance = data.credit_balance_cents || 0;
+      document.getElementById('balance-text').textContent = `$${(balance / 100).toFixed(2)}`;
+
+      // Auto-reload info
+      const reloadStat = document.getElementById('reload-stat');
+      if (data.has_payment_method) {
+        reloadStat.classList.remove('hidden');
+        const reloadAmt = (data.reload_amount_cents || 4900) / 100;
+        document.getElementById('reload-text').textContent =
+          data.auto_reload_enabled ? `$${reloadAmt.toFixed(2)} (enabled)` : 'Disabled';
+      } else {
+        reloadStat.classList.add('hidden');
+      }
 
       // License key
       document.getElementById('license-key').textContent =
         key.slice(0, 20) + '...' + key.slice(-10);
-
-      // Hide upgrade button for pro users
-      if (data.plan === 'pro') {
-        document.getElementById('upgrade-link').classList.add('hidden');
-      }
     }
 
     function submitKey() {
@@ -283,6 +363,36 @@
       }
     }
 
+    async function upgradeToPro() {
+      if (!storedKey) return;
+      const btn = document.getElementById('upgrade-btn');
+      btn.textContent = 'Redirecting to Stripe...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/stripe/setup`, {
+          method: 'POST',
+          headers: {
+            'x-api-key': storedKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ return_url: window.location.href }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Could not start checkout. Please try again.');
+          btn.textContent = 'Add Payment Method & Upgrade';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Could not reach server. Please try again.');
+        btn.textContent = 'Add Payment Method & Upgrade';
+        btn.disabled = false;
+      }
+    }
+
     async function openBillingPortal() {
       if (!storedKey) return;
       try {
@@ -294,7 +404,7 @@
         if (data.url) {
           window.location.href = data.url;
         } else {
-          alert(data.message || 'Could not open billing portal. Set up a payment method first.');
+          alert(data.message || 'Could not open billing portal.');
         }
       } catch {
         alert('Could not reach server. Please try again.');
@@ -307,16 +417,27 @@
       showLogin();
     }
 
-    // Check URL fragment for key from OAuth redirect (e.g. /dashboard#key=lk_...)
+    // Check URL fragment for key from OAuth redirect
     const fragment = window.location.hash;
     if (fragment.startsWith('#key=')) {
       const keyFromUrl = fragment.slice(5);
       if (keyFromUrl.startsWith('lk_')) {
         localStorage.setItem('lakecode_key', keyFromUrl);
         storedKey = keyFromUrl;
-        // Clean the fragment from the URL so key isn't visible/bookmarkable
-        history.replaceState(null, '', window.location.pathname);
+        history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+    }
+
+    // Check for setup=complete query param (Stripe redirect)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('setup') === 'complete') {
+      document.getElementById('setup-alert').classList.remove('hidden');
+      // Clean URL
+      history.replaceState(null, '', window.location.pathname);
+      // Auto-hide after 5s
+      setTimeout(() => {
+        document.getElementById('setup-alert').classList.add('hidden');
+      }, 5000);
     }
 
     // Auto-load if key stored
