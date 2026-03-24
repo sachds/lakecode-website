@@ -325,6 +325,21 @@
       font-size: 0.875rem;
     }
 
+    .refresh-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--accent);
+      margin-left: 4px;
+      transition: opacity 0.2s;
+      padding: 0;
+      line-height: 1;
+    }
+    .refresh-btn:hover { opacity: 0.7; }
+    .refresh-btn.spinning { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     @media (max-width: 768px) {
       .tier-grid { grid-template-columns: 1fr; }
       .activity-summary { flex-direction: column; gap: 12px; }
@@ -483,7 +498,10 @@
 
         <!-- Recent Activity -->
         <div class="dash-card" style="margin-bottom: 20px;" id="activity-section">
-          <h3>Recent Activity</h3>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <h3>Recent Activity</h3>
+            <button class="refresh-btn" id="refresh-activity-btn" onclick="loadActivity(storedKey)" title="Refresh">&#x21bb;</button>
+          </div>
           <div id="activity-summary" class="activity-summary hidden">
             <div class="activity-stat">
               <span class="activity-stat-value" id="stat-requests-today">0</span>
@@ -852,6 +870,8 @@
     async function loadActivity(key) {
       const feedEl = document.getElementById('activity-feed');
       const summaryEl = document.getElementById('activity-summary');
+      const refreshBtn = document.getElementById('refresh-activity-btn');
+      if (refreshBtn) refreshBtn.classList.add('spinning');
       try {
         const res = await fetch(API_URL + '/account/usage', { headers: { 'x-api-key': key } });
         if (!res.ok) {
@@ -899,6 +919,8 @@
       } catch (err) {
         console.error('Activity load failed:', err);
         feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
+      } finally {
+        if (refreshBtn) refreshBtn.classList.remove('spinning');
       }
     }
 
