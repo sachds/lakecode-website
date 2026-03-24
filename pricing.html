@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Lakecode</title>
-  <meta name="description" content="Lakecode pricing. Free daily credits plus auto-reload for heavy usage.">
+  <meta name="description" content="Lakecode pricing — Free, Pro, and Team plans starting at $20/month.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,14 +39,14 @@
   <!-- Pricing -->
   <section class="page-hero">
     <div class="container">
-      <h1>Pay for what you use</h1>
-      <p class="page-sub">Free daily credits to get started. Add a payment method and your balance auto-reloads.</p>
+      <h1>Simple, transparent pricing</h1>
+      <p class="page-sub">Start free. Upgrade when you need more.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="pricing-grid" style="max-width: 700px; margin: 0 auto;">
+      <div class="pricing-grid three-col">
         <!-- Free -->
         <div class="pricing-card">
           <div class="pricing-header">
@@ -57,52 +57,72 @@
             <p class="pricing-desc">Try lakecode with no commitment.</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Free daily credits</li>
-            <li><span class="check">&#10003;</span> Enough for a few commands per day</li>
-            <li><span class="check">&#10003;</span> Resets every night at midnight UTC</li>
-            <li><span class="check">&#10003;</span> All features included</li>
+            <li><span class="check">&#10003;</span> Limited daily usage</li>
+            <li><span class="check">&#10003;</span> All platforms (Databricks & Snowflake)</li>
+            <li><span class="check">&#10003;</span> All commands & workflows</li>
+            <li><span class="check">&#10003;</span> Resets every 24 hours</li>
             <li><span class="check">&#10003;</span> No credit card required</li>
           </ul>
           <a href="/signin" class="btn btn-secondary btn-full">Get Started Free</a>
         </div>
 
-        <!-- Paid -->
+        <!-- Pro -->
         <div class="pricing-card featured">
-          <div class="pricing-badge">Recommended</div>
+          <div class="pricing-badge">Most Popular</div>
           <div class="pricing-header">
             <h3>Pro</h3>
             <div class="pricing-price">
-              <span class="price-amount">$49</span>
-              <span class="price-period">default reload</span>
+              <span class="price-amount">$20</span>
+              <span class="price-period">/month</span>
             </div>
-            <p class="pricing-desc">Add a card, set your reload amount, never run out.</p>
+            <p class="pricing-desc">Unlimited usage for individual developers.</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Daily free credits included</li>
+            <li><span class="check">&#10003;</span> Unlimited daily usage</li>
+            <li><span class="check">&#10003;</span> No request limits</li>
             <li><span class="check">&#10003;</span> Auto-reload when balance is low</li>
-            <li><span class="check">&#10003;</span> Set any reload amount ($5+)</li>
-            <li><span class="check">&#10003;</span> Pause or adjust anytime</li>
-            <li><span class="check">&#10003;</span> Full charge history on dashboard</li>
+            <li><span class="check">&#10003;</span> Priority support</li>
+            <li><span class="check">&#10003;</span> Cancel anytime</li>
           </ul>
-          <a href="/signin" class="btn btn-primary btn-full" id="setup-btn">Add Payment Method</a>
+          <a href="/dashboard" class="btn btn-primary btn-full" id="pro-btn">Upgrade to Pro</a>
+        </div>
+
+        <!-- Team -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>Team</h3>
+            <div class="pricing-price">
+              <span class="price-amount">$20</span>
+              <span class="price-period">/user/month</span>
+            </div>
+            <p class="pricing-desc">For teams and organizations.</p>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="check">&#10003;</span> Everything in Pro</li>
+            <li><span class="check">&#10003;</span> Team management</li>
+            <li><span class="check">&#10003;</span> Shared billing</li>
+            <li><span class="check">&#10003;</span> Usage analytics per user</li>
+            <li><span class="check">&#10003;</span> Centralized admin</li>
+          </ul>
+          <a href="/dashboard" class="btn btn-secondary btn-full" id="team-btn">Upgrade to Team</a>
         </div>
       </div>
 
       <!-- How it works -->
       <div class="credits-explainer">
-        <h3>How auto-reload works</h3>
+        <h3>How it works</h3>
         <div class="explainer-grid">
           <div class="explainer-item">
-            <strong>1. Add a payment method</strong>
-            <p>Securely save a card via Stripe. Your first reload amount is charged immediately.</p>
+            <strong>1. Sign up free</strong>
+            <p>Create an account with Google. You'll get a license key and limited daily usage to try everything out.</p>
           </div>
           <div class="explainer-item">
-            <strong>2. Use lakecode normally</strong>
-            <p>Each command deducts from your balance based on actual AI tokens used. Free credits are used first.</p>
+            <strong>2. Upgrade when ready</strong>
+            <p>Save a payment method via Stripe from your dashboard. You're immediately upgraded and auto-reload is enabled.</p>
           </div>
           <div class="explainer-item">
-            <strong>3. Auto top-up</strong>
-            <p>When your balance drops below 20% of your reload amount, we automatically charge your card and add credits.</p>
+            <strong>3. Never run out</strong>
+            <p>When your balance gets low, your card is automatically charged and your balance is topped up. Pause or cancel anytime.</p>
           </div>
         </div>
       </div>
@@ -112,23 +132,23 @@
         <h2>Questions</h2>
         <details class="faq-item">
           <summary>Can I use my own API keys instead?</summary>
-          <p>Yes. Lakecode supports BYOK (bring your own key) for Anthropic and OpenAI. Your own keys bypass the credit system entirely.</p>
+          <p>Yes. Lakecode supports BYOK (bring your own key) for Anthropic and OpenAI. Your own keys bypass the billing system entirely.</p>
         </details>
         <details class="faq-item">
-          <summary>What happens when I run out of credits?</summary>
-          <p>If auto-reload is enabled, your card is charged and credits are added automatically. If disabled, free daily credits reset at midnight UTC. With no balance remaining, you'll be prompted to add a payment method.</p>
+          <summary>What happens when I hit the free daily limit?</summary>
+          <p>You'll see a message that your daily usage is exhausted. It resets every 24 hours, or you can upgrade to Pro for unlimited usage.</p>
         </details>
         <details class="faq-item">
-          <summary>Can I change or pause auto-reload?</summary>
-          <p>Yes. On your dashboard you can change the reload amount, toggle auto-reload on or off, or manually trigger a reload anytime.</p>
+          <summary>Can I change or cancel my plan?</summary>
+          <p>Yes. On your dashboard, click "Manage Billing" to update your payment method, change plans, or cancel. Changes take effect immediately.</p>
         </details>
         <details class="faq-item">
-          <summary>How much does a typical command cost?</summary>
-          <p>Simple commands like /status cost a few cents. Complex workflows like /debug or /audit can cost $0.30&ndash;$0.80 depending on the data involved.</p>
+          <summary>What does auto-reload mean?</summary>
+          <p>When your usage balance drops below a threshold, we automatically charge your saved payment method for $20 and top up your account. This way you never run out mid-session.</p>
         </details>
         <details class="faq-item">
-          <summary>Do you offer team pricing?</summary>
-          <p>Not yet, but it's on the roadmap. Reach out if you have a team of 5+ and we'll work something out.</p>
+          <summary>How does Team billing work?</summary>
+          <p>Team plans are billed per user per month. One admin manages billing and can add or remove team members. All usage is tracked per user with shared analytics.</p>
         </details>
       </div>
     </div>
@@ -161,14 +181,5 @@
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    // If signed in, redirect "Add Payment Method" to dashboard setup flow
-    const existingKey = localStorage.getItem('lk_key');
-    if (existingKey) {
-      const setupBtn = document.getElementById('setup-btn');
-      setupBtn.href = '/dashboard';
-      setupBtn.textContent = 'Go to Dashboard';
-    }
-  </script>
 </body>
 </html>
