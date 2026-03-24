@@ -259,8 +259,75 @@
       color: var(--green);
     }
 
+    /* Activity feed */
+    .activity-summary {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+    .activity-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .activity-stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .activity-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .activity-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+      gap: 12px;
+    }
+    .activity-row:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .activity-icon.usage { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
+    .activity-icon.reload { background: rgba(34, 197, 94, 0.1); color: var(--green); }
+    .activity-details { flex: 1; min-width: 0; }
+    .activity-desc { font-size: 0.875rem; }
+    .activity-time { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
+    .model-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      font-family: var(--mono);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .activity-amount { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .activity-amount.debit { color: var(--text); }
+    .activity-amount.credit { color: var(--green); }
+    .activity-empty {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-dim);
+      font-size: 0.875rem;
+    }
+
     @media (max-width: 768px) {
       .tier-grid { grid-template-columns: 1fr; }
+      .activity-summary { flex-direction: column; gap: 12px; }
     }
   </style>
 </head>
@@ -411,6 +478,24 @@
           <div class="key-mono" id="license-key">lk_...</div>
           <div style="margin-top: 12px;">
             <button class="btn btn-sm btn-secondary" onclick="copyKey()">Copy Key</button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dash-card" style="margin-bottom: 20px;" id="activity-section">
+          <h3>Recent Activity</h3>
+          <div id="activity-summary" class="activity-summary hidden">
+            <div class="activity-stat">
+              <span class="activity-stat-value" id="stat-requests-today">0</span>
+              <span class="activity-stat-label">Requests today</span>
+            </div>
+            <div class="activity-stat">
+              <span class="activity-stat-value" id="stat-spent-today">$0.00</span>
+              <span class="activity-stat-label">Spent today</span>
+            </div>
+          </div>
+          <div id="activity-feed">
+            <div class="activity-empty" style="color: var(--text-dim); font-size: 0.8125rem;">Loading...</div>
           </div>
         </div>
 
@@ -575,6 +660,7 @@
         }
         const data = await res.json();
         renderDashboard(data, key);
+        loadActivity(key);
       } catch (err) {
         console.error('Dashboard load failed:', err);
         showLogin();
@@ -726,6 +812,94 @@
       localStorage.removeItem('lk_key');
       storedKey = null;
       showLogin();
+    }
+
+    // ── Activity Feed ──
+
+    function timeAgo(dateStr) {
+      const now = Date.now();
+      const then = new Date(dateStr + (dateStr.endsWith('Z') ? '' : 'Z')).getTime();
+      const diffSec = Math.floor((now - then) / 1000);
+      if (diffSec < 60) return 'just now';
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return diffMin + 'm ago';
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) return diffHr + 'h ago';
+      const diffDay = Math.floor(diffHr / 24);
+      if (diffDay === 1) return 'yesterday';
+      if (diffDay < 7) return diffDay + 'd ago';
+      return new Date(then).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function shortModel(model) {
+      const m = model.replace('claude-', '');
+      const parts = m.split('-');
+      if (parts.length >= 2) {
+        const family = parts[0];
+        const major = parts[1];
+        const minor = parts[2];
+        if (minor && minor.length === 1) return family + '-' + major + '.' + minor;
+        return family + '-' + major;
+      }
+      return m;
+    }
+
+    function formatAmount(cents) {
+      if (cents < 100) return cents + '\u00a2';
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    async function loadActivity(key) {
+      const feedEl = document.getElementById('activity-feed');
+      const summaryEl = document.getElementById('activity-summary');
+      try {
+        const res = await fetch(API_URL + '/account/usage', { headers: { 'x-api-key': key } });
+        if (!res.ok) {
+          feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
+          return;
+        }
+        const data = await res.json();
+
+        // Summary
+        if (data.summary) {
+          document.getElementById('stat-requests-today').textContent = data.summary.requests_today;
+          document.getElementById('stat-spent-today').textContent = '$' + (data.summary.spent_today_cents / 100).toFixed(2);
+          summaryEl.classList.remove('hidden');
+        }
+
+        // Feed
+        if (!data.activity || data.activity.length === 0) {
+          feedEl.innerHTML = '<div class="activity-empty">No activity yet. Start a conversation to see usage here.</div>';
+          return;
+        }
+
+        let html = '';
+        for (const item of data.activity) {
+          if (item.type === 'usage') {
+            html += '<div class="activity-row">'
+              + '<div class="activity-icon usage">&darr;</div>'
+              + '<div class="activity-details">'
+              + '<div class="activity-desc"><span class="model-badge">' + shortModel(item.model) + '</span></div>'
+              + '<div class="activity-time">' + timeAgo(item.created_at) + '</div>'
+              + '</div>'
+              + '<div class="activity-amount debit">&minus;' + formatAmount(item.amount_cents) + '</div>'
+              + '</div>';
+          } else if (item.type === 'reload') {
+            html += '<div class="activity-row">'
+              + '<div class="activity-icon reload">+</div>'
+              + '<div class="activity-details">'
+              + '<div class="activity-desc">Balance reload</div>'
+              + '<div class="activity-time">' + timeAgo(item.created_at) + '</div>'
+              + '</div>'
+              + '<div class="activity-amount credit">+' + formatAmount(item.amount_cents) + '</div>'
+              + '</div>';
+          }
+        }
+        feedEl.innerHTML = html;
+      } catch (err) {
+        console.error('Activity load failed:', err);
+        feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
+      }
     }
 
     // ── Init ──
