@@ -206,7 +206,7 @@
       padding: 0.15rem 0;
     }
     .tier-features li::before {
-      content: "✓ ";
+      content: "\2713  ";
       color: #4ade80;
       font-weight: bold;
     }
@@ -238,10 +238,116 @@
       opacity: 0.5;
       cursor: default;
     }
-    .tier-subtext {
-      font-size: 0.625rem;
-      color: #666;
+
+    /* Checkout confirmation overlay */
+    .checkout-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+    .checkout-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 100%;
+    }
+    .checkout-card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .checkout-card .checkout-plan-name {
+      font-size: 0.8125rem;
+      color: #a78bfa;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+    .checkout-summary {
+      background: #111;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .checkout-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.375rem 0;
+      font-size: 0.8125rem;
+    }
+    .checkout-row .label { color: #888; }
+    .checkout-row .value { color: #e5e5e5; font-weight: 500; }
+    .checkout-row.total {
+      border-top: 1px solid #333;
       margin-top: 0.5rem;
+      padding-top: 0.75rem;
+    }
+    .checkout-row.total .label { color: #e5e5e5; font-weight: 600; }
+    .checkout-row.total .value { color: #fff; font-size: 1rem; font-weight: 700; }
+    .checkout-details {
+      list-style: none;
+      margin-bottom: 1.25rem;
+    }
+    .checkout-details li {
+      font-size: 0.75rem;
+      color: #888;
+      padding: 0.2rem 0;
+    }
+    .checkout-details li::before {
+      content: "\2713  ";
+      color: #4ade80;
+    }
+    .btn-checkout {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 0.5rem;
+    }
+    .btn-checkout-pro {
+      background: #7c3aed;
+      color: #fff;
+    }
+    .btn-checkout-pro:hover { background: #6d28d9; }
+    .btn-checkout-team {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    .btn-checkout-team:hover { background: #1e40af; }
+    .btn-checkout:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .btn-cancel {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      background: transparent;
+      color: #888;
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+    .btn-cancel:hover { color: #e5e5e5; }
+    .checkout-note {
+      font-size: 0.6875rem;
+      color: #555;
+      text-align: center;
+      margin-top: 0.75rem;
+      line-height: 1.5;
     }
 
     .usage-label {
@@ -275,9 +381,7 @@
     }
     .pro-status-dot.green { background: #4ade80; }
     .pro-status-dot.blue { background: #60a5fa; }
-    .pro-status-text {
-      font-size: 0.8125rem;
-    }
+    .pro-status-text { font-size: 0.8125rem; }
     .pro-status-text.green { color: #4ade80; }
     .pro-status-text.blue { color: #60a5fa; }
 
@@ -315,7 +419,6 @@
       <!-- Pricing tiers (shown for free/trial users) -->
       <div id="pricing-section" class="hidden">
         <div class="pricing-grid">
-          <!-- Free tier -->
           <div class="tier-card" id="tier-free">
             <div class="tier-name">Free</div>
             <div class="tier-price">$0</div>
@@ -327,8 +430,6 @@
             </ul>
             <button class="btn-tier" disabled>Current Plan</button>
           </div>
-
-          <!-- Pro tier -->
           <div class="tier-card" id="tier-pro">
             <div class="tier-name">Pro</div>
             <div class="tier-price">$20 <span>/mo</span></div>
@@ -339,13 +440,10 @@
               <li>Auto-reload</li>
               <li>Priority support</li>
             </ul>
-            <button class="btn-tier btn-tier-pro" onclick="upgradeToplan('pro')" id="btn-upgrade-pro">
+            <button class="btn-tier btn-tier-pro" onclick="showCheckout('pro')">
               Upgrade to Pro
             </button>
-            <p class="tier-subtext">Save payment method for auto-reload</p>
           </div>
-
-          <!-- Team tier -->
           <div class="tier-card" id="tier-team">
             <div class="tier-name">Team</div>
             <div class="tier-price">$20 <span>/user/mo</span></div>
@@ -356,10 +454,9 @@
               <li>Shared billing</li>
               <li>Usage analytics</li>
             </ul>
-            <button class="btn-tier btn-tier-team" onclick="upgradeToplan('team')" id="btn-upgrade-team">
+            <button class="btn-tier btn-tier-team" onclick="showCheckout('team')">
               Upgrade to Team
             </button>
-            <p class="tier-subtext">Save payment method for auto-reload</p>
           </div>
         </div>
       </div>
@@ -373,7 +470,7 @@
         </div>
         <div class="stat">
           <span class="stat-label">Email</span>
-          <span class="stat-value" id="email">—</span>
+          <span class="stat-value" id="email">&mdash;</span>
         </div>
         <div id="plan-description-stat" class="stat">
           <span class="stat-label" id="plan-desc-text">Limited daily usage</span>
@@ -386,8 +483,6 @@
       <!-- Usage -->
       <div class="card">
         <div class="card-title">Usage</div>
-
-        <!-- Free plan: daily usage bar -->
         <div id="free-usage-section">
           <div class="usage-label">
             <span>Daily usage</span>
@@ -396,12 +491,8 @@
           <div class="progress-bar">
             <div id="daily-bar" class="progress-fill progress-green" style="width: 0%"></div>
           </div>
-          <p class="muted" style="margin-top: 0.5rem;" id="usage-hint">
-            Resets every 24 hours
-          </p>
+          <p class="muted" style="margin-top: 0.5rem;" id="usage-hint">Resets every 24 hours</p>
         </div>
-
-        <!-- Paid plan: active status -->
         <div id="paid-usage-section" class="hidden">
           <div class="pro-status">
             <div class="pro-status-dot" id="paid-status-dot"></div>
@@ -409,7 +500,7 @@
           </div>
           <div class="stat" style="margin-top: 0.75rem;">
             <span class="stat-label">Auto-reload</span>
-            <span class="stat-value" id="reload-text">—</span>
+            <span class="stat-value" id="reload-text">&mdash;</span>
           </div>
         </div>
       </div>
@@ -425,16 +516,153 @@
     </div>
   </div>
 
+  <!-- Checkout confirmation overlay -->
+  <div id="checkout-overlay" class="checkout-overlay hidden">
+    <div class="checkout-card">
+      <h2>Confirm your upgrade</h2>
+      <div class="checkout-plan-name" id="checkout-plan-name">Pro Plan</div>
+
+      <div class="checkout-summary">
+        <div class="checkout-row">
+          <span class="label">Plan</span>
+          <span class="value" id="checkout-plan-label">Pro</span>
+        </div>
+        <div class="checkout-row">
+          <span class="label">Billing</span>
+          <span class="value" id="checkout-billing">Monthly</span>
+        </div>
+        <div class="checkout-row total">
+          <span class="label">Price</span>
+          <span class="value" id="checkout-price">$20/mo</span>
+        </div>
+      </div>
+
+      <ul class="checkout-details" id="checkout-features"></ul>
+
+      <button class="btn-checkout" id="checkout-confirm-btn" onclick="confirmCheckout()">
+        Continue to Payment
+      </button>
+      <button class="btn-cancel" onclick="hideCheckout()">Cancel</button>
+
+      <p class="checkout-note">
+        You'll be taken to Stripe to securely save a payment method.<br>
+        Your card will be saved for automatic reloading. Cancel anytime from your dashboard.
+      </p>
+    </div>
+  </div>
+
   <script>
     const API_URL = 'https://api.lakecode.ai';
     let storedKey = localStorage.getItem('lakecode_key');
+    let selectedPlan = null;
 
+    // ── Plan details ──
+    const PLANS = {
+      pro: {
+        name: 'Pro Plan',
+        label: 'Pro',
+        price: '$20/mo',
+        billing: 'Monthly',
+        btnClass: 'btn-checkout-pro',
+        features: [
+          'Unlimited daily usage',
+          'No request limits',
+          'Auto-reload when balance is low',
+          'Priority support',
+          'Cancel anytime',
+        ],
+      },
+      team: {
+        name: 'Team Plan',
+        label: 'Team',
+        price: '$20/user/mo',
+        billing: 'Monthly, per user',
+        btnClass: 'btn-checkout-team',
+        features: [
+          'Everything in Pro',
+          'Team management & invites',
+          'Shared billing under one account',
+          'Per-user usage analytics',
+          'Centralized admin controls',
+        ],
+      },
+    };
+
+    // ── Checkout overlay ──
+    function showCheckout(plan) {
+      const info = PLANS[plan];
+      if (!info) return;
+      selectedPlan = plan;
+
+      document.getElementById('checkout-plan-name').textContent = info.name;
+      document.getElementById('checkout-plan-label').textContent = info.label;
+      document.getElementById('checkout-billing').textContent = info.billing;
+      document.getElementById('checkout-price').textContent = info.price;
+
+      const featList = document.getElementById('checkout-features');
+      featList.innerHTML = '';
+      info.features.forEach(f => {
+        const li = document.createElement('li');
+        li.textContent = f;
+        featList.appendChild(li);
+      });
+
+      const btn = document.getElementById('checkout-confirm-btn');
+      btn.className = `btn-checkout ${info.btnClass}`;
+      btn.textContent = 'Continue to Payment';
+      btn.disabled = false;
+
+      document.getElementById('checkout-overlay').classList.remove('hidden');
+    }
+
+    function hideCheckout() {
+      document.getElementById('checkout-overlay').classList.add('hidden');
+      selectedPlan = null;
+      // Clean upgrade param from URL
+      const url = new URL(window.location);
+      url.searchParams.delete('upgrade');
+      history.replaceState(null, '', url.pathname + url.search);
+    }
+
+    async function confirmCheckout() {
+      if (!storedKey || !selectedPlan) return;
+      const btn = document.getElementById('checkout-confirm-btn');
+      btn.textContent = 'Redirecting to Stripe...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/stripe/setup`, {
+          method: 'POST',
+          headers: {
+            'x-api-key': storedKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            return_url: window.location.origin + '/dashboard',
+            plan: selectedPlan,
+          }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Could not start checkout. Please try again.');
+          btn.textContent = 'Continue to Payment';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Could not reach server. Please try again.');
+        btn.textContent = 'Continue to Payment';
+        btn.disabled = false;
+      }
+    }
+
+    // ── Dashboard load ──
     async function loadDashboard(key) {
       try {
         const res = await fetch(`${API_URL}/account`, {
           headers: { 'x-api-key': key }
         });
-
         if (!res.ok) {
           if (res.status === 401) {
             localStorage.removeItem('lakecode_key');
@@ -443,7 +671,6 @@
           }
           throw new Error(`HTTP ${res.status}`);
         }
-
         const data = await res.json();
         showDashboard(data, key);
       } catch (err) {
@@ -455,7 +682,6 @@
     function showLogin() {
       document.getElementById('login-view').classList.remove('hidden');
       document.getElementById('dashboard-view').classList.add('hidden');
-
       const navLink = document.getElementById('nav-auth-link');
       navLink.textContent = 'Sign In';
       navLink.href = '/auth';
@@ -466,7 +692,6 @@
       document.getElementById('login-view').classList.add('hidden');
       document.getElementById('dashboard-view').classList.remove('hidden');
 
-      // Nav: switch to Sign Out
       const navLink = document.getElementById('nav-auth-link');
       navLink.textContent = 'Sign Out';
       navLink.href = '#';
@@ -485,27 +710,21 @@
 
       // Plan description
       const planDesc = document.getElementById('plan-desc-text');
-      if (plan === 'team') {
-        planDesc.textContent = 'Unlimited usage — team plan';
-      } else if (plan === 'pro') {
-        planDesc.textContent = 'Unlimited usage with auto-reload';
-      } else if (plan === 'trial') {
-        planDesc.textContent = 'Trial — limited daily usage';
-      } else {
-        planDesc.textContent = 'Limited daily usage';
-      }
+      if (plan === 'team') planDesc.textContent = 'Unlimited usage — team plan';
+      else if (plan === 'pro') planDesc.textContent = 'Unlimited usage with auto-reload';
+      else if (plan === 'trial') planDesc.textContent = 'Trial — limited daily usage';
+      else planDesc.textContent = 'Limited daily usage';
 
-      // Pricing section: show for free/trial users, hide for paid
+      // Pricing section: show for free/trial users
       const pricingSection = document.getElementById('pricing-section');
       if (!isPaid) {
         pricingSection.classList.remove('hidden');
-        // Mark current plan
         document.getElementById('tier-free').classList.toggle('current', plan === 'free');
       } else {
         pricingSection.classList.add('hidden');
       }
 
-      // Billing actions: show manage billing only for users with payment method
+      // Billing actions
       const billingLink = document.getElementById('billing-link');
       if (data.has_payment_method) {
         billingLink.classList.remove('hidden');
@@ -513,7 +732,7 @@
         billingLink.classList.add('hidden');
       }
 
-      // Usage section: show different views for free vs paid
+      // Usage section
       const freeUsage = document.getElementById('free-usage-section');
       const paidUsage = document.getElementById('paid-usage-section');
 
@@ -521,7 +740,6 @@
         freeUsage.classList.add('hidden');
         paidUsage.classList.remove('hidden');
 
-        // Color based on plan
         const dot = document.getElementById('paid-status-dot');
         const statusText = document.getElementById('paid-status-text');
         if (plan === 'team') {
@@ -534,7 +752,6 @@
           statusText.textContent = 'Unlimited usage — active';
         }
 
-        // Auto-reload info
         if (data.has_payment_method) {
           const reloadAmt = (data.reload_amount_cents || 2000) / 100;
           document.getElementById('reload-text').textContent =
@@ -546,7 +763,6 @@
         freeUsage.classList.remove('hidden');
         paidUsage.classList.add('hidden');
 
-        // Daily usage bar (percentage only, no dollar amounts)
         const dailyUsed = data.daily_free_used_cents || 0;
         const dailyLimit = data.daily_free_allowance_cents || 100;
         const dailyPct = Math.min(100, Math.round((dailyUsed / dailyLimit) * 100));
@@ -557,10 +773,9 @@
         dailyBar.style.width = `${dailyPct}%`;
         dailyBar.className = `progress-fill ${dailyPct > 90 ? 'progress-red' : dailyPct > 70 ? 'progress-yellow' : 'progress-green'}`;
 
-        const usagePctEl = document.getElementById('usage-pct-text');
-        usagePctEl.style.color = dailyPct > 90 ? '#ef4444' : dailyPct > 70 ? '#f59e0b' : '#4ade80';
+        document.getElementById('usage-pct-text').style.color =
+          dailyPct > 90 ? '#ef4444' : dailyPct > 70 ? '#f59e0b' : '#4ade80';
 
-        // Show hint based on usage
         const hint = document.getElementById('usage-hint');
         if (dailyPct >= 100) {
           hint.textContent = 'Daily limit reached — upgrade for unlimited usage';
@@ -576,6 +791,13 @@
       // License key
       document.getElementById('license-key').textContent =
         key.slice(0, 20) + '...' + key.slice(-10);
+
+      // If there's an upgrade intent from URL, auto-open checkout
+      const urlParams = new URLSearchParams(window.location.search);
+      const upgradeIntent = urlParams.get('upgrade');
+      if (upgradeIntent && PLANS[upgradeIntent] && !isPaid) {
+        showCheckout(upgradeIntent);
+      }
     }
 
     function submitKey() {
@@ -590,40 +812,6 @@
     function copyKey() {
       if (storedKey) {
         navigator.clipboard.writeText(storedKey);
-      }
-    }
-
-    async function upgradeToplan(plan) {
-      if (!storedKey) return;
-      const btnId = plan === 'team' ? 'btn-upgrade-team' : 'btn-upgrade-pro';
-      const btn = document.getElementById(btnId);
-      btn.textContent = 'Redirecting to Stripe...';
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(`${API_URL}/stripe/setup`, {
-          method: 'POST',
-          headers: {
-            'x-api-key': storedKey,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            return_url: window.location.href,
-            plan: plan,
-          }),
-        });
-        const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert(data.error || 'Could not start checkout. Please try again.');
-          btn.textContent = plan === 'team' ? 'Upgrade to Team' : 'Upgrade to Pro';
-          btn.disabled = false;
-        }
-      } catch {
-        alert('Could not reach server. Please try again.');
-        btn.textContent = plan === 'team' ? 'Upgrade to Team' : 'Upgrade to Pro';
-        btn.disabled = false;
       }
     }
 
@@ -651,6 +839,8 @@
       showLogin();
     }
 
+    // ── Init ──
+
     // Check URL fragment for key from OAuth redirect
     const fragment = window.location.hash;
     if (fragment.startsWith('#key=')) {
@@ -666,9 +856,7 @@
     const params = new URLSearchParams(window.location.search);
     if (params.get('setup') === 'complete') {
       document.getElementById('setup-alert').classList.remove('hidden');
-      // Clean URL
       history.replaceState(null, '', window.location.pathname);
-      // Auto-hide after 5s
       setTimeout(() => {
         document.getElementById('setup-alert').classList.add('hidden');
       }, 5000);

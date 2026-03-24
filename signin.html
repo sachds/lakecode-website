@@ -62,16 +62,21 @@
   <script src="script.js"></script>
   <script>
     const API_URL = 'https://api.lakecode.ai';
+    const urlParams = new URLSearchParams(window.location.search);
+    const planIntent = urlParams.get('plan'); // e.g. "pro" or "team"
 
-    // If already signed in, redirect to dashboard
+    // If already signed in, redirect to dashboard (with upgrade intent if present)
     if (localStorage.getItem('lk_key')) {
-      window.location.href = '/dashboard';
+      const dest = planIntent ? `/dashboard?upgrade=${planIntent}` : '/dashboard';
+      window.location.href = dest;
     }
 
     document.getElementById('google-signin').addEventListener('click', (e) => {
       e.preventDefault();
-      // Redirect to auth-worker which starts Google OAuth with state=web
-      window.location.href = `${API_URL}/auth/start?state=web`;
+      // Pass plan through OAuth state so after sign-in, user lands on dashboard
+      // with upgrade intent: state=web (free) or state=web:pro or state=web:team
+      const state = planIntent ? `web:${planIntent}` : 'web';
+      window.location.href = `${API_URL}/auth/start?state=${state}`;
     });
   </script>
 </body>

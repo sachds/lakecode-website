@@ -84,7 +84,7 @@
             <li><span class="check">&#10003;</span> Priority support</li>
             <li><span class="check">&#10003;</span> Cancel anytime</li>
           </ul>
-          <a href="/dashboard" class="btn btn-primary btn-full" id="pro-btn">Upgrade to Pro</a>
+          <a href="#" class="btn btn-primary btn-full" id="pro-btn" onclick="handleUpgrade('pro'); return false;">Upgrade to Pro</a>
         </div>
 
         <!-- Team -->
@@ -104,7 +104,7 @@
             <li><span class="check">&#10003;</span> Usage analytics per user</li>
             <li><span class="check">&#10003;</span> Centralized admin</li>
           </ul>
-          <a href="/dashboard" class="btn btn-secondary btn-full" id="team-btn">Upgrade to Team</a>
+          <a href="#" class="btn btn-secondary btn-full" id="team-btn" onclick="handleUpgrade('team'); return false;">Upgrade to Team</a>
         </div>
       </div>
 
@@ -181,5 +181,20 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    const API_URL = 'https://api.lakecode.ai';
+
+    function handleUpgrade(plan) {
+      const existingKey = localStorage.getItem('lakecode_key');
+      if (existingKey) {
+        // Already signed in — go to dashboard with upgrade intent
+        window.location.href = `/dashboard?upgrade=${plan}`;
+      } else {
+        // Not signed in — start OAuth with plan in state, so after sign-in
+        // they land on dashboard with upgrade intent
+        window.location.href = `${API_URL}/auth/start?state=web:${plan}`;
+      }
+    }
+  </script>
 </body>
 </html>
