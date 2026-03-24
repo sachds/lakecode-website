@@ -126,7 +126,7 @@
       margin-bottom: 0.75rem;
     }
     .muted { color: #666; font-size: 0.75rem; }
-    .hidden { display: none; }
+    .hidden { display: none !important; }
     .alert {
       padding: 0.75rem 1rem;
       border-radius: 8px;
@@ -793,10 +793,13 @@
         key.slice(0, 20) + '...' + key.slice(-10);
 
       // If there's an upgrade intent from URL, auto-open checkout
-      const urlParams = new URLSearchParams(window.location.search);
-      const upgradeIntent = urlParams.get('upgrade');
-      if (upgradeIntent && PLANS[upgradeIntent] && !isPaid) {
-        showCheckout(upgradeIntent);
+      // But NOT if we just returned from Stripe (setup=complete)
+      if (!justCompletedSetup) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const upgradeIntent = urlParams.get('upgrade');
+        if (upgradeIntent && PLANS[upgradeIntent] && !isPaid) {
+          showCheckout(upgradeIntent);
+        }
       }
     }
 
@@ -853,8 +856,10 @@
     }
 
     // Check for setup=complete query param (Stripe redirect)
+    let justCompletedSetup = false;
     const params = new URLSearchParams(window.location.search);
     if (params.get('setup') === 'complete') {
+      justCompletedSetup = true;
       document.getElementById('setup-alert').classList.remove('hidden');
       history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
