@@ -13,7 +13,7 @@
       min-height: 100vh;
       padding: 2rem;
     }
-    .container { max-width: 600px; margin: 0 auto; }
+    .container { max-width: 640px; margin: 0 auto; }
     .header {
       display: flex;
       align-items: center;
@@ -62,6 +62,7 @@
     }
     .plan-free { background: #333; color: #888; }
     .plan-pro { background: #1e3a2f; color: #4ade80; }
+    .plan-team { background: #1e2a4b; color: #60a5fa; }
     .plan-trial { background: #3b2f1e; color: #f59e0b; }
     .progress-bar {
       height: 8px;
@@ -107,14 +108,6 @@
       color: #fff;
     }
     .btn-primary:hover { background: #15803d; }
-    .btn-upgrade {
-      background: #7c3aed;
-      border-color: #7c3aed;
-      color: #fff;
-      font-size: 0.875rem;
-      padding: 0.625rem 1.25rem;
-    }
-    .btn-upgrade:hover { background: #6d28d9; }
     .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
     .login-prompt {
       text-align: center;
@@ -134,41 +127,6 @@
     }
     .muted { color: #666; font-size: 0.75rem; }
     .hidden { display: none; }
-    .upgrade-banner {
-      background: linear-gradient(135deg, #1e1b4b, #312e81);
-      border: 1px solid #4338ca;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    .upgrade-banner h3 {
-      color: #c4b5fd;
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-    }
-    .upgrade-features {
-      list-style: none;
-      text-align: left;
-      margin: 0 auto 1rem;
-      max-width: 280px;
-    }
-    .upgrade-features li {
-      color: #a5b4fc;
-      font-size: 0.8125rem;
-      padding: 0.25rem 0;
-    }
-    .upgrade-features li::before {
-      content: "✓ ";
-      color: #818cf8;
-      font-weight: bold;
-    }
-    .upgrade-subtext {
-      color: #7c7caa;
-      font-size: 0.6875rem;
-      margin-top: 0.5rem;
-    }
-    .upgrade-banner .btn-upgrade { width: 100%; }
     .alert {
       padding: 0.75rem 1rem;
       border-radius: 8px;
@@ -180,11 +138,112 @@
       border: 1px solid #166534;
       color: #4ade80;
     }
-    .plan-description {
-      color: #888;
-      font-size: 0.8125rem;
-      margin-top: 0.25rem;
+
+    /* Pricing tiers grid */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
     }
+    .tier-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.15s;
+    }
+    .tier-card:hover { border-color: #555; }
+    .tier-card.current { border-color: #4ade80; }
+    .tier-card.current::after {
+      content: 'Current';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4ade80;
+      color: #0a0a0a;
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tier-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+    .tier-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.125rem;
+    }
+    .tier-price span {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #888;
+    }
+    .tier-desc {
+      font-size: 0.6875rem;
+      color: #888;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    .tier-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    .tier-features li {
+      font-size: 0.6875rem;
+      color: #aaa;
+      padding: 0.15rem 0;
+    }
+    .tier-features li::before {
+      content: "✓ ";
+      color: #4ade80;
+      font-weight: bold;
+    }
+    .btn-tier {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: transparent;
+      color: #e5e5e5;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-tier:hover { background: #222; }
+    .btn-tier-pro {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #fff;
+    }
+    .btn-tier-pro:hover { background: #6d28d9; }
+    .btn-tier-team {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #fff;
+    }
+    .btn-tier-team:hover { background: #1e40af; }
+    .btn-tier:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    .tier-subtext {
+      font-size: 0.625rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
     .usage-label {
       display: flex;
       justify-content: space-between;
@@ -212,12 +271,19 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #4ade80;
       flex-shrink: 0;
     }
+    .pro-status-dot.green { background: #4ade80; }
+    .pro-status-dot.blue { background: #60a5fa; }
     .pro-status-text {
       font-size: 0.8125rem;
-      color: #4ade80;
+    }
+    .pro-status-text.green { color: #4ade80; }
+    .pro-status-text.blue { color: #60a5fa; }
+
+    @media (max-width: 480px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      body { padding: 1rem; }
     }
   </style>
 </head>
@@ -230,7 +296,7 @@
 
     <!-- Setup complete alert -->
     <div id="setup-alert" class="alert alert-success hidden">
-      Payment method saved. You've been upgraded to Pro!
+      Payment method saved. You've been upgraded!
     </div>
 
     <!-- Login prompt (shown when no key stored) -->
@@ -246,21 +312,56 @@
     <!-- Dashboard (shown after auth) -->
     <div id="dashboard-view" class="hidden">
 
-      <!-- Upgrade banner (free users only) -->
-      <div id="upgrade-banner" class="upgrade-banner hidden">
-        <h3>Upgrade to Pro</h3>
-        <ul class="upgrade-features">
-          <li>Unlimited daily usage</li>
-          <li>No request limits</li>
-          <li>Auto-reload when balance is low</li>
-          <li>Priority support</li>
-        </ul>
-        <button class="btn btn-upgrade" onclick="upgradeToPro()" id="upgrade-btn">
-          Save Payment Method & Upgrade
-        </button>
-        <p class="upgrade-subtext">
-          Your card will be saved for automatic reloading. Cancel anytime.
-        </p>
+      <!-- Pricing tiers (shown for free/trial users) -->
+      <div id="pricing-section" class="hidden">
+        <div class="pricing-grid">
+          <!-- Free tier -->
+          <div class="tier-card" id="tier-free">
+            <div class="tier-name">Free</div>
+            <div class="tier-price">$0</div>
+            <div class="tier-desc">For trying things out</div>
+            <ul class="tier-features">
+              <li>Limited daily usage</li>
+              <li>All platforms</li>
+              <li>Community support</li>
+            </ul>
+            <button class="btn-tier" disabled>Current Plan</button>
+          </div>
+
+          <!-- Pro tier -->
+          <div class="tier-card" id="tier-pro">
+            <div class="tier-name">Pro</div>
+            <div class="tier-price">$20 <span>/mo</span></div>
+            <div class="tier-desc">For individual developers</div>
+            <ul class="tier-features">
+              <li>Unlimited usage</li>
+              <li>All platforms</li>
+              <li>Auto-reload</li>
+              <li>Priority support</li>
+            </ul>
+            <button class="btn-tier btn-tier-pro" onclick="upgradeToplan('pro')" id="btn-upgrade-pro">
+              Upgrade to Pro
+            </button>
+            <p class="tier-subtext">Save payment method for auto-reload</p>
+          </div>
+
+          <!-- Team tier -->
+          <div class="tier-card" id="tier-team">
+            <div class="tier-name">Team</div>
+            <div class="tier-price">$20 <span>/user/mo</span></div>
+            <div class="tier-desc">For teams & organizations</div>
+            <ul class="tier-features">
+              <li>Everything in Pro</li>
+              <li>Team management</li>
+              <li>Shared billing</li>
+              <li>Usage analytics</li>
+            </ul>
+            <button class="btn-tier btn-tier-team" onclick="upgradeToplan('team')" id="btn-upgrade-team">
+              Upgrade to Team
+            </button>
+            <p class="tier-subtext">Save payment method for auto-reload</p>
+          </div>
+        </div>
       </div>
 
       <!-- Plan -->
@@ -300,11 +401,11 @@
           </p>
         </div>
 
-        <!-- Pro plan: active status -->
-        <div id="pro-usage-section" class="hidden">
+        <!-- Paid plan: active status -->
+        <div id="paid-usage-section" class="hidden">
           <div class="pro-status">
-            <div class="pro-status-dot"></div>
-            <span class="pro-status-text">Unlimited usage — active</span>
+            <div class="pro-status-dot" id="paid-status-dot"></div>
+            <span class="pro-status-text" id="paid-status-text">Unlimited usage — active</span>
           </div>
           <div class="stat" style="margin-top: 0.75rem;">
             <span class="stat-label">Auto-reload</span>
@@ -371,30 +472,37 @@
       navLink.href = '#';
       navLink.onclick = function(e) { e.preventDefault(); logout(); };
 
+      const plan = data.plan || 'free';
+      const isPaid = plan === 'pro' || plan === 'team';
+
       // Plan badge
       const badge = document.getElementById('plan-badge');
-      badge.textContent = data.plan.toUpperCase();
-      badge.className = `plan-badge plan-${data.plan}`;
+      badge.textContent = plan.toUpperCase();
+      badge.className = `plan-badge plan-${plan}`;
 
       // Email
       document.getElementById('email').textContent = data.email;
 
       // Plan description
       const planDesc = document.getElementById('plan-desc-text');
-      if (data.plan === 'pro') {
+      if (plan === 'team') {
+        planDesc.textContent = 'Unlimited usage — team plan';
+      } else if (plan === 'pro') {
         planDesc.textContent = 'Unlimited usage with auto-reload';
-      } else if (data.plan === 'trial') {
+      } else if (plan === 'trial') {
         planDesc.textContent = 'Trial — limited daily usage';
       } else {
         planDesc.textContent = 'Limited daily usage';
       }
 
-      // Upgrade banner: show for free/trial users, hide for pro
-      const upgradeBanner = document.getElementById('upgrade-banner');
-      if (data.plan === 'free' || data.plan === 'trial') {
-        upgradeBanner.classList.remove('hidden');
+      // Pricing section: show for free/trial users, hide for paid
+      const pricingSection = document.getElementById('pricing-section');
+      if (!isPaid) {
+        pricingSection.classList.remove('hidden');
+        // Mark current plan
+        document.getElementById('tier-free').classList.toggle('current', plan === 'free');
       } else {
-        upgradeBanner.classList.add('hidden');
+        pricingSection.classList.add('hidden');
       }
 
       // Billing actions: show manage billing only for users with payment method
@@ -405,17 +513,30 @@
         billingLink.classList.add('hidden');
       }
 
-      // Usage section: show different views for free vs pro
+      // Usage section: show different views for free vs paid
       const freeUsage = document.getElementById('free-usage-section');
-      const proUsage = document.getElementById('pro-usage-section');
+      const paidUsage = document.getElementById('paid-usage-section');
 
-      if (data.plan === 'pro') {
+      if (isPaid) {
         freeUsage.classList.add('hidden');
-        proUsage.classList.remove('hidden');
+        paidUsage.classList.remove('hidden');
+
+        // Color based on plan
+        const dot = document.getElementById('paid-status-dot');
+        const statusText = document.getElementById('paid-status-text');
+        if (plan === 'team') {
+          dot.className = 'pro-status-dot blue';
+          statusText.className = 'pro-status-text blue';
+          statusText.textContent = 'Unlimited usage — team active';
+        } else {
+          dot.className = 'pro-status-dot green';
+          statusText.className = 'pro-status-text green';
+          statusText.textContent = 'Unlimited usage — active';
+        }
 
         // Auto-reload info
         if (data.has_payment_method) {
-          const reloadAmt = (data.reload_amount_cents || 4900) / 100;
+          const reloadAmt = (data.reload_amount_cents || 2000) / 100;
           document.getElementById('reload-text').textContent =
             data.auto_reload_enabled ? `$${reloadAmt.toFixed(2)} when low (enabled)` : 'Disabled';
         } else {
@@ -423,7 +544,7 @@
         }
       } else {
         freeUsage.classList.remove('hidden');
-        proUsage.classList.add('hidden');
+        paidUsage.classList.add('hidden');
 
         // Daily usage bar (percentage only, no dollar amounts)
         const dailyUsed = data.daily_free_used_cents || 0;
@@ -442,10 +563,10 @@
         // Show hint based on usage
         const hint = document.getElementById('usage-hint');
         if (dailyPct >= 100) {
-          hint.textContent = 'Daily limit reached — upgrade to Pro for unlimited usage';
+          hint.textContent = 'Daily limit reached — upgrade for unlimited usage';
           hint.style.color = '#ef4444';
         } else if (dailyPct > 70) {
-          hint.textContent = 'Getting close to daily limit — upgrade for unlimited';
+          hint.textContent = 'Getting close to daily limit';
           hint.style.color = '#f59e0b';
         } else {
           hint.textContent = 'Resets every 24 hours';
@@ -472,9 +593,10 @@
       }
     }
 
-    async function upgradeToPro() {
+    async function upgradeToplan(plan) {
       if (!storedKey) return;
-      const btn = document.getElementById('upgrade-btn');
+      const btnId = plan === 'team' ? 'btn-upgrade-team' : 'btn-upgrade-pro';
+      const btn = document.getElementById(btnId);
       btn.textContent = 'Redirecting to Stripe...';
       btn.disabled = true;
 
@@ -485,19 +607,22 @@
             'x-api-key': storedKey,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ return_url: window.location.href }),
+          body: JSON.stringify({
+            return_url: window.location.href,
+            plan: plan,
+          }),
         });
         const data = await res.json();
         if (data.url) {
           window.location.href = data.url;
         } else {
           alert(data.error || 'Could not start checkout. Please try again.');
-          btn.textContent = 'Save Payment Method & Upgrade';
+          btn.textContent = plan === 'team' ? 'Upgrade to Team' : 'Upgrade to Pro';
           btn.disabled = false;
         }
       } catch {
         alert('Could not reach server. Please try again.');
-        btn.textContent = 'Save Payment Method & Upgrade';
+        btn.textContent = plan === 'team' ? 'Upgrade to Team' : 'Upgrade to Pro';
         btn.disabled = false;
       }
     }
