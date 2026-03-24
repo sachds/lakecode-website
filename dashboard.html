@@ -3,518 +3,424 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>lakecode — Dashboard</title>
+  <title>Dashboard — Lakecode</title>
+  <meta name="description" content="Manage your Lakecode account and plan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0a0a0a;
-      color: #e5e5e5;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-    .container { max-width: 640px; margin: 0 auto; }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-    }
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      text-decoration: none;
-    }
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .card-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #888;
-      margin-bottom: 1rem;
-    }
-    .stat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #222;
-    }
-    .stat:last-child { border-bottom: none; }
-    .stat-label { color: #888; font-size: 0.875rem; }
-    .stat-value { font-weight: 500; }
+    .hidden { display: none !important; }
+
+    /* Plan badges */
     .plan-badge {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
+      padding: 4px 12px;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .plan-free { background: #333; color: #888; }
-    .plan-pro { background: #1e3a2f; color: #4ade80; }
-    .plan-team { background: #1e2a4b; color: #60a5fa; }
-    .plan-trial { background: #3b2f1e; color: #f59e0b; }
-    .progress-bar {
-      height: 8px;
-      background: #333;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 0.5rem;
-    }
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.3s;
-    }
-    .progress-green { background: #4ade80; }
-    .progress-yellow { background: #f59e0b; }
-    .progress-red { background: #ef4444; }
-    .key-display {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.75rem;
-      background: #111;
-      padding: 0.75rem;
-      border-radius: 6px;
-      word-break: break-all;
-      color: #888;
-      margin-top: 0.5rem;
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: transparent;
-      color: #e5e5e5;
-      font-size: 0.8125rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .btn:hover { background: #222; }
-    .btn-primary {
-      background: #166534;
-      border-color: #166534;
-      color: #fff;
-    }
-    .btn-primary:hover { background: #15803d; }
-    .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
-    .login-prompt {
-      text-align: center;
-      padding: 3rem 1rem;
-    }
-    .login-prompt p { color: #888; margin-bottom: 1rem; }
-    input[type="text"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #111;
-      color: #e5e5e5;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.8125rem;
-      margin-bottom: 0.75rem;
-    }
-    .muted { color: #666; font-size: 0.75rem; }
-    .hidden { display: none !important; }
-    .alert {
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 0.8125rem;
-      margin-bottom: 1rem;
-    }
-    .alert-success {
-      background: #1e3a2f;
-      border: 1px solid #166534;
-      color: #4ade80;
-    }
+    .plan-free { background: var(--surface); color: var(--text-dim); }
+    .plan-pro { background: rgba(74, 222, 128, 0.1); color: var(--green); }
+    .plan-team { background: rgba(96, 165, 250, 0.1); color: #60a5fa; }
+    .plan-trial { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
 
-    /* Pricing tiers grid */
-    .pricing-grid {
+    /* Tier cards in pricing grid */
+    .tier-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
     }
     .tier-card {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 1.25rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
       text-align: center;
       position: relative;
       transition: border-color 0.15s;
     }
-    .tier-card:hover { border-color: #555; }
-    .tier-card.current { border-color: #4ade80; }
+    .tier-card:hover { border-color: var(--border-light); }
+    .tier-card.current { border-color: var(--green); }
     .tier-card.current::after {
       content: 'Current';
       position: absolute;
-      top: -8px;
+      top: -10px;
       left: 50%;
       transform: translateX(-50%);
-      background: #4ade80;
+      background: var(--green);
       color: #0a0a0a;
       font-size: 0.625rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 10px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+    .tier-card.featured { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
     .tier-name {
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.25rem;
+      margin-bottom: 4px;
     }
     .tier-price {
-      font-size: 1.25rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.125rem;
+      margin-bottom: 4px;
     }
     .tier-price span {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       font-weight: 400;
-      color: #888;
+      color: var(--text-dim);
     }
     .tier-desc {
-      font-size: 0.6875rem;
-      color: #888;
-      margin-bottom: 0.75rem;
-      line-height: 1.4;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
     }
     .tier-features {
       list-style: none;
       text-align: left;
-      margin-bottom: 1rem;
+      margin-bottom: 20px;
     }
     .tier-features li {
-      font-size: 0.6875rem;
-      color: #aaa;
-      padding: 0.15rem 0;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      padding: 3px 0;
     }
-    .tier-features li::before {
-      content: "\2713  ";
-      color: #4ade80;
-      font-weight: bold;
-    }
-    .btn-tier {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: transparent;
-      color: #e5e5e5;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-tier:hover { background: #222; }
-    .btn-tier-pro {
-      background: #7c3aed;
-      border-color: #7c3aed;
-      color: #fff;
-    }
-    .btn-tier-pro:hover { background: #6d28d9; }
-    .btn-tier-team {
-      background: #1d4ed8;
-      border-color: #1d4ed8;
-      color: #fff;
-    }
-    .btn-tier-team:hover { background: #1e40af; }
-    .btn-tier:disabled {
-      opacity: 0.5;
-      cursor: default;
+    .tier-features li .check {
+      color: var(--green);
+      font-weight: 700;
+      margin-right: 6px;
     }
 
-    /* Checkout confirmation overlay */
+    /* Usage bar */
+    .usage-bar-wrap { margin-top: 8px; }
+    .usage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .usage-header span { font-size: 0.8125rem; color: var(--text-secondary); }
+    .usage-header .pct { font-weight: 600; }
+
+    /* Status dot */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.green { background: var(--green); }
+    .status-dot.blue { background: #60a5fa; }
+    .status-label { font-size: 0.875rem; }
+    .status-label.green { color: var(--green); }
+    .status-label.blue { color: #60a5fa; }
+
+    /* Checkout overlay */
     .checkout-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.7);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 1000;
       padding: 1rem;
     }
     .checkout-card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 16px;
-      padding: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
       max-width: 420px;
       width: 100%;
     }
     .checkout-card h2 {
       font-size: 1.25rem;
       font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.5rem;
+      margin-bottom: 4px;
     }
-    .checkout-card .checkout-plan-name {
+    .checkout-plan-name {
       font-size: 0.8125rem;
-      color: #a78bfa;
+      color: var(--accent-hover);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 1.25rem;
+      margin-bottom: 20px;
     }
     .checkout-summary {
-      background: #111;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1.25rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
     }
     .checkout-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.375rem 0;
-      font-size: 0.8125rem;
+      padding: 6px 0;
+      font-size: 0.875rem;
     }
-    .checkout-row .label { color: #888; }
-    .checkout-row .value { color: #e5e5e5; font-weight: 500; }
+    .checkout-row .label { color: var(--text-secondary); }
+    .checkout-row .value { font-weight: 500; }
     .checkout-row.total {
-      border-top: 1px solid #333;
-      margin-top: 0.5rem;
-      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+      padding-top: 12px;
     }
-    .checkout-row.total .label { color: #e5e5e5; font-weight: 600; }
-    .checkout-row.total .value { color: #fff; font-size: 1rem; font-weight: 700; }
+    .checkout-row.total .label { font-weight: 600; }
+    .checkout-row.total .value { font-size: 1.125rem; font-weight: 700; }
     .checkout-details {
       list-style: none;
-      margin-bottom: 1.25rem;
+      margin-bottom: 20px;
     }
     .checkout-details li {
-      font-size: 0.75rem;
-      color: #888;
-      padding: 0.2rem 0;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      padding: 3px 0;
     }
     .checkout-details li::before {
       content: "\2713  ";
-      color: #4ade80;
+      color: var(--green);
     }
     .btn-checkout {
       width: 100%;
-      padding: 0.75rem;
+      padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
       font-size: 0.9375rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.15s;
-      margin-bottom: 0.5rem;
+      margin-bottom: 8px;
     }
-    .btn-checkout-pro {
-      background: #7c3aed;
-      color: #fff;
-    }
-    .btn-checkout-pro:hover { background: #6d28d9; }
-    .btn-checkout-team {
-      background: #1d4ed8;
-      color: #fff;
-    }
+    .btn-checkout-pro { background: var(--accent); color: #fff; }
+    .btn-checkout-pro:hover { background: var(--accent-hover); }
+    .btn-checkout-team { background: #1d4ed8; color: #fff; }
     .btn-checkout-team:hover { background: #1e40af; }
-    .btn-checkout:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-    .btn-cancel {
+    .btn-checkout:disabled { opacity: 0.6; cursor: default; }
+    .btn-cancel-checkout {
       width: 100%;
-      padding: 0.5rem;
+      padding: 8px;
       border: none;
       background: transparent;
-      color: #888;
+      color: var(--text-dim);
+      font-family: var(--font);
       font-size: 0.8125rem;
       cursor: pointer;
     }
-    .btn-cancel:hover { color: #e5e5e5; }
+    .btn-cancel-checkout:hover { color: var(--text); }
     .checkout-note {
       font-size: 0.6875rem;
-      color: #555;
+      color: var(--text-dim);
       text-align: center;
-      margin-top: 0.75rem;
+      margin-top: 12px;
       line-height: 1.5;
     }
 
-    .usage-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.25rem;
-    }
-    .usage-label span {
+    /* Key display */
+    .key-mono {
+      font-family: var(--mono);
       font-size: 0.8125rem;
-      color: #888;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      word-break: break-all;
+      color: var(--text-secondary);
+      margin-top: 8px;
     }
-    .usage-label .usage-pct {
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .pro-status {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      background: #111;
-      border-radius: 6px;
-      margin-top: 0.5rem;
-    }
-    .pro-status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .pro-status-dot.green { background: #4ade80; }
-    .pro-status-dot.blue { background: #60a5fa; }
-    .pro-status-text { font-size: 0.8125rem; }
-    .pro-status-text.green { color: #4ade80; }
-    .pro-status-text.blue { color: #60a5fa; }
 
-    @media (max-width: 480px) {
-      .pricing-grid { grid-template-columns: 1fr; }
-      body { padding: 1rem; }
+    /* Alert */
+    .alert-bar {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      color: var(--green);
+    }
+
+    @media (max-width: 768px) {
+      .tier-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <a href="/" class="logo">lakecode</a>
-      <a href="/auth" class="btn" id="nav-auth-link">Sign In</a>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="#" class="btn btn-sm nav-auth-btn" id="nav-auth-link">Dashboard</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </nav>
 
-    <!-- Setup complete alert -->
-    <div id="setup-alert" class="alert alert-success hidden">
-      Payment method saved. You've been upgraded!
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Dashboard</h1>
+      <p class="page-sub" id="hero-sub">Manage your account and plan.</p>
     </div>
+  </section>
 
-    <!-- Login prompt (shown when no key stored) -->
-    <div id="login-view" class="login-prompt">
-      <p>Enter your license key to view your dashboard.</p>
-      <input type="text" id="key-input" placeholder="lk_eyJ..." />
-      <button class="btn btn-primary" onclick="submitKey()">View Dashboard</button>
-      <p class="muted" style="margin-top: 1rem;">
-        Get your key: run <code>lakecode login</code> or check your email.
-      </p>
-    </div>
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
 
-    <!-- Dashboard (shown after auth) -->
-    <div id="dashboard-view" class="hidden">
+      <!-- Setup complete alert -->
+      <div id="setup-alert" class="alert-bar hidden">
+        Payment method saved. You've been upgraded!
+      </div>
 
-      <!-- Pricing tiers (shown for free/trial users, hidden once paid confirmed) -->
-      <div id="pricing-section">
-        <div class="pricing-grid">
-          <div class="tier-card" id="tier-free">
-            <div class="tier-name">Free</div>
-            <div class="tier-price">$0</div>
-            <div class="tier-desc">For trying things out</div>
-            <ul class="tier-features">
-              <li>Limited daily usage</li>
-              <li>All platforms</li>
-              <li>Community support</li>
-            </ul>
-            <button class="btn-tier" disabled>Current Plan</button>
-          </div>
-          <div class="tier-card" id="tier-pro">
-            <div class="tier-name">Pro</div>
-            <div class="tier-price">$20 <span>/mo</span></div>
-            <div class="tier-desc">For individual developers</div>
-            <ul class="tier-features">
-              <li>Unlimited usage</li>
-              <li>All platforms</li>
-              <li>Auto-reload</li>
-              <li>Priority support</li>
-            </ul>
-            <button class="btn-tier btn-tier-pro" onclick="showCheckout('pro')">
-              Upgrade to Pro
-            </button>
-          </div>
-          <div class="tier-card" id="tier-team">
-            <div class="tier-name">Team</div>
-            <div class="tier-price">$20 <span>/user/mo</span></div>
-            <div class="tier-desc">For teams & organizations</div>
-            <ul class="tier-features">
-              <li>Everything in Pro</li>
-              <li>Team management</li>
-              <li>Shared billing</li>
-              <li>Usage analytics</li>
-            </ul>
-            <button class="btn-tier btn-tier-team" onclick="showCheckout('team')">
-              Upgrade to Team
-            </button>
-          </div>
+      <!-- Login prompt (shown when no key stored) -->
+      <div id="login-view" class="dash-noauth" style="text-align: center; padding: 40px 0;">
+        <div class="signin-card" style="display: inline-block; max-width: 400px;">
+          <h2 style="margin-bottom: 8px;">Sign in to view your dashboard</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 20px;">Enter your license key or sign in with Google.</p>
+          <input type="text" id="key-input" placeholder="lk_eyJ..." style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 0.8125rem; margin-bottom: 12px;" />
+          <button class="btn btn-primary" onclick="submitKey()" style="width: 100%; margin-bottom: 12px;">View Dashboard</button>
+          <a href="/signin" class="btn btn-secondary" style="width: 100%; display: block; text-align: center;">Sign in with Google</a>
+          <p style="color: var(--text-dim); font-size: 0.75rem; margin-top: 16px;">
+            Get your key: run <code>lakecode login</code> or check your email.
+          </p>
         </div>
       </div>
 
-      <!-- Plan -->
-      <div class="card">
-        <div class="card-title">Plan</div>
-        <div class="stat">
-          <span class="stat-label">Current plan</span>
-          <span id="plan-badge" class="plan-badge plan-free">FREE</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Email</span>
-          <span class="stat-value" id="email">&mdash;</span>
-        </div>
-        <div id="plan-description-stat" class="stat">
-          <span class="stat-label" id="plan-desc-text">Limited daily usage</span>
-        </div>
-        <div class="btn-group" id="billing-actions">
-          <a href="#" class="btn hidden" id="billing-link" onclick="openBillingPortal(); return false;">Manage Billing</a>
-        </div>
-      </div>
+      <!-- Dashboard (shown after auth) -->
+      <div id="dashboard-view" class="hidden">
 
-      <!-- Usage -->
-      <div class="card">
-        <div class="card-title">Usage</div>
-        <div id="free-usage-section">
-          <div class="usage-label">
-            <span>Daily usage</span>
-            <span class="usage-pct" id="usage-pct-text">0%</span>
+        <!-- Pricing tiers (shown for free/trial users) -->
+        <div id="pricing-section">
+          <div class="tier-grid">
+            <div class="tier-card" id="tier-free">
+              <div class="tier-name">Free</div>
+              <div class="tier-price">$0</div>
+              <div class="tier-desc">For trying things out</div>
+              <ul class="tier-features">
+                <li><span class="check">&#10003;</span> Limited daily usage</li>
+                <li><span class="check">&#10003;</span> All platforms</li>
+                <li><span class="check">&#10003;</span> Community support</li>
+              </ul>
+              <button class="btn btn-sm" disabled style="width:100%; opacity:0.5;">Current Plan</button>
+            </div>
+            <div class="tier-card featured" id="tier-pro">
+              <div class="tier-name">Pro</div>
+              <div class="tier-price">$20 <span>/mo</span></div>
+              <div class="tier-desc">For individual developers</div>
+              <ul class="tier-features">
+                <li><span class="check">&#10003;</span> Unlimited usage</li>
+                <li><span class="check">&#10003;</span> Auto-reload</li>
+                <li><span class="check">&#10003;</span> Priority support</li>
+              </ul>
+              <button class="btn btn-sm btn-primary" style="width:100%;" onclick="showCheckout('pro')">Upgrade to Pro</button>
+            </div>
+            <div class="tier-card" id="tier-team">
+              <div class="tier-name">Team</div>
+              <div class="tier-price">$20 <span>/user/mo</span></div>
+              <div class="tier-desc">For teams & orgs</div>
+              <ul class="tier-features">
+                <li><span class="check">&#10003;</span> Everything in Pro</li>
+                <li><span class="check">&#10003;</span> Team management</li>
+                <li><span class="check">&#10003;</span> Usage analytics</li>
+              </ul>
+              <button class="btn btn-sm btn-secondary" style="width:100%;" onclick="showCheckout('team')">Upgrade to Team</button>
+            </div>
           </div>
-          <div class="progress-bar">
-            <div id="daily-bar" class="progress-fill progress-green" style="width: 0%"></div>
-          </div>
-          <p class="muted" style="margin-top: 0.5rem;" id="usage-hint">Resets every 24 hours</p>
         </div>
-        <div id="paid-usage-section" class="hidden">
-          <div class="pro-status">
-            <div class="pro-status-dot" id="paid-status-dot"></div>
-            <span class="pro-status-text" id="paid-status-text">Unlimited usage — active</span>
-          </div>
-          <div class="stat" style="margin-top: 0.75rem;">
-            <span class="stat-label">Auto-reload</span>
-            <span class="stat-value" id="reload-text">&mdash;</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- License Key -->
-      <div class="card">
-        <div class="card-title">License Key</div>
-        <div class="key-display" id="license-key">lk_...</div>
-        <div class="btn-group">
-          <button class="btn" onclick="copyKey()">Copy Key</button>
+        <!-- Account info -->
+        <div class="dash-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
+          <div class="dash-card">
+            <h3>Plan</h3>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+              <span id="plan-badge" class="plan-badge plan-free">FREE</span>
+            </div>
+            <p class="dash-meta" id="plan-desc-text">Limited daily usage</p>
+            <p class="dash-meta" id="email-text" style="margin-top: 4px;"></p>
+            <div style="margin-top: 12px;">
+              <a href="#" class="btn btn-sm btn-secondary hidden" id="billing-link" onclick="openBillingPortal(); return false;">Manage Billing</a>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <h3>Usage</h3>
+            <!-- Free usage -->
+            <div id="free-usage-section">
+              <div class="usage-bar-wrap">
+                <div class="usage-header">
+                  <span>Daily usage</span>
+                  <span class="pct" id="usage-pct-text">0%</span>
+                </div>
+                <div class="usage-bar">
+                  <div class="usage-fill" id="daily-bar" style="width: 0%"></div>
+                </div>
+                <p class="dash-meta" style="margin-top: 6px;" id="usage-hint">Resets every 24 hours</p>
+              </div>
+            </div>
+            <!-- Paid usage -->
+            <div id="paid-usage-section" class="hidden">
+              <div class="status-row">
+                <div class="status-dot" id="paid-status-dot"></div>
+                <span class="status-label" id="paid-status-text">Unlimited usage — active</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                <span class="dash-meta">Auto-reload</span>
+                <span style="font-size: 0.875rem; font-weight: 500;" id="reload-text">&mdash;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- License Key -->
+        <div class="dash-card" style="margin-bottom: 20px;">
+          <h3>License Key</h3>
+          <p class="dash-meta">Use this key to authenticate the CLI. Run <code>lakecode login</code> or set it manually.</p>
+          <div class="key-mono" id="license-key">lk_...</div>
+          <div style="margin-top: 12px;">
+            <button class="btn btn-sm btn-secondary" onclick="copyKey()">Copy Key</button>
+          </div>
+        </div>
+
+        <!-- Sign out -->
+        <div style="padding-top: 20px; border-top: 1px solid var(--border);">
+          <button class="btn btn-sm" onclick="logout()">Sign Out</button>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Checkout confirmation overlay -->
   <div id="checkout-overlay" class="checkout-overlay hidden">
@@ -542,7 +448,7 @@
       <button class="btn-checkout" id="checkout-confirm-btn" onclick="confirmCheckout()">
         Continue to Payment
       </button>
-      <button class="btn-cancel" onclick="hideCheckout()">Cancel</button>
+      <button class="btn-cancel-checkout" onclick="hideCheckout()">Cancel</button>
 
       <p class="checkout-note">
         You'll be taken to Stripe to securely save a payment method.<br>
@@ -551,58 +457,63 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
   <script>
     const API_URL = 'https://api.lakecode.ai';
     // Support both old (lk_key) and new (lakecode_key) localStorage keys
     let storedKey = localStorage.getItem('lakecode_key') || localStorage.getItem('lk_key');
     if (storedKey && !localStorage.getItem('lakecode_key')) {
-      localStorage.setItem('lakecode_key', storedKey); // migrate
+      localStorage.setItem('lakecode_key', storedKey);
     }
     let selectedPlan = null;
 
-    // ── Plan details ──
     const PLANS = {
       pro: {
-        name: 'Pro Plan',
-        label: 'Pro',
-        price: '$20/mo',
-        billing: 'Monthly',
+        name: 'Pro Plan', label: 'Pro', price: '$20/mo', billing: 'Monthly',
         btnClass: 'btn-checkout-pro',
-        features: [
-          'Unlimited daily usage',
-          'No request limits',
-          'Auto-reload when balance is low',
-          'Priority support',
-          'Cancel anytime',
-        ],
+        features: ['Unlimited daily usage', 'No request limits', 'Auto-reload when balance is low', 'Priority support', 'Cancel anytime'],
       },
       team: {
-        name: 'Team Plan',
-        label: 'Team',
-        price: '$20/user/mo',
-        billing: 'Monthly, per user',
+        name: 'Team Plan', label: 'Team', price: '$20/user/mo', billing: 'Monthly, per user',
         btnClass: 'btn-checkout-team',
-        features: [
-          'Everything in Pro',
-          'Team management & invites',
-          'Shared billing under one account',
-          'Per-user usage analytics',
-          'Centralized admin controls',
-        ],
+        features: ['Everything in Pro', 'Team management & invites', 'Shared billing under one account', 'Per-user usage analytics', 'Centralized admin controls'],
       },
     };
 
-    // ── Checkout overlay ──
     function showCheckout(plan) {
       const info = PLANS[plan];
       if (!info) return;
       selectedPlan = plan;
-
       document.getElementById('checkout-plan-name').textContent = info.name;
       document.getElementById('checkout-plan-label').textContent = info.label;
       document.getElementById('checkout-billing').textContent = info.billing;
       document.getElementById('checkout-price').textContent = info.price;
-
       const featList = document.getElementById('checkout-features');
       featList.innerHTML = '';
       info.features.forEach(f => {
@@ -610,19 +521,16 @@
         li.textContent = f;
         featList.appendChild(li);
       });
-
       const btn = document.getElementById('checkout-confirm-btn');
       btn.className = `btn-checkout ${info.btnClass}`;
       btn.textContent = 'Continue to Payment';
       btn.disabled = false;
-
       document.getElementById('checkout-overlay').classList.remove('hidden');
     }
 
     function hideCheckout() {
       document.getElementById('checkout-overlay').classList.add('hidden');
       selectedPlan = null;
-      // Clean upgrade param from URL
       const url = new URL(window.location);
       url.searchParams.delete('upgrade');
       history.replaceState(null, '', url.pathname + url.search);
@@ -633,18 +541,11 @@
       const btn = document.getElementById('checkout-confirm-btn');
       btn.textContent = 'Redirecting to Stripe...';
       btn.disabled = true;
-
       try {
         const res = await fetch(`${API_URL}/stripe/setup`, {
           method: 'POST',
-          headers: {
-            'x-api-key': storedKey,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            return_url: window.location.origin + '/dashboard',
-            plan: selectedPlan,
-          }),
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ return_url: window.location.origin + '/dashboard', plan: selectedPlan }),
         });
         const data = await res.json();
         if (data.url) {
@@ -661,12 +562,9 @@
       }
     }
 
-    // ── Dashboard load ──
     async function loadDashboard(key) {
       try {
-        const res = await fetch(`${API_URL}/account`, {
-          headers: { 'x-api-key': key }
-        });
+        const res = await fetch(`${API_URL}/account`, { headers: { 'x-api-key': key } });
         if (!res.ok) {
           if (res.status === 401) {
             localStorage.removeItem('lakecode_key');
@@ -676,7 +574,7 @@
           throw new Error(`HTTP ${res.status}`);
         }
         const data = await res.json();
-        showDashboard(data, key);
+        renderDashboard(data, key);
       } catch (err) {
         console.error('Dashboard load failed:', err);
         showLogin();
@@ -688,14 +586,14 @@
       document.getElementById('dashboard-view').classList.add('hidden');
       const navLink = document.getElementById('nav-auth-link');
       navLink.textContent = 'Sign In';
-      navLink.href = '/auth';
-      navLink.onclick = null;
+      navLink.href = '/signin';
     }
 
-    function showDashboard(data, key) {
+    function renderDashboard(data, key) {
       document.getElementById('login-view').classList.add('hidden');
       document.getElementById('dashboard-view').classList.remove('hidden');
 
+      // Nav
       const navLink = document.getElementById('nav-auth-link');
       navLink.textContent = 'Sign Out';
       navLink.href = '#';
@@ -704,22 +602,25 @@
       const plan = data.plan || 'free';
       const isPaid = plan === 'pro' || plan === 'team';
 
+      // Hero subtitle
+      document.getElementById('hero-sub').textContent = data.email;
+
       // Plan badge
       const badge = document.getElementById('plan-badge');
       badge.textContent = plan.toUpperCase();
       badge.className = `plan-badge plan-${plan}`;
 
-      // Email
-      document.getElementById('email').textContent = data.email;
-
-      // Plan description
+      // Plan desc
       const planDesc = document.getElementById('plan-desc-text');
       if (plan === 'team') planDesc.textContent = 'Unlimited usage — team plan';
       else if (plan === 'pro') planDesc.textContent = 'Unlimited usage with auto-reload';
       else if (plan === 'trial') planDesc.textContent = 'Trial — limited daily usage';
       else planDesc.textContent = 'Limited daily usage';
 
-      // Pricing section: show for free/trial users
+      // Email
+      document.getElementById('email-text').textContent = data.email;
+
+      // Pricing section
       const pricingSection = document.getElementById('pricing-section');
       if (!isPaid) {
         pricingSection.classList.remove('hidden');
@@ -728,34 +629,29 @@
         pricingSection.classList.add('hidden');
       }
 
-      // Billing actions
+      // Billing
       const billingLink = document.getElementById('billing-link');
-      if (data.has_payment_method) {
-        billingLink.classList.remove('hidden');
-      } else {
-        billingLink.classList.add('hidden');
-      }
+      if (data.has_payment_method) billingLink.classList.remove('hidden');
+      else billingLink.classList.add('hidden');
 
-      // Usage section
+      // Usage
       const freeUsage = document.getElementById('free-usage-section');
       const paidUsage = document.getElementById('paid-usage-section');
 
       if (isPaid) {
         freeUsage.classList.add('hidden');
         paidUsage.classList.remove('hidden');
-
         const dot = document.getElementById('paid-status-dot');
         const statusText = document.getElementById('paid-status-text');
         if (plan === 'team') {
-          dot.className = 'pro-status-dot blue';
-          statusText.className = 'pro-status-text blue';
+          dot.className = 'status-dot blue';
+          statusText.className = 'status-label blue';
           statusText.textContent = 'Unlimited usage — team active';
         } else {
-          dot.className = 'pro-status-dot green';
-          statusText.className = 'pro-status-text green';
+          dot.className = 'status-dot green';
+          statusText.className = 'status-label green';
           statusText.textContent = 'Unlimited usage — active';
         }
-
         if (data.has_payment_method) {
           const reloadAmt = (data.reload_amount_cents || 2000) / 100;
           document.getElementById('reload-text').textContent =
@@ -766,38 +662,26 @@
       } else {
         freeUsage.classList.remove('hidden');
         paidUsage.classList.add('hidden');
-
         const dailyUsed = data.daily_free_used_cents || 0;
         const dailyLimit = data.daily_free_allowance_cents || 100;
         const dailyPct = Math.min(100, Math.round((dailyUsed / dailyLimit) * 100));
-
         document.getElementById('usage-pct-text').textContent = `${dailyPct}%`;
-
-        const dailyBar = document.getElementById('daily-bar');
-        dailyBar.style.width = `${dailyPct}%`;
-        dailyBar.className = `progress-fill ${dailyPct > 90 ? 'progress-red' : dailyPct > 70 ? 'progress-yellow' : 'progress-green'}`;
-
+        const bar = document.getElementById('daily-bar');
+        bar.style.width = `${dailyPct}%`;
+        if (dailyPct > 90) bar.classList.add('usage-crit');
+        else if (dailyPct > 70) bar.classList.add('usage-warn');
         document.getElementById('usage-pct-text').style.color =
-          dailyPct > 90 ? '#ef4444' : dailyPct > 70 ? '#f59e0b' : '#4ade80';
-
+          dailyPct > 90 ? 'var(--red)' : dailyPct > 70 ? 'var(--yellow)' : 'var(--green)';
         const hint = document.getElementById('usage-hint');
-        if (dailyPct >= 100) {
-          hint.textContent = 'Daily limit reached — upgrade for unlimited usage';
-          hint.style.color = '#ef4444';
-        } else if (dailyPct > 70) {
-          hint.textContent = 'Getting close to daily limit';
-          hint.style.color = '#f59e0b';
-        } else {
-          hint.textContent = 'Resets every 24 hours';
-        }
+        if (dailyPct >= 100) { hint.textContent = 'Daily limit reached — upgrade for unlimited'; hint.style.color = 'var(--red)'; }
+        else if (dailyPct > 70) { hint.textContent = 'Getting close to daily limit'; hint.style.color = 'var(--yellow)'; }
+        else { hint.textContent = 'Resets every 24 hours'; }
       }
 
       // License key
-      document.getElementById('license-key').textContent =
-        key.slice(0, 20) + '...' + key.slice(-10);
+      document.getElementById('license-key').textContent = key.slice(0, 20) + '...' + key.slice(-10);
 
-      // If there's an upgrade intent from URL, auto-open checkout
-      // But NOT if we just returned from Stripe (setup=complete)
+      // Auto-open checkout from URL (but not after Stripe return)
       if (!justCompletedSetup) {
         const urlParams = new URLSearchParams(window.location.search);
         const upgradeIntent = urlParams.get('upgrade');
@@ -818,7 +702,9 @@
 
     function copyKey() {
       if (storedKey) {
-        navigator.clipboard.writeText(storedKey);
+        navigator.clipboard.writeText(storedKey).then(() => {
+          // brief feedback could go here
+        });
       }
     }
 
@@ -830,25 +716,21 @@
           headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
         });
         const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert(data.message || 'Could not open billing portal.');
-        }
-      } catch {
-        alert('Could not reach server. Please try again.');
-      }
+        if (data.url) window.location.href = data.url;
+        else alert(data.message || 'Could not open billing portal.');
+      } catch { alert('Could not reach server.'); }
     }
 
     function logout() {
       localStorage.removeItem('lakecode_key');
+      localStorage.removeItem('lk_key');
       storedKey = null;
       showLogin();
     }
 
     // ── Init ──
 
-    // Check URL fragment for key from OAuth redirect
+    // Key from OAuth redirect
     const fragment = window.location.hash;
     if (fragment.startsWith('#key=')) {
       const keyFromUrl = fragment.slice(5);
@@ -859,19 +741,17 @@
       }
     }
 
-    // Check for setup=complete query param (Stripe redirect)
+    // Stripe return
     let justCompletedSetup = false;
     const params = new URLSearchParams(window.location.search);
     if (params.get('setup') === 'complete') {
       justCompletedSetup = true;
       document.getElementById('setup-alert').classList.remove('hidden');
       history.replaceState(null, '', window.location.pathname);
-      setTimeout(() => {
-        document.getElementById('setup-alert').classList.add('hidden');
-      }, 5000);
+      setTimeout(() => { document.getElementById('setup-alert').classList.add('hidden'); }, 5000);
     }
 
-    // Auto-load if key stored
+    // Load
     if (storedKey) {
       loadDashboard(storedKey);
     }
