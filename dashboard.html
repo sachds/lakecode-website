@@ -502,60 +502,6 @@
       margin-bottom: 20px;
     }
 
-    /* Quickstart banner */
-    .quickstart-banner {
-      background: var(--surface);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 24px;
-      position: relative;
-    }
-    .quickstart-banner h3 {
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-    .quickstart-banner p {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-    .quickstart-cmd {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-family: var(--mono);
-      font-size: 0.8125rem;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .quickstart-cmd code { flex: 1; }
-    .quickstart-cmd button {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      font-size: 0.75rem;
-      padding: 2px 6px;
-    }
-    .quickstart-cmd button:hover { color: var(--text); }
-    .quickstart-dismiss {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      font-size: 1.125rem;
-      line-height: 1;
-    }
-    .quickstart-dismiss:hover { color: var(--text); }
-
     /* Charge history table */
     .charge-table {
       width: 100%;
@@ -700,22 +646,6 @@
       <!-- Setup complete alert -->
       <div id="setup-alert" class="alert-bar hidden">
         Payment method saved. You've been upgraded!
-      </div>
-
-      <!-- Quickstart banner (new users) -->
-      <div id="quickstart-banner" class="quickstart-banner hidden">
-        <button class="quickstart-dismiss" onclick="dismissQuickstart()" title="Dismiss">&times;</button>
-        <h3>Get started in your terminal</h3>
-        <p>Install lakecode and log in to start using the CLI.</p>
-        <div class="quickstart-cmd">
-          <code>npm install -g lakecode</code>
-          <button onclick="copyCmd('npm install -g lakecode', this)">Copy</button>
-        </div>
-        <div class="quickstart-cmd">
-          <code>lakecode login</code>
-          <button onclick="copyCmd('lakecode login', this)">Copy</button>
-        </div>
-        <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0;">Requires Node.js 18+. <a href="/docs/getting-started" style="color: var(--accent);">Full setup guide &rarr;</a></p>
       </div>
 
       <!-- Login prompt (shown when no key stored) -->
@@ -1122,7 +1052,6 @@
         const data = await res.json();
         renderDashboard(data, key);
         renderBillingSection(data);
-        showQuickstartIfNew(data);
         loadActivity(key);
         if (data.plan === 'pro' || data.plan === 'team') {
           loadChargeHistory();
@@ -1596,28 +1525,6 @@
         document.getElementById('trend-start').textContent =
           startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       }
-    }
-
-    // ── Quickstart Banner ──
-
-    function showQuickstartIfNew(data) {
-      if (localStorage.getItem('lakecode_quickstart_dismissed')) return;
-      // Show for new users (no activity, or just created)
-      const banner = document.getElementById('quickstart-banner');
-      banner.classList.remove('hidden');
-    }
-
-    function dismissQuickstart() {
-      document.getElementById('quickstart-banner').classList.add('hidden');
-      localStorage.setItem('lakecode_quickstart_dismissed', '1');
-    }
-
-    function copyCmd(text, btn) {
-      navigator.clipboard.writeText(text).then(() => {
-        const orig = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = orig; }, 1500);
-      });
     }
 
     // ── Key Rotation ──
