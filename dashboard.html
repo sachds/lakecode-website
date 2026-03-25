@@ -888,7 +888,8 @@
       const refreshBtn = document.getElementById('refresh-activity-btn');
       if (refreshBtn) refreshBtn.classList.add('spinning');
       try {
-        const res = await fetch(API_URL + '/account/usage', { headers: { 'x-api-key': key } });
+        const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD in local tz
+        const res = await fetch(API_URL + '/account/usage?today=' + today, { headers: { 'x-api-key': key } });
         if (!res.ok) {
           feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
           return;
