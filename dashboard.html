@@ -355,9 +355,157 @@
     .refresh-btn.spinning { animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Balance card */
+    .balance-hero {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .balance-amount {
+      font-size: 2.25rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .balance-currency {
+      font-size: 1rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .balance-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .balance-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .balance-status.healthy { background: rgba(74, 222, 128, 0.1); color: var(--green); }
+    .balance-status.low { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+    .balance-status.empty { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+    /* Trend chart */
+    .trend-wrap {
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .trend-label {
+      font-size: 0.6875rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .trend-canvas {
+      width: 100%;
+      height: 60px;
+      display: block;
+    }
+    .trend-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.625rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* Auto-reload card */
+    .reload-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+    .reload-row + .reload-row {
+      border-top: 1px solid var(--border);
+    }
+    .reload-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .reload-value {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .reload-select {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      cursor: pointer;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 11px;
+      transition: background 0.2s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background: var(--text);
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-track {
+      background: var(--green);
+    }
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(18px);
+      background: #0a0a0a;
+    }
+
+    /* Account settings */
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.875rem;
+    }
+    .account-row + .account-row {
+      border-top: 1px solid var(--border);
+    }
+    .account-row-label { color: var(--text-dim); }
+    .account-row-value { font-weight: 500; }
+
+    /* Two-col grid for balance + reload */
+    .billing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
     @media (max-width: 768px) {
       .tier-grid { grid-template-columns: 1fr; }
       .activity-summary { flex-direction: column; gap: 12px; }
+      .billing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -508,6 +656,89 @@
           <div class="key-mono" id="license-key">lk_...</div>
           <div style="margin-top: 12px;">
             <button class="btn btn-sm btn-secondary" onclick="copyKey()">Copy Key</button>
+          </div>
+        </div>
+
+        <!-- Balance & Auto-Reload (paid users only) -->
+        <div id="billing-section" class="hidden">
+          <div class="billing-grid">
+            <!-- Balance -->
+            <div class="dash-card">
+              <h3>Balance</h3>
+              <div class="balance-hero">
+                <span class="balance-currency">$</span>
+                <span class="balance-amount" id="balance-amount">0.00</span>
+              </div>
+              <div class="balance-label">Available credit</div>
+              <span class="balance-status healthy" id="balance-status">
+                <span class="status-dot green" style="width:6px;height:6px;"></span> Healthy
+              </span>
+              <div class="trend-wrap">
+                <div class="trend-label">Last 7 days spend</div>
+                <canvas class="trend-canvas" id="trend-chart"></canvas>
+                <div class="trend-legend">
+                  <span id="trend-start"></span>
+                  <span id="trend-end">Today</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-Reload -->
+            <div class="dash-card">
+              <h3>Auto-Reload</h3>
+              <div class="reload-row">
+                <span class="reload-label">Enabled</span>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="reload-toggle" onchange="toggleAutoReload()">
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="reload-row">
+                <span class="reload-label">Reload amount</span>
+                <select class="reload-select" id="reload-amount-select" onchange="updateReloadAmount()">
+                  <option value="500">$5</option>
+                  <option value="1000">$10</option>
+                  <option value="2000" selected>$20</option>
+                  <option value="5000">$50</option>
+                  <option value="10000">$100</option>
+                </select>
+              </div>
+              <div class="reload-row">
+                <span class="reload-label">Triggers when below</span>
+                <span class="reload-value" id="reload-threshold">$4.00</span>
+              </div>
+              <div style="margin-top: 12px;">
+                <button class="btn btn-sm btn-primary" id="reload-now-btn" onclick="reloadNow()" style="width: 100%;">Reload Now</button>
+              </div>
+              <p class="dash-meta" style="margin-top: 8px; text-align: center;" id="reload-hint">
+                Your card is charged automatically when your balance gets low.
+              </p>
+            </div>
+          </div>
+
+          <!-- Account Settings -->
+          <div class="dash-card" style="margin-bottom: 20px;">
+            <h3>Account Settings</h3>
+            <div class="account-row">
+              <span class="account-row-label">Email</span>
+              <span class="account-row-value" id="acct-email">—</span>
+            </div>
+            <div class="account-row">
+              <span class="account-row-label">Plan</span>
+              <span class="account-row-value" id="acct-plan-badge"></span>
+            </div>
+            <div class="account-row">
+              <span class="account-row-label">Member since</span>
+              <span class="account-row-value" id="acct-member-since">—</span>
+            </div>
+            <div class="account-row">
+              <span class="account-row-label">Payment method</span>
+              <span class="account-row-value" id="acct-payment">—</span>
+            </div>
+            <div style="margin-top: 16px; display: flex; gap: 8px;">
+              <button class="btn btn-sm btn-secondary" id="acct-billing-btn" onclick="openBillingPortal()">Manage Billing</button>
+              <button class="btn btn-sm" id="acct-add-payment-btn" onclick="showCheckout('pro')" style="display:none;">Add Payment Method</button>
+            </div>
           </div>
         </div>
 
@@ -693,6 +924,7 @@
         }
         const data = await res.json();
         renderDashboard(data, key);
+        renderBillingSection(data);
         loadActivity(key);
       } catch (err) {
         console.error('Dashboard load failed:', err);
@@ -903,6 +1135,25 @@
           summaryEl.classList.remove('hidden');
         }
 
+        // Trend chart (from daily_spend if available, else compute from activity)
+        if (data.daily_spend) {
+          drawTrendChart(data.daily_spend);
+        } else if (data.activity && data.activity.length > 0) {
+          // Compute daily totals from activity data
+          const dayMap = {};
+          for (const item of data.activity) {
+            if (item.type === 'usage') {
+              const d = (item.created_at || '').slice(0, 10);
+              dayMap[d] = (dayMap[d] || 0) + (item.amount_cents || 0);
+            }
+          }
+          const days = Object.keys(dayMap).sort();
+          const last7 = days.slice(-7);
+          if (last7.length > 1) {
+            drawTrendChart(last7.map(d => ({ date: d, amount_cents: dayMap[d] })));
+          }
+        }
+
         // Feed
         if (!data.activity || data.activity.length === 0) {
           feedEl.innerHTML = '<div class="activity-empty">No activity yet. Start a conversation to see usage here.</div>';
@@ -937,6 +1188,208 @@
         feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
       } finally {
         if (refreshBtn) refreshBtn.classList.remove('spinning');
+      }
+    }
+
+    // ── Billing / Balance / Reload ──
+
+    let currentReloadCents = 2000;
+    let accountData = null;
+
+    function renderBillingSection(data) {
+      accountData = data;
+      const isPaid = data.plan === 'pro' || data.plan === 'team';
+      const section = document.getElementById('billing-section');
+
+      if (!isPaid) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+
+      // Balance
+      const balanceCents = data.credit_balance_cents || 0;
+      const balanceDollars = (balanceCents / 100).toFixed(2);
+      document.getElementById('balance-amount').textContent = balanceDollars;
+
+      const reloadAmt = data.reload_amount_cents || 2000;
+      const threshold = reloadAmt * 0.2;
+      const statusEl = document.getElementById('balance-status');
+      if (balanceCents <= 0) {
+        statusEl.className = 'balance-status empty';
+        statusEl.innerHTML = '<span class="status-dot" style="width:6px;height:6px;background:#ef4444;border-radius:50%;"></span> Empty';
+      } else if (balanceCents < threshold) {
+        statusEl.className = 'balance-status low';
+        statusEl.innerHTML = '<span class="status-dot" style="width:6px;height:6px;background:#f59e0b;border-radius:50%;"></span> Low — reload pending';
+      } else {
+        statusEl.className = 'balance-status healthy';
+        statusEl.innerHTML = '<span class="status-dot" style="width:6px;height:6px;background:var(--green);border-radius:50%;"></span> Healthy';
+      }
+
+      // Auto-reload toggle + amount
+      currentReloadCents = reloadAmt;
+      document.getElementById('reload-toggle').checked = !!data.auto_reload_enabled;
+      document.getElementById('reload-amount-select').value = String(reloadAmt);
+      document.getElementById('reload-threshold').textContent = '$' + (reloadAmt * 0.2 / 100).toFixed(2);
+
+      if (!data.has_payment_method) {
+        document.getElementById('reload-now-btn').textContent = 'Add Payment Method';
+        document.getElementById('reload-hint').textContent = 'Add a payment method to enable auto-reload.';
+      }
+
+      // Account settings
+      document.getElementById('acct-email').textContent = data.email || '—';
+      const planBadge = document.getElementById('acct-plan-badge');
+      planBadge.innerHTML = '<span class="plan-badge plan-' + (data.plan || 'free') + '">' + (data.plan || 'free').toUpperCase() + '</span>';
+      document.getElementById('acct-member-since').textContent = data.created_at
+        ? new Date(data.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+        : '—';
+      document.getElementById('acct-payment').textContent = data.has_payment_method ? 'Saved (Stripe)' : 'None';
+
+      if (data.has_payment_method) {
+        document.getElementById('acct-billing-btn').style.display = '';
+        document.getElementById('acct-add-payment-btn').style.display = 'none';
+      } else {
+        document.getElementById('acct-billing-btn').style.display = 'none';
+        document.getElementById('acct-add-payment-btn').style.display = '';
+      }
+    }
+
+    function updateReloadThreshold() {
+      const val = parseInt(document.getElementById('reload-amount-select').value, 10);
+      document.getElementById('reload-threshold').textContent = '$' + (val * 0.2 / 100).toFixed(2);
+    }
+
+    async function updateReloadAmount() {
+      updateReloadThreshold();
+      const val = parseInt(document.getElementById('reload-amount-select').value, 10);
+      if (!storedKey || val === currentReloadCents) return;
+      try {
+        await fetch(API_URL + '/account/reload-settings', {
+          method: 'POST',
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reload_amount_cents: val }),
+        });
+        currentReloadCents = val;
+      } catch (e) { console.error('Failed to update reload amount:', e); }
+    }
+
+    async function toggleAutoReload() {
+      if (!storedKey) return;
+      const enabled = document.getElementById('reload-toggle').checked;
+      try {
+        await fetch(API_URL + '/account/reload-settings', {
+          method: 'POST',
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ auto_reload_enabled: enabled ? 1 : 0 }),
+        });
+      } catch (e) { console.error('Failed to toggle auto-reload:', e); }
+    }
+
+    async function reloadNow() {
+      if (!storedKey) return;
+      if (!accountData?.has_payment_method) {
+        showCheckout('pro');
+        return;
+      }
+      const btn = document.getElementById('reload-now-btn');
+      btn.textContent = 'Reloading...';
+      btn.disabled = true;
+      try {
+        const res = await fetch(API_URL + '/account/reload', {
+          method: 'POST',
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btn.textContent = 'Reloaded!';
+          setTimeout(() => { btn.textContent = 'Reload Now'; btn.disabled = false; }, 2000);
+          loadDashboard(storedKey);
+        } else {
+          alert(data.error || 'Reload failed.');
+          btn.textContent = 'Reload Now';
+          btn.disabled = false;
+        }
+      } catch {
+        alert('Could not reach server.');
+        btn.textContent = 'Reload Now';
+        btn.disabled = false;
+      }
+    }
+
+    // ── Trend Chart ──
+
+    function drawTrendChart(dailySpend) {
+      const canvas = document.getElementById('trend-chart');
+      if (!canvas || !dailySpend || dailySpend.length === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const w = rect.width;
+      const h = rect.height;
+
+      const values = dailySpend.map(d => d.amount_cents || 0);
+      const max = Math.max(...values, 1);
+      const pad = { top: 4, bottom: 4, left: 0, right: 0 };
+      const plotW = w - pad.left - pad.right;
+      const plotH = h - pad.top - pad.bottom;
+
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0, pad.top, 0, h - pad.bottom);
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6366f1';
+      grad.addColorStop(0, accentColor + '30');
+      grad.addColorStop(1, accentColor + '00');
+
+      // Build path
+      ctx.beginPath();
+      for (let i = 0; i < values.length; i++) {
+        const x = pad.left + (i / Math.max(values.length - 1, 1)) * plotW;
+        const y = pad.top + plotH - (values[i] / max) * plotH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      // Fill
+      const lastX = pad.left + plotW;
+      ctx.lineTo(lastX, h - pad.bottom);
+      ctx.lineTo(pad.left, h - pad.bottom);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Stroke line
+      ctx.beginPath();
+      for (let i = 0; i < values.length; i++) {
+        const x = pad.left + (i / Math.max(values.length - 1, 1)) * plotW;
+        const y = pad.top + plotH - (values[i] / max) * plotH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = accentColor;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Dots
+      for (let i = 0; i < values.length; i++) {
+        const x = pad.left + (i / Math.max(values.length - 1, 1)) * plotW;
+        const y = pad.top + plotH - (values[i] / max) * plotH;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = accentColor;
+        ctx.fill();
+      }
+
+      // Legend dates
+      if (dailySpend.length > 0) {
+        const startDate = new Date(dailySpend[0].date);
+        document.getElementById('trend-start').textContent =
+          startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       }
     }
 
