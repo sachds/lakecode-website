@@ -502,10 +502,162 @@
       margin-bottom: 20px;
     }
 
+    /* Quickstart banner */
+    .quickstart-banner {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .quickstart-banner h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .quickstart-banner p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .quickstart-cmd {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .quickstart-cmd code { flex: 1; }
+    .quickstart-cmd button {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+    }
+    .quickstart-cmd button:hover { color: var(--text); }
+    .quickstart-dismiss {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1.125rem;
+      line-height: 1;
+    }
+    .quickstart-dismiss:hover { color: var(--text); }
+
+    /* Charge history table */
+    .charge-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .charge-table th {
+      text-align: left;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .charge-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .charge-table tr:last-child td { border-bottom: none; }
+    .charge-table .charge-amount {
+      font-weight: 600;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+    .charge-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+    }
+    .charge-status.succeeded { background: rgba(74, 222, 128, 0.1); color: var(--green); }
+    .charge-status.failed { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+    .charge-status.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+
+    /* Model breakdown */
+    .model-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .model-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8125rem;
+    }
+    .model-bar-label {
+      width: 100px;
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+    .model-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .model-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .model-bar-value {
+      width: 60px;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-dim);
+    }
+
+    /* Key rotation confirm */
+    .key-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .key-rotate-confirm {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-size: 0.8125rem;
+      color: #ef4444;
+    }
+    .key-rotate-confirm p { margin-bottom: 8px; }
+    .key-rotate-confirm .btn { font-size: 0.75rem; }
+
     @media (max-width: 768px) {
       .tier-grid { grid-template-columns: 1fr; }
       .activity-summary { flex-direction: column; gap: 12px; }
       .billing-grid { grid-template-columns: 1fr; }
+      .model-bar-label { width: 70px; }
     }
   </style>
 </head>
@@ -548,6 +700,22 @@
       <!-- Setup complete alert -->
       <div id="setup-alert" class="alert-bar hidden">
         Payment method saved. You've been upgraded!
+      </div>
+
+      <!-- Quickstart banner (new users) -->
+      <div id="quickstart-banner" class="quickstart-banner hidden">
+        <button class="quickstart-dismiss" onclick="dismissQuickstart()" title="Dismiss">&times;</button>
+        <h3>Get started in your terminal</h3>
+        <p>Install lakecode and log in to start using the CLI.</p>
+        <div class="quickstart-cmd">
+          <code>npm install -g lakecode</code>
+          <button onclick="copyCmd('npm install -g lakecode', this)">Copy</button>
+        </div>
+        <div class="quickstart-cmd">
+          <code>lakecode login</code>
+          <button onclick="copyCmd('lakecode login', this)">Copy</button>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0;">Requires Node.js 18+. <a href="/docs/getting-started" style="color: var(--accent);">Full setup guide &rarr;</a></p>
       </div>
 
       <!-- Login prompt (shown when no key stored) -->
@@ -654,8 +822,16 @@
           <h3>License Key</h3>
           <p class="dash-meta">Use this key to authenticate the CLI. Run <code>lakecode login</code> or set it manually.</p>
           <div class="key-mono" id="license-key">lk_...</div>
-          <div style="margin-top: 12px;">
+          <div class="key-actions">
             <button class="btn btn-sm btn-secondary" onclick="copyKey()">Copy Key</button>
+            <button class="btn btn-sm" onclick="showRotateConfirm()" id="rotate-key-btn">Rotate Key</button>
+          </div>
+          <div id="rotate-confirm" class="key-rotate-confirm hidden">
+            <p>This will invalidate your current key. You'll need to re-authenticate all CLI sessions with the new key.</p>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-sm" style="background: #ef4444; color: #fff; border-color: #ef4444;" onclick="rotateKey()">Confirm Rotate</button>
+              <button class="btn btn-sm" onclick="hideRotateConfirm()">Cancel</button>
+            </div>
           </div>
         </div>
 
@@ -742,6 +918,16 @@
           </div>
         </div>
 
+        <!-- Usage by Model -->
+        <div class="dash-card" style="margin-bottom: 20px;" id="model-breakdown-section">
+          <div class="section-header-row">
+            <h3>Usage by Model</h3>
+          </div>
+          <div id="model-breakdown" class="model-breakdown">
+            <div class="activity-empty">Loading...</div>
+          </div>
+        </div>
+
         <!-- Recent Activity -->
         <div class="dash-card" style="margin-bottom: 20px;" id="activity-section">
           <div class="section-header-row">
@@ -760,6 +946,17 @@
           </div>
           <div id="activity-feed">
             <div class="activity-empty" style="color: var(--text-dim); font-size: 0.8125rem;">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Charge History (paid users) -->
+        <div class="dash-card hidden" style="margin-bottom: 20px;" id="charge-history-section">
+          <div class="section-header-row">
+            <h3>Charge History</h3>
+            <button class="refresh-btn" id="refresh-charges-btn" onclick="loadChargeHistory()" title="Refresh">&#x21bb;</button>
+          </div>
+          <div id="charge-history-body">
+            <div class="activity-empty">Loading...</div>
           </div>
         </div>
 
@@ -925,7 +1122,11 @@
         const data = await res.json();
         renderDashboard(data, key);
         renderBillingSection(data);
+        showQuickstartIfNew(data);
         loadActivity(key);
+        if (data.plan === 'pro' || data.plan === 'team') {
+          loadChargeHistory();
+        }
       } catch (err) {
         console.error('Dashboard load failed:', err);
         showLogin();
@@ -1157,6 +1358,7 @@
         // Feed
         if (!data.activity || data.activity.length === 0) {
           feedEl.innerHTML = '<div class="activity-empty">No activity yet. Start a conversation to see usage here.</div>';
+          renderModelBreakdown([]);
           return;
         }
 
@@ -1183,6 +1385,9 @@
           }
         }
         feedEl.innerHTML = html;
+
+        // Model breakdown
+        renderModelBreakdown(data.activity);
       } catch (err) {
         console.error('Activity load failed:', err);
         feedEl.innerHTML = '<div class="activity-empty">Could not load activity.</div>';
@@ -1390,6 +1595,160 @@
         const startDate = new Date(dailySpend[0].date);
         document.getElementById('trend-start').textContent =
           startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+    }
+
+    // ── Quickstart Banner ──
+
+    function showQuickstartIfNew(data) {
+      if (localStorage.getItem('lakecode_quickstart_dismissed')) return;
+      // Show for new users (no activity, or just created)
+      const banner = document.getElementById('quickstart-banner');
+      banner.classList.remove('hidden');
+    }
+
+    function dismissQuickstart() {
+      document.getElementById('quickstart-banner').classList.add('hidden');
+      localStorage.setItem('lakecode_quickstart_dismissed', '1');
+    }
+
+    function copyCmd(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = orig; }, 1500);
+      });
+    }
+
+    // ── Key Rotation ──
+
+    function showRotateConfirm() {
+      document.getElementById('rotate-confirm').classList.remove('hidden');
+      document.getElementById('rotate-key-btn').classList.add('hidden');
+    }
+
+    function hideRotateConfirm() {
+      document.getElementById('rotate-confirm').classList.add('hidden');
+      document.getElementById('rotate-key-btn').classList.remove('hidden');
+    }
+
+    async function rotateKey() {
+      if (!storedKey) return;
+      try {
+        const res = await fetch(API_URL + '/account/rotate-key', {
+          method: 'POST',
+          headers: { 'x-api-key': storedKey, 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (res.ok && data.key) {
+          storedKey = data.key;
+          localStorage.setItem('lakecode_key', data.key);
+          document.getElementById('license-key').textContent = data.key.slice(0, 20) + '...' + data.key.slice(-10);
+          hideRotateConfirm();
+          // Show brief success
+          const alert = document.getElementById('setup-alert');
+          alert.textContent = 'License key rotated. Update your CLI with: lakecode login';
+          alert.classList.remove('hidden');
+          setTimeout(() => alert.classList.add('hidden'), 5000);
+        } else {
+          alert(data.error || 'Could not rotate key. Try again.');
+        }
+      } catch {
+        alert('Could not reach server.');
+      }
+    }
+
+    // ── Model Breakdown ──
+
+    const MODEL_COLORS = [
+      '#6366f1', '#8b5cf6', '#a78bfa', '#60a5fa', '#34d399', '#f59e0b', '#ef4444', '#ec4899'
+    ];
+
+    function renderModelBreakdown(activity) {
+      const el = document.getElementById('model-breakdown');
+      if (!activity || activity.length === 0) {
+        el.innerHTML = '<div class="activity-empty">No usage data yet.</div>';
+        return;
+      }
+
+      // Aggregate by model
+      const modelMap = {};
+      for (const item of activity) {
+        if (item.type === 'usage' && item.model) {
+          const name = shortModel(item.model);
+          modelMap[name] = (modelMap[name] || 0) + (item.amount_cents || 0);
+        }
+      }
+
+      const entries = Object.entries(modelMap).sort((a, b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        el.innerHTML = '<div class="activity-empty">No usage data yet.</div>';
+        return;
+      }
+
+      const maxVal = entries[0][1];
+      let html = '';
+      entries.forEach(([model, cents], i) => {
+        const pct = maxVal > 0 ? (cents / maxVal) * 100 : 0;
+        const color = MODEL_COLORS[i % MODEL_COLORS.length];
+        html += '<div class="model-bar-row">'
+          + '<span class="model-bar-label">' + model + '</span>'
+          + '<div class="model-bar-track"><div class="model-bar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div>'
+          + '<span class="model-bar-value">' + formatAmount(cents) + '</span>'
+          + '</div>';
+      });
+      el.innerHTML = html;
+    }
+
+    // ── Charge History ──
+
+    async function loadChargeHistory() {
+      if (!storedKey) return;
+      const section = document.getElementById('charge-history-section');
+      const body = document.getElementById('charge-history-body');
+      const refreshBtn = document.getElementById('refresh-charges-btn');
+      if (refreshBtn) refreshBtn.classList.add('spinning');
+
+      try {
+        const res = await fetch(API_URL + '/account/charges', {
+          headers: { 'x-api-key': storedKey },
+        });
+        if (!res.ok) {
+          body.innerHTML = '<div class="activity-empty">Could not load charge history.</div>';
+          return;
+        }
+        const data = await res.json();
+        const charges = data.charges || [];
+
+        if (charges.length === 0) {
+          body.innerHTML = '<div class="activity-empty">No charges yet.</div>';
+          return;
+        }
+
+        let html = '<table class="charge-table"><thead><tr>'
+          + '<th>Date</th><th>Amount</th><th>Status</th>'
+          + '</tr></thead><tbody>';
+
+        for (const ch of charges) {
+          const date = new Date(ch.created_at + (ch.created_at.endsWith('Z') ? '' : 'Z'));
+          const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const amount = '$' + (ch.amount_cents / 100).toFixed(2);
+          const status = ch.status || 'succeeded';
+          html += '<tr>'
+            + '<td>' + dateStr + '</td>'
+            + '<td class="charge-amount">+' + amount + '</td>'
+            + '<td><span class="charge-status ' + status + '">' + status + '</span></td>'
+            + '</tr>';
+        }
+
+        html += '</tbody></table>';
+        body.innerHTML = html;
+        section.classList.remove('hidden');
+      } catch (err) {
+        console.error('Charge history load failed:', err);
+        body.innerHTML = '<div class="activity-empty">Could not load charge history.</div>';
+      } finally {
+        if (refreshBtn) refreshBtn.classList.remove('spinning');
       }
     }
 
