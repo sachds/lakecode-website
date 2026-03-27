@@ -691,15 +691,15 @@
               <button class="btn btn-sm btn-primary" style="width:100%;" onclick="showCheckout('pro')">Upgrade to Pro</button>
             </div>
             <div class="tier-card" id="tier-team">
-              <div class="tier-name">Team</div>
-              <div class="tier-price">$20 <span>/user/mo</span></div>
+              <div class="tier-name">Team / Enterprise</div>
+              <div class="tier-price">Custom</div>
               <div class="tier-desc">For teams & orgs</div>
               <ul class="tier-features">
                 <li><span class="check">&#10003;</span> Everything in Pro</li>
-                <li><span class="check">&#10003;</span> Team management</li>
-                <li><span class="check">&#10003;</span> Usage analytics</li>
+                <li><span class="check">&#10003;</span> SSO & team management</li>
+                <li><span class="check">&#10003;</span> Dedicated support</li>
               </ul>
-              <button class="btn btn-sm btn-secondary" style="width:100%;" onclick="showCheckout('team')">Upgrade to Team</button>
+              <a href="mailto:team@lakecode.ai" class="btn btn-sm btn-secondary" style="width:100%;">Contact Us</a>
             </div>
           </div>
         </div>
@@ -974,11 +974,6 @@
         name: 'Pro Plan', label: 'Pro', price: '$20/mo', billing: 'Monthly',
         btnClass: 'btn-checkout-pro',
         features: ['Unlimited daily usage', 'No request limits', 'Auto-reload when balance is low', 'Priority support', 'Cancel anytime'],
-      },
-      team: {
-        name: 'Team Plan', label: 'Team', price: '$20/user/mo', billing: 'Monthly, per user',
-        btnClass: 'btn-checkout-team',
-        features: ['Everything in Pro', 'Team management & invites', 'Shared billing under one account', 'Per-user usage analytics', 'Centralized admin controls'],
       },
     };
 
