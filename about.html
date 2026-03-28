@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Lakecode</title>
+  <meta name="description" content="About Lakecode — the team building the AI-powered CLI agent for Databricks and Snowflake.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>About Lakecode</h1>
+      <p class="page-sub">Building the command line for data teams.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 720px;">
+
+      <h3>What we're building</h3>
+      <p>Lakecode is a terminal-native AI agent for data engineers and platform teams. It connects directly to Databricks and Snowflake, understands your workspace context, and executes real workflows &mdash; debugging failed jobs, proving data quality, analyzing cost spikes, managing Unity Catalog permissions, and deploying assets &mdash; all from a single CLI.</p>
+      <p>We believe the best developer tools stay out of your way. No browser tabs, no dashboards to click through, no context switching. Just type what you need and get an answer backed by real platform evidence.</p>
+
+      <h3>Why we built this</h3>
+      <p>Data engineers spend too much time on operational toil: digging through run logs, cross-referencing query history, tracing permission chains, and manually checking data quality. These tasks are repetitive, context-heavy, and perfectly suited for AI &mdash; but only if the AI has direct access to the platform APIs and understands the domain.</p>
+      <p>Lakecode gives AI that access. Every command pulls real data from your workspace, processes it with domain-specific knowledge, and returns actionable results &mdash; not generic suggestions.</p>
+
+      <h3>Our approach</h3>
+      <ul style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+        <li><strong>Terminal-first</strong> &mdash; Runs where you already work. No new UI to learn.</li>
+        <li><strong>Evidence-based</strong> &mdash; Every answer is backed by real data pulled from your platform. No hallucinated SQL or made-up metrics.</li>
+        <li><strong>Workflow-oriented</strong> &mdash; Not a chatbot. Structured workflows that collect evidence, analyze it, and produce actionable output.</li>
+        <li><strong>Privacy-conscious</strong> &mdash; We never store your data, queries, or credentials. The proxy sees only token counts for billing. Your workspace data stays between you and your platform.</li>
+      </ul>
+
+      <h3>Get in touch</h3>
+      <p>We'd love to hear from you &mdash; whether it's feedback, feature requests, or partnership inquiries.</p>
+      <ul style="color: var(--text-secondary); line-height: 1.8;">
+        <li>General inquiries: <a href="mailto:hello@lakecode.ai" style="color: var(--accent);">hello@lakecode.ai</a></li>
+        <li>Team / Enterprise: <a href="mailto:team@lakecode.ai" style="color: var(--accent);">team@lakecode.ai</a></li>
+        <li>Support: <a href="mailto:support@lakecode.ai" style="color: var(--accent);">support@lakecode.ai</a></li>
+      </ul>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

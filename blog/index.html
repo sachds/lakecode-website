@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Lakecode</title>
+  <meta name="description" content="Lakecode engineering blog — workflows, tutorials, and deep dives on AI-powered data platform operations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../pages.css">
+  <style>
+    .blog-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .blog-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      transition: border-color 0.15s;
+    }
+    .blog-card:hover { border-color: var(--border-light); }
+    .blog-card h3 {
+      font-size: 1.125rem;
+      margin-bottom: 8px;
+    }
+    .blog-card h3 a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .blog-card h3 a:hover { color: var(--accent); }
+    .blog-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .blog-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--accent);
+    }
+    .blog-card p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .blog-card .read-more {
+      font-size: 0.8125rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .blog-card .read-more:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">&gt;_</span> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/blog" class="active">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Blog</h1>
+      <p class="page-sub">Engineering deep dives, workflow guides, and product updates.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="blog-grid">
+
+        <div class="blog-card">
+          <div class="blog-meta">
+            <span class="blog-tag">Workflow</span>
+            <span>March 28, 2026</span>
+          </div>
+          <h3><a href="/blog/debugging-failed-databricks-jobs">Debugging Failed Databricks Jobs with a Single Command</a></h3>
+          <p>How <code>/debug job</code> automates the entire root cause analysis workflow &mdash; pulling configs, run history, error logs, query history, and cluster events into one diagnosis.</p>
+          <a href="/blog/debugging-failed-databricks-jobs" class="read-more">Read more &rarr;</a>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-meta">
+            <span class="blog-tag">Workflow</span>
+            <span>March 28, 2026</span>
+          </div>
+          <h3><a href="/blog/data-quality-evidence-packs">Building Data Quality Evidence Packs with /prove</a></h3>
+          <p>A walkthrough of the <code>/prove</code> command: how it generates comprehensive table health reports with schema snapshots, null analysis, freshness checks, and duplicate detection.</p>
+          <a href="/blog/data-quality-evidence-packs" class="read-more">Read more &rarr;</a>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-meta">
+            <span class="blog-tag">Workflow</span>
+            <span>March 28, 2026</span>
+          </div>
+          <h3><a href="/blog/unity-catalog-access-control">Managing Unity Catalog Permissions from the Terminal</a></h3>
+          <p>How the <code>/uc</code> commands let you trace access, diff grants against desired state, and apply changes with full audit trails &mdash; all without touching the Databricks UI.</p>
+          <a href="/blog/unity-catalog-access-control" class="read-more">Read more &rarr;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-icon">&gt;_</span> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
