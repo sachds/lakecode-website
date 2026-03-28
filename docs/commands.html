@@ -62,79 +62,164 @@
           <div class="docs-content">
 
             <p>All commands are invoked as slash commands within the Lakecode CLI. Each command connects to your Databricks or Snowflake workspace using your existing CLI profile and auth.</p>
+            <p>Commands labeled <span class="model-badge" style="font-size: 0.625rem;">Databricks</span> or <span class="model-badge" style="font-size: 0.625rem;">Snowflake</span> are platform-specific. Unlabeled commands work on both platforms.</p>
 
             <h3>Observability</h3>
 
             <div class="cmd-ref">
-              <code>/status job &lt;id&gt;</code>
+              <code>/status job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Retrieves the job configuration and its last 5 runs. Use this as a quick health check for any job &mdash; see the schedule, cluster config, and recent run outcomes at a glance.</p>
               <pre><code>lakecode /status job 123456</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/logs &lt;run-id&gt;</code>
+              <code>/logs &lt;run-id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Fetches the full output of a specific run, including stdout, stderr, and error tracebacks. Lakecode analyzes the errors and highlights the root cause.</p>
               <pre><code>lakecode /logs 78901234</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/debug job &lt;id&gt;</code>
+              <code>/debug job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Full diagnosis workflow: pulls the job config, finds the most recent failed run, extracts errors, checks query history, and produces a root cause analysis. This is the single command for &ldquo;why is this job broken?&rdquo;</p>
               <pre><code>lakecode /debug job 123456</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/queries job &lt;id&gt;</code>
+              <code>/debug task &lt;name&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Snowflake</span>
+              <p>Diagnose a failed Snowflake task: fetches the task definition, run history, error details, and produces a root cause analysis.</p>
+              <pre><code>lakecode /debug task DAILY_REFRESH</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/queries job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Retrieves the SQL query history for the latest run of a job. Useful for understanding what queries a job executed and how long each took.</p>
               <pre><code>lakecode /queries job 123456</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/queries run &lt;run-id&gt;</code>
+              <code>/queries run &lt;run-id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Retrieves the SQL query history for a specific run. Use this when you need to inspect queries from a particular execution, not just the latest.</p>
               <pre><code>lakecode /queries run 78901234</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/watch job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Subscribe to real-time monitoring of a job. Receives alerts on failures, cost anomalies, and SLA breaches. Use <code>/watch list</code> to see active subscriptions, <code>/watch stop</code> to cancel.</p>
+              <pre><code>lakecode /watch job 123456</code></pre>
             </div>
 
             <h3>Data Quality</h3>
 
             <div class="cmd-ref">
               <code>/prove &lt;table&gt;</code>
-              <p>Generates a comprehensive evidence pack for a table: schema snapshot, row count, null analysis, freshness check, duplicate detection, numeric statistics, sample rows, and an overall health assessment. Results are saved to the <code>./evidence/</code> directory.</p>
+              <p>Generates a comprehensive evidence pack for a table: schema snapshot, row count, null analysis, freshness check, duplicate detection, numeric statistics, sample rows, and an overall health assessment. Results are saved to the <code>./evidence/</code> directory. Works on both Databricks and Snowflake.</p>
               <pre><code>lakecode /prove my_catalog.my_schema.my_table</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/audit jobs</code>
+              <code>/audit jobs</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Scans all jobs in your workspace for SLA gaps, missing timeout configurations, and recurring failures. Produces a risk-scored report so you can prioritize which jobs need attention.</p>
               <pre><code>lakecode /audit jobs</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/audit tasks</code> <span class="model-badge" style="font-size: 0.625rem;">Snowflake</span>
+              <p>Audit all Snowflake tasks: checks ownership, schedules, failure rates, and generates a compliance report.</p>
+              <pre><code>lakecode /audit tasks</code></pre>
             </div>
 
             <h3>Cost Analysis</h3>
 
             <div class="cmd-ref">
               <code>/cost top</code>
-              <p>Queries your platform billing tables and identifies the top spend drivers &mdash; which jobs, clusters, or warehouses are costing the most.</p>
+              <p>Queries your platform billing tables and identifies the top spend drivers. On Databricks: jobs, clusters, and warehouses. On Snowflake: warehouses and queries.</p>
               <pre><code>lakecode /cost top</code></pre>
             </div>
 
             <div class="cmd-ref">
               <code>/cost spike</code>
-              <p>Compares today&rsquo;s spend against a baseline period to detect cost spikes. Identifies the specific drivers behind any increase.</p>
+              <p>Compares a target day&rsquo;s spend against a baseline period to detect cost spikes. Identifies the specific drivers behind any increase. Works on both platforms.</p>
               <pre><code>lakecode /cost spike</code></pre>
             </div>
 
-            <h3>Deployment &amp; Execution</h3>
+            <div class="cmd-ref">
+              <code>/genai ask &lt;question&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>GenAI cost monitoring sub-agent. Answers questions about GenAI spend using Unity Catalog functions &mdash; e.g., &ldquo;which endpoints cost the most last week?&rdquo;</p>
+              <pre><code>lakecode /genai ask "what is our top GenAI spend driver?"</code></pre>
+            </div>
+
+            <h3>Governance &amp; Unity Catalog</h3>
 
             <div class="cmd-ref">
-              <code>/deploy &lt;local-path&gt; &lt;workspace-path&gt;</code>
+              <code>/uc explain-access &lt;principal&gt; &lt;object&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Trace why a principal has (or lacks) access to a Unity Catalog object by walking the grant hierarchy. Supports an optional <code>--action</code> flag (e.g., <code>SELECT</code>).</p>
+              <pre><code>lakecode /uc explain-access user@company.com analytics.prod.sales</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/uc diff-grants &lt;object&gt; --to &lt;desired.yml&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Compare current UC grants against a desired-state YAML and produce a reviewable plan showing what needs to be added, removed, or changed.</p>
+              <pre><code>lakecode /uc diff-grants analytics.prod --to grants.yml</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/uc apply-grants --plan &lt;planId&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Execute a previously generated grant plan with before/after snapshots for audit.</p>
+              <pre><code>lakecode /uc apply-grants --plan abc123</code></pre>
+            </div>
+
+            <h3>Deployment &amp; Bundles</h3>
+
+            <div class="cmd-ref">
+              <code>/deploy &lt;local-path&gt; &lt;workspace-path&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Imports a local file (notebook, SQL, Python) into your Databricks workspace at the specified path.</p>
               <pre><code>lakecode /deploy ./notebooks/etl.py /Workspace/production/etl</code></pre>
             </div>
 
             <div class="cmd-ref">
-              <code>/run job &lt;id&gt;</code>
+              <code>/run job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
               <p>Triggers a job run and polls for completion. Shows real-time status updates until the run finishes or fails.</p>
               <pre><code>lakecode /run job 123456</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/capture job &lt;id&gt;</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Capture a Databricks job definition into a DAB (Databricks Asset Bundle) configuration. Also supports <code>/capture pipeline &lt;id&gt;</code> for DLT pipelines.</p>
+              <pre><code>lakecode /capture job 123456 --to ./bundle</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/drift detect</code> <span class="model-badge" style="font-size: 0.625rem;">Databricks</span>
+              <p>Compare deployed Databricks resources against your bundle definitions to detect configuration drift. Flags any differences between what&rsquo;s defined in code and what&rsquo;s live.</p>
+              <pre><code>lakecode /drift detect --target prod</code></pre>
+            </div>
+
+            <h3>Session &amp; Utility</h3>
+
+            <div class="cmd-ref">
+              <code>/model &lt;name&gt;</code>
+              <p>Switch the AI model mid-session. Supports <code>opus</code>, <code>sonnet</code>, and <code>haiku</code> for different speed/quality tradeoffs.</p>
+              <pre><code>lakecode /model sonnet</code></pre>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/sessions list</code>
+              <p>List saved conversation sessions. Use <code>/sessions delete &lt;id&gt;</code> to remove old sessions.</p>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/context</code>
+              <p>Show the current workspace context: platform, profile, catalogs, schemas, and active conventions.</p>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/replay</code>
+              <p>Replay a previous session or workflow run for review or re-execution.</p>
+            </div>
+
+            <div class="cmd-ref">
+              <code>/help</code>
+              <p>Show the full list of available commands and usage information.</p>
             </div>
 
           </div>

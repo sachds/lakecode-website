@@ -88,17 +88,47 @@ Use the `analytics-medium` SQL warehouse for ad-hoc queries.
             <h3>Skills injection</h3>
             <p>Lakecode ships with a library of platform-specific skills (Unity Catalog, Delta Lake, Snowflake Streams, Tasks, Cortex, and more). When you run a command, Lakecode detects relevant keywords and injects the appropriate skills into the AI context. This means the AI always has deep, current knowledge about the platform features involved in your query &mdash; without you configuring anything.</p>
 
+            <h3>Config files</h3>
+            <p>Lakecode uses YAML config files at two levels:</p>
+            <ul>
+              <li><strong>Global</strong> &mdash; <code>~/.lakecode/config.yml</code> applies to all projects.</li>
+              <li><strong>Project</strong> &mdash; <code>./lakecode.yml</code> in your project root. Project config overrides global.</li>
+            </ul>
+            <p>You can also set <code>LAKECODE_CONFIG_PATH</code> to point to an external config file.</p>
+            <pre><code># lakecode.yml
+platform: databricks          # or "snowflake"
+
+databricks:
+  profile: DEFAULT             # Databricks CLI profile name
+  default_catalog: analytics
+  default_schema: prod
+
+snowflake:
+  connection: default          # connection name from ~/.snowflake/config.toml
+  warehouse: ANALYTICS_WH
+  database: PROD
+  role: DATA_ENG</code></pre>
+
             <h3>Environment variables</h3>
-            <p>Lakecode uses standard environment variables for workspace connectivity:</p>
+            <p>Lakecode uses standard environment variables for workspace connectivity. Environment variables take precedence over config files.</p>
+            <h4>Databricks</h4>
             <ul>
               <li><code>DATABRICKS_HOST</code> &mdash; Your workspace URL (e.g., <code>https://dbc-abc123.cloud.databricks.com</code>)</li>
               <li><code>DATABRICKS_TOKEN</code> &mdash; A personal access token for your workspace</li>
-              <li><code>SNOWFLAKE_ACCOUNT</code> &mdash; Your Snowflake account identifier</li>
-              <li><code>SNOWFLAKE_USER</code> &mdash; Your Snowflake username</li>
-              <li><code>ANTHROPIC_API_KEY</code> &mdash; (Optional) Your own Anthropic key for BYOK mode</li>
-              <li><code>OPENAI_API_KEY</code> &mdash; (Optional) Your own OpenAI key for BYOK mode</li>
+              <li><code>LAKECODE_PROFILE</code> &mdash; Databricks CLI profile name (default: <code>DEFAULT</code>)</li>
+              <li><code>LAKECODE_TARGET</code> &mdash; Target workspace for bundle operations</li>
             </ul>
-            <p>If you have a Databricks CLI profile (<code>~/.databrickscfg</code>) or Snowflake connection (<code>~/.snowflake/config.toml</code>), Lakecode will use it automatically. Environment variables take precedence over the config file.</p>
+            <h4>Snowflake</h4>
+            <ul>
+              <li><code>LAKECODE_SNOWFLAKE_CONNECTION</code> &mdash; Connection name from <code>~/.snowflake/config.toml</code> (default: <code>default</code>)</li>
+              <li><code>LAKECODE_SNOWFLAKE_ACCOUNT</code> &mdash; Your Snowflake account identifier</li>
+            </ul>
+            <h4>General</h4>
+            <ul>
+              <li><code>LAKECODE_PLATFORM</code> &mdash; Platform: <code>databricks</code> or <code>snowflake</code></li>
+              <li><code>ANTHROPIC_API_KEY</code> &mdash; (Optional) Your own Anthropic key for BYOK mode</li>
+            </ul>
+            <p>If you have a Databricks CLI profile (<code>~/.databrickscfg</code>) or Snowflake connection (<code>~/.snowflake/config.toml</code>), Lakecode will use it automatically.</p>
 
           </div>
 

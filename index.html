@@ -209,8 +209,8 @@
               <span>Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span>
             </div>
             <div class="command">
-              <code>/describe &lt;table&gt;</code>
-              <span>Quick table overview: schema, row count, freshness</span>
+              <code>/audit jobs</code>
+              <span>Scan for SLA gaps, missing timeouts, recurring failures</span>
             </div>
           </div>
         </div>
@@ -230,8 +230,8 @@
               <span>Compare day vs baseline; AI identifies likely drivers</span>
             </div>
             <div class="command">
-              <code>/profile</code>
-              <span>Refresh workspace profile: catalogs, schemas, tables, warehouses</span>
+              <code>/drift detect</code>
+              <span>Compare deployed resources against bundle definitions</span>
             </div>
           </div>
         </div>
@@ -247,12 +247,12 @@
               <span>Trigger job run + poll until completion</span>
             </div>
             <div class="command">
-              <code>/login</code>
-              <span>Authenticate with Google OAuth or configure workspace</span>
+              <code>/capture job &lt;id&gt;</code>
+              <span>Capture a job or pipeline into a Databricks Asset Bundle</span>
             </div>
             <div class="command">
-              <code>/config</code>
-              <span>View or update lakecode configuration</span>
+              <code>/uc explain-access</code>
+              <span>Trace why a principal has (or lacks) access to a Unity Catalog object</span>
             </div>
           </div>
         </div>
@@ -401,7 +401,7 @@
         </div>
         <div class="why-card">
           <h3>Pro</h3>
-          <p>Add a payment method, get auto-reloading credits when your balance is low. Default reload at $49. Usage-based &mdash; pay only for what you use.</p>
+          <p>Add a payment method, get auto-reloading credits when your balance is low. Default reload at $20. Usage-based &mdash; pay only for what you use.</p>
         </div>
       </div>
       <div class="hero-actions" style="margin-top: 36px; margin-bottom: 0;">

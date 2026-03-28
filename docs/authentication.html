@@ -72,16 +72,12 @@
             <h3>License keys</h3>
             <p>After OAuth, Lakecode issues a license key in the format <code>lk_&lt;base64url&gt;</code>. The key is an Ed25519-signed payload containing your email, plan type, and expiry date. It is stored locally and sent with every request to the proxy, which verifies the signature server-side.</p>
             <p>You can view your current key on the <a href="/dashboard">dashboard</a> or by running:</p>
-            <pre><code>lakecode /status</code></pre>
+            <pre><code>lakecode config license</code></pre>
 
             <h3>Bring Your Own Key (BYOK)</h3>
-            <p>If you prefer to use your own AI provider keys and bypass the Lakecode proxy entirely, set one of these environment variables:</p>
-            <pre><code># Use your own Anthropic key
-export ANTHROPIC_API_KEY=sk-ant-...
-
-# Or use your own OpenAI key
-export OPENAI_API_KEY=sk-...</code></pre>
-            <p>When a BYOK key is set, Lakecode routes requests directly to the provider. No credits are consumed, no proxy is involved, and billing is handled entirely by your provider account.</p>
+            <p>If you prefer to use your own Anthropic API key and bypass the Lakecode proxy entirely, set this environment variable:</p>
+            <pre><code>export ANTHROPIC_API_KEY=sk-ant-...</code></pre>
+            <p>When a BYOK key is set, Lakecode routes requests directly to Anthropic. No credits are consumed, no proxy is involved, and billing is handled entirely by your Anthropic account.</p>
 
           </div>
 
