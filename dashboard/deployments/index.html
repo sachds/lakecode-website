@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lakecode — Deployments</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: #888; text-decoration: none; font-size: 0.875rem; }
+    .nav-links a:hover { color: #e5e5e5; }
+    .nav-links a.active { color: #4ade80; }
+    h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: transparent;
+      color: #e5e5e5;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #222; }
+    .btn-primary { background: #166534; border-color: #166534; color: #fff; }
+    .btn-primary:hover { background: #15803d; }
+    .btn-danger { background: #991b1b; border-color: #991b1b; color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-sm { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    select, input {
+      width: 100%;
+      padding: 0.625rem;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #111;
+      color: #e5e5e5;
+      font-size: 0.8125rem;
+      margin-bottom: 0.75rem;
+    }
+    label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 0.25rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-healthy { background: #1e3a2f; color: #4ade80; }
+    .badge-degraded { background: #3b2f1e; color: #f59e0b; }
+    .badge-failed { background: #3b1e1e; color: #ef4444; }
+    .badge-provisioning { background: #1e2a4b; color: #60a5fa; }
+    .badge-requested { background: #333; color: #888; }
+    .badge-deleted { background: #222; color: #666; }
+    .dep-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+    }
+    .dep-row:last-child { border-bottom: none; }
+    .dep-row:hover { background: rgba(255,255,255,0.02); margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 6px; }
+    .dep-name { font-weight: 500; flex: 1; }
+    .dep-meta { font-size: 0.75rem; color: #666; }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.375rem 0;
+      font-size: 0.8125rem;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #888; }
+    .detail-value { color: #e5e5e5; font-weight: 500; }
+    .detail-value a { color: #60a5fa; text-decoration: none; }
+    .detail-value a:hover { text-decoration: underline; }
+    .log-entry {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.6875rem;
+      padding: 0.25rem 0;
+      color: #888;
+    }
+    .log-entry .step { color: #60a5fa; }
+    .log-entry .completed { color: #4ade80; }
+    .log-entry .failed { color: #ef4444; }
+    .log-entry .started { color: #f59e0b; }
+    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .hidden { display: none !important; }
+    .muted { color: #666; font-size: 0.8125rem; }
+    .form-row { display: flex; gap: 0.75rem; }
+    .form-row > * { flex: 1; }
+    .bundle-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .bundle-card:hover { border-color: #555; }
+    .bundle-card.selected { border-color: #4ade80; }
+    .bundle-name { font-weight: 600; font-size: 0.875rem; }
+    .bundle-desc { font-size: 0.75rem; color: #888; margin-top: 0.125rem; }
+    .bundle-meta { font-size: 0.6875rem; color: #555; margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="/" class="logo">lakecode</a>
+      <div class="nav-links">
+        <a href="/dashboard">Account</a>
+        <a href="/dashboard/deployments" class="active">Deployments</a>
+      </div>
+    </div>
+
+    <!-- List view -->
+    <div id="view-list">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h2>Deployments</h2>
+        <button class="btn btn-primary" onclick="showCreate()">New Deployment</button>
+      </div>
+      <div class="card">
+        <div id="dep-list"><span class="muted">Loading...</span></div>
+      </div>
+    </div>
+
+    <!-- Create view -->
+    <div id="view-create" class="hidden">
+      <h2>Create Deployment</h2>
+      <div class="card">
+        <label>Deployment Name</label>
+        <input type="text" id="create-name" placeholder="acme-platform-ops">
+
+        <div class="form-row">
+          <div>
+            <label>Mode</label>
+            <select id="create-mode">
+              <option value="hosted">Hosted (we manage)</option>
+              <option value="enterprise">Enterprise (you manage)</option>
+            </select>
+          </div>
+          <div>
+            <label>Region</label>
+            <select id="create-region">
+              <option value="us-east-1">US East (N. Virginia)</option>
+              <option value="us-west-2">US West (Oregon)</option>
+              <option value="eu-west-1">EU West (Ireland)</option>
+              <option value="ap-southeast-1">AP Southeast (Singapore)</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Assistant Bundle</label>
+        <div id="bundle-list"><span class="muted">Loading bundles...</span></div>
+
+        <label>Initial Users (comma-separated emails or groups)</label>
+        <input type="text" id="create-users" placeholder="team@company.com, data-platform-team">
+
+        <label>Admin Users</label>
+        <input type="text" id="create-admins" placeholder="admin@company.com">
+
+        <div class="actions">
+          <button class="btn btn-primary" id="create-btn" onclick="createDeployment()">Create</button>
+          <button class="btn" onclick="showList()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail view -->
+    <div id="view-detail" class="hidden">
+      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+        <button class="btn btn-sm" onclick="showList()">&larr; Back</button>
+        <h2 id="detail-name" style="margin:0">Deployment</h2>
+        <span id="detail-badge" class="badge"></span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Details</div>
+        <div id="detail-rows"></div>
+        <div class="actions" id="detail-actions"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Provisioning Log</div>
+        <div id="detail-logs"><span class="muted">No logs yet</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROV_API = 'http://localhost:3200'; // Provisioning server
+    let selectedBundleId = null;
+    let currentDeploymentId = null;
+
+    // --- Navigation ---
+    function showList() {
+      document.getElementById('view-list').classList.remove('hidden');
+      document.getElementById('view-create').classList.add('hidden');
+      document.getElementById('view-detail').classList.add('hidden');
+      loadDeployments();
+    }
+
+    function showCreate() {
+      document.getElementById('view-list').classList.add('hidden');
+      document.getElementById('view-create').classList.remove('hidden');
+      document.getElementById('view-detail').classList.add('hidden');
+      loadBundles();
+    }
+
+    function showDetail(id) {
+      document.getElementById('view-list').classList.add('hidden');
+      document.getElementById('view-create').classList.add('hidden');
+      document.getElementById('view-detail').classList.remove('hidden');
+      currentDeploymentId = id;
+      loadDetail(id);
+    }
+
+    // --- Deployments list ---
+    async function loadDeployments() {
+      const el = document.getElementById('dep-list');
+      try {
+        const r = await fetch(`${PROV_API}/deployments`);
+        const d = await r.json();
+        if (!d.deployments?.length) {
+          el.innerHTML = '<span class="muted">No deployments yet. Click "New Deployment" to create one.</span>';
+          return;
+        }
+        el.innerHTML = d.deployments.map(dep => {
+          const badgeClass = getBadgeClass(dep.status);
+          const time = dep.createdAt ? new Date(dep.createdAt).toLocaleDateString() : '';
+          return `<div class="dep-row" onclick="showDetail('${dep.id}')">
+            <span class="dep-name">${dep.config.name}</span>
+            <span class="badge ${badgeClass}">${dep.status}</span>
+            <span class="dep-meta">${dep.config.mode} &middot; ${dep.config.region} &middot; ${time}</span>
+          </div>`;
+        }).join('');
+      } catch(e) {
+        el.innerHTML = `<span class="muted">Error: ${e.message}. Is the provisioning server running?</span>`;
+      }
+    }
+
+    // --- Bundle selection ---
+    async function loadBundles() {
+      const el = document.getElementById('bundle-list');
+      try {
+        const r = await fetch(`${PROV_API}/bundles`);
+        const d = await r.json();
+        el.innerHTML = d.bundles.map(b => `
+          <div class="bundle-card${selectedBundleId === b.id ? ' selected' : ''}" onclick="selectBundle('${b.id}', this)">
+            <div class="bundle-name">${b.name}</div>
+            <div class="bundle-desc">${b.description}</div>
+            <div class="bundle-meta">${b.platforms.join(', ')} &middot; ${b.workflowCount} workflows &middot; v${b.version}</div>
+          </div>
+        `).join('');
+      } catch(e) {
+        el.innerHTML = `<span class="muted">Error loading bundles: ${e.message}</span>`;
+      }
+    }
+
+    function selectBundle(id, el) {
+      document.querySelectorAll('.bundle-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedBundleId = id;
+    }
+
+    // --- Create deployment ---
+    async function createDeployment() {
+      const name = document.getElementById('create-name').value.trim();
+      const mode = document.getElementById('create-mode').value;
+      const region = document.getElementById('create-region').value;
+      const users = document.getElementById('create-users').value.split(',').map(s => s.trim()).filter(Boolean);
+      const admins = document.getElementById('create-admins').value.split(',').map(s => s.trim()).filter(Boolean);
+
+      if (!name) return alert('Name is required');
+      if (!selectedBundleId) return alert('Select a bundle');
+
+      const btn = document.getElementById('create-btn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+
+      try {
+        // Create
+        const r = await fetch(`${PROV_API}/deployments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tenantId: name,
+            name,
+            mode,
+            region,
+            assistantSpecId: selectedBundleId,
+            assistantSpec: { id: `${name}-assistant`, bundles: [selectedBundleId] },
+            users,
+            admins,
+          }),
+        });
+        const d = await r.json();
+
+        // Auto-provision
+        await fetch(`${PROV_API}/deployments/${d.deployment.id}/provision`, { method: 'POST' });
+
+        showDetail(d.deployment.id);
+      } catch(e) {
+        alert(`Error: ${e.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create';
+      }
+    }
+
+    // --- Deployment detail ---
+    async function loadDetail(id) {
+      try {
+        const [depRes, logsRes] = await Promise.all([
+          fetch(`${PROV_API}/deployments/${id}`),
+          fetch(`${PROV_API}/deployments/${id}/logs`),
+        ]);
+        const dep = (await depRes.json()).deployment;
+        const logs = (await logsRes.json()).logs;
+
+        document.getElementById('detail-name').textContent = dep.config.name;
+
+        const badge = document.getElementById('detail-badge');
+        badge.textContent = dep.status;
+        badge.className = `badge ${getBadgeClass(dep.status)}`;
+
+        // Detail rows
+        const rows = [
+          ['Mode', dep.config.mode],
+          ['Region', dep.config.region],
+          ['Bundle', dep.config.assistantSpecId],
+          ['Status', dep.status],
+          ['App Version', dep.appVersion || '—'],
+          ['Workspace', dep.resources?.workspaceUrl ? `<a href="${dep.resources.workspaceUrl}" target="_blank">${dep.resources.workspaceUrl}</a>` : '—'],
+          ['App URL', dep.resources?.appUrl ? `<a href="${dep.resources.appUrl}/app" target="_blank">${dep.resources.appUrl}</a>` : '—'],
+          ['Warehouse', dep.resources?.warehouseId || '—'],
+          ['Created', dep.createdAt ? new Date(dep.createdAt).toLocaleString() : '—'],
+          ['Provisioned', dep.provisionedAt ? new Date(dep.provisionedAt).toLocaleString() : '—'],
+          ['Last Error', dep.lastError || '—'],
+        ];
+
+        document.getElementById('detail-rows').innerHTML = rows.map(([label, value]) =>
+          `<div class="detail-row"><span class="detail-label">${label}</span><span class="detail-value">${value}</span></div>`
+        ).join('');
+
+        // Actions
+        const actions = document.getElementById('detail-actions');
+        let btns = '';
+        if (dep.resources?.appUrl) {
+          btns += `<a href="${dep.resources.appUrl}/app" target="_blank" class="btn btn-primary">Launch Assistant</a>`;
+        }
+        if (dep.status === 'failed') {
+          btns += `<button class="btn" onclick="retryDeployment('${id}')">Retry</button>`;
+        }
+        if (dep.status !== 'deleted' && dep.status !== 'deleting') {
+          btns += `<button class="btn btn-danger btn-sm" onclick="destroyDeployment('${id}')">Destroy</button>`;
+        }
+        if (['provisioning_workspace','bootstrapping_resources','deploying_app','configuring','verifying_health'].includes(dep.status)) {
+          btns += `<button class="btn btn-sm" onclick="loadDetail('${id}')">Refresh</button>`;
+        }
+        actions.innerHTML = btns;
+
+        // Logs
+        const logsEl = document.getElementById('detail-logs');
+        if (logs.length === 0) {
+          logsEl.innerHTML = '<span class="muted">No logs yet</span>';
+        } else {
+          logsEl.innerHTML = logs.map(l => {
+            const time = new Date(l.timestamp).toLocaleTimeString();
+            const dur = l.durationMs ? ` (${(l.durationMs/1000).toFixed(1)}s)` : '';
+            return `<div class="log-entry"><span class="step">${l.step}</span> <span class="${l.status}">${l.status}</span>${dur} <span style="color:#555">${time}</span>${l.error ? ` <span class="failed">${l.error}</span>` : ''}</div>`;
+          }).join('');
+        }
+
+        // Auto-refresh if still provisioning
+        if (['provisioning_workspace','bootstrapping_resources','deploying_app','configuring','verifying_health','requested'].includes(dep.status)) {
+          setTimeout(() => { if (currentDeploymentId === id) loadDetail(id); }, 3000);
+        }
+      } catch(e) {
+        document.getElementById('detail-rows').innerHTML = `<span class="muted">Error: ${e.message}</span>`;
+      }
+    }
+
+    async function retryDeployment(id) {
+      await fetch(`${PROV_API}/deployments/${id}/retry`, { method: 'POST' });
+      loadDetail(id);
+    }
+
+    async function destroyDeployment(id) {
+      if (!confirm('Destroy this deployment? This will delete the app and optionally the workspace.')) return;
+      await fetch(`${PROV_API}/deployments/${id}/destroy`, { method: 'POST' });
+      loadDetail(id);
+    }
+
+    // --- Helpers ---
+    function getBadgeClass(status) {
+      if (status === 'healthy') return 'badge-healthy';
+      if (status === 'degraded') return 'badge-degraded';
+      if (status === 'failed') return 'badge-failed';
+      if (status === 'deleted') return 'badge-deleted';
+      if (['requested','provisioning_workspace','bootstrapping_resources','deploying_app','configuring','verifying_health','updating'].includes(status)) return 'badge-provisioning';
+      return 'badge-requested';
+    }
+
+    // --- Init ---
+    showList();
+  </script>
+</body>
+</html>
