@@ -231,7 +231,10 @@
   </div>
 
   <script>
-    const PROV_API = 'http://localhost:3200'; // Provisioning server
+    // Provisioning API: production Worker or local dev server
+    const PROV_API = window.location.hostname === 'localhost'
+      ? 'http://localhost:3200'
+      : 'https://provisioning.lakecode.ai';
     let selectedBundleId = null;
     let currentDeploymentId = null;
 
@@ -339,9 +342,8 @@
         });
         const d = await r.json();
 
-        // Auto-provision
-        await fetch(`${PROV_API}/deployments/${d.deployment.id}/provision`, { method: 'POST' });
-
+        // Deployment created with status "requested"
+        // Provisioning is triggered manually/scripted for now
         showDetail(d.deployment.id);
       } catch(e) {
         alert(`Error: ${e.message}`);
