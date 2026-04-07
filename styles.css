@@ -130,8 +130,6 @@ code {
 
 .logo-icon {
   color: var(--accent);
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .nav-links {
