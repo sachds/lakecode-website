@@ -287,6 +287,11 @@
   max-width: 960px;
 }
 
+.pricing-grid.four-col {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1200px;
+}
+
 /* Free tier banner */
 .free-tier-banner {
   display: flex;
@@ -835,7 +840,8 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .pricing-grid,
-  .pricing-grid.three-col {
+  .pricing-grid.three-col,
+  .pricing-grid.four-col {
     grid-template-columns: 1fr;
   }
 

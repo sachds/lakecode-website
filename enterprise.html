@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise — Lakecode</title>
+  <meta name="description" content="Lakecode for enterprise — governed AI workflows for Databricks with approval gates, audit trails, and Databricks-native deployment.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/#docs">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise" class="active">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-badge">Enterprise</div>
+      <h1>AI workflows your platform team controls</h1>
+      <p class="page-sub">Governed, auditable AI agents that run natively on Databricks &mdash; with approval gates, evidence trails, and org-wide configuration.</p>
+      <div class="hero-actions" style="margin-top: 32px;">
+        <a href="mailto:team@lakecode.ai" class="btn btn-primary">Book a Demo</a>
+        <a href="#platform" class="btn btn-secondary">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Governed Workflows -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Governed workflows with approval gates</h2>
+        <p>Every AI action is classified, logged, and gated &mdash; so your team moves fast without losing control.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Safety classification</h3>
+          <ul>
+            <li>Every operation classified as READ, WRITE, or DESTRUCTIVE</li>
+            <li>WRITE and DESTRUCTIVE actions require explicit approval</li>
+            <li>Configurable per org &mdash; set your own risk thresholds</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Approval gates</h3>
+          <ul>
+            <li>Human-in-the-loop before any state-changing operation</li>
+            <li>Step manifests show exactly what will execute and why</li>
+            <li>Approve, reject, or modify before the agent proceeds</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Evidence packs &amp; audit trails</h3>
+          <ul>
+            <li>Every workflow produces structured evidence artifacts</li>
+            <li>Full execution logs tied to user identity and timestamp</li>
+            <li>Attach to PRs, incidents, compliance reviews, or Jira tickets</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <h3>AssistantSpec &mdash; configure per org</h3>
+          <ul>
+            <li>Define which workflows are available to your team</li>
+            <li>Set default catalogs, schemas, naming conventions</li>
+            <li>Enforce org-specific policies and guardrails</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Databricks-native -->
+  <section id="platform" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Databricks-native deployment</h2>
+        <p>Runs where your data lives &mdash; not in a sidecar or external SaaS.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Databricks Apps</h3>
+          <p>Deploy lakecode as a Databricks App with a managed UI. Your team gets governed AI workflows without installing anything locally.</p>
+        </div>
+        <div class="why-card">
+          <h3>Model Serving</h3>
+          <p>Run the agent backend on Databricks Model Serving for low-latency, scalable execution inside your cloud perimeter.</p>
+        </div>
+        <div class="why-card">
+          <h3>Unity Catalog integration</h3>
+          <p>UC-backed state store for execution history, evidence packs, and configuration. Leverage existing access controls and lineage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Platform architecture</h2>
+        <p>Built for security, auditability, and your existing Databricks investment.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <h3>Serverless workspace provisioning</h3>
+          <p>Ephemeral, isolated compute for each workflow execution. No long-running clusters, no shared state between runs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <h3>Step manifests</h3>
+          <p>Every workflow decomposes into typed steps with declared inputs, outputs, and safety classification. Full transparency before execution.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Model governance via AI Gateway</h3>
+          <p>Route all LLM calls through Databricks AI Gateway. Enforce rate limits, logging, and model selection at the org level.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>UC-backed state store</h3>
+          <p>Execution history, evidence artifacts, and agent configuration stored in Unity Catalog. Governed by your existing access policies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connectors -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Connector actions</h2>
+        <p>Lakecode workflows connect to the tools your team already uses.</p>
+      </div>
+      <div class="why-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 720px; margin: 0 auto;">
+        <div class="why-card">
+          <h3>Slack</h3>
+          <p>Post evidence packs, debug summaries, and approval requests directly to Slack channels. Keep your team in the loop without context switching.</p>
+        </div>
+        <div class="why-card">
+          <h3>Jira</h3>
+          <p>Create and update Jira tickets with structured evidence. Link debug reports to incidents and data quality findings to stories.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <h2>Bring governed AI workflows to your data team.</h2>
+      <p>See how lakecode deploys natively on Databricks with the controls your platform team needs.</p>
+      <div class="hero-actions">
+        <a href="mailto:team@lakecode.ai" class="btn btn-primary">Book a Demo</a>
+        <a href="/pricing" class="btn btn-secondary">View Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>AI-powered data platform agent for Databricks &amp; Snowflake.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Docs</h4>
+          <a href="/docs/getting-started">Getting started</a>
+          <a href="/docs/commands">Commands</a>
+          <a href="/docs/configuration">Configuration</a>
+          <a href="/docs/security">Safety</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
