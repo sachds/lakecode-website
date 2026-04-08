@@ -248,6 +248,40 @@
   }
 }
 
+/* ── Enterprise gate ── */
+.enterprise-gate {
+  text-align: center;
+  padding: 64px 24px;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.enterprise-gate-icon {
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.enterprise-gate h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.enterprise-gate p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  max-width: 400px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+}
+
+.enterprise-gate-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
 /* ── Shared page styles (pricing, signin, dashboard) ── */
 
 /* Page hero */

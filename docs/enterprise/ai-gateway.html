@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Gateway — Lakecode Enterprise Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / <a href="/docs#enterprise">Enterprise</a> / AI Gateway</div>
+      <h1>AI Gateway</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+          <h4 style="margin-top: 24px;">Enterprise</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/enterprise/deployment">Deployment</a>
+            <a href="/docs/enterprise/approval-gates">Approval Gates</a>
+            <a href="/docs/enterprise/assistantspec">AssistantSpec</a>
+            <a href="/docs/enterprise/connectors">Connectors</a>
+            <a href="/docs/enterprise/ai-gateway" class="current">AI Gateway</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <!-- Enterprise gate -->
+          <div id="enterprise-gate" class="enterprise-gate">
+            <div class="enterprise-gate-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Enterprise documentation</h3>
+            <p>This content is available to Enterprise customers. Sign in with your enterprise account or contact sales to get access.</p>
+            <div class="enterprise-gate-actions">
+              <a href="/signin" class="btn btn-primary">Sign in</a>
+              <a href="mailto:team@lakecode.ai" class="btn btn-secondary">Contact Sales</a>
+            </div>
+          </div>
+
+          <!-- Gated content -->
+          <div id="enterprise-content" style="display: none;">
+            <div class="docs-content">
+
+              <h3>Overview</h3>
+              <p>In Lakecode Enterprise, all LLM requests are routed through <strong>Databricks AI Gateway</strong>. This gives your platform team centralized control over model access, rate limits, logging, and cost tracking &mdash; without requiring changes to lakecode workflows.</p>
+
+              <h3>Why AI Gateway</h3>
+              <ul>
+                <li><strong>No direct API keys</strong> &mdash; lakecode never holds model provider credentials. All requests go through your gateway endpoint.</li>
+                <li><strong>Centralized logging</strong> &mdash; every LLM call is logged in Unity Catalog with user identity, prompt, response, latency, and token count.</li>
+                <li><strong>Rate limiting</strong> &mdash; enforce per-user or per-team rate limits to control cost and prevent runaway usage.</li>
+                <li><strong>Model governance</strong> &mdash; control which models are available and route requests to approved endpoints.</li>
+              </ul>
+
+              <h3>Setup</h3>
+              <p>Create an AI Gateway route in your Databricks workspace that points to your preferred model provider:</p>
+              <pre><code># Create a gateway route for Claude (via Anthropic)
+databricks serving-endpoints create --json '{
+  "name": "ai-gateway",
+  "config": {
+    "served_entities": [{
+      "name": "claude-sonnet",
+      "external_model": {
+        "name": "claude-sonnet-4-20250514",
+        "provider": "anthropic",
+        "anthropic_config": {
+          "anthropic_api_key": "{{secrets/lakecode/anthropic-key}}"
+        }
+      }
+    }]
+  },
+  "ai_gateway": {
+    "usage_tracking_config": {
+      "enabled": true
+    },
+    "rate_limits": [{
+      "key": "user",
+      "renewal_period": "minute",
+      "calls": 20
+    }]
+  }
+}'</code></pre>
+              <p>Then point lakecode to the gateway in your <a href="/docs/enterprise/assistantspec">AssistantSpec</a>:</p>
+              <pre><code>models:
+  gateway_endpoint: /serving-endpoints/ai-gateway
+  planner: claude-sonnet-4-20250514
+  sql: claude-sonnet-4-20250514
+  summarizer: claude-haiku-4-5-20251001</code></pre>
+
+              <h3>Supported providers</h3>
+              <p>Databricks AI Gateway supports multiple model providers. Lakecode works with any provider that offers tool-use capable models:</p>
+              <ul>
+                <li><strong>Anthropic</strong> &mdash; Claude Sonnet, Claude Haiku (recommended)</li>
+                <li><strong>OpenAI</strong> &mdash; GPT-4o, GPT-4o-mini</li>
+                <li><strong>Databricks Foundation Models</strong> &mdash; DBRX, Llama 3</li>
+                <li><strong>Azure OpenAI</strong> &mdash; for Azure-deployed workspaces</li>
+              </ul>
+
+              <h3>Rate limiting</h3>
+              <p>Rate limits can be configured at multiple levels:</p>
+              <pre><code># In your AI Gateway configuration
+"rate_limits": [
+  {
+    "key": "user",
+    "renewal_period": "minute",
+    "calls": 20
+  },
+  {
+    "key": "endpoint",
+    "renewal_period": "minute",
+    "calls": 200
+  }
+]</code></pre>
+              <p>Additionally, per-user hourly limits can be set in AssistantSpec:</p>
+              <pre><code>models:
+  rate_limit: 100  # max requests per user per hour</code></pre>
+              <p>When a user hits a rate limit, their workflow is paused (not terminated) and resumes automatically when the limit window resets.</p>
+
+              <h3>Logging &amp; cost tracking</h3>
+              <p>With usage tracking enabled, AI Gateway logs every request to Unity Catalog. You can query this data for cost analysis and usage patterns:</p>
+              <pre><code>-- Total tokens by user this week
+SELECT
+  request_metadata.user,
+  SUM(usage.prompt_tokens) AS prompt_tokens,
+  SUM(usage.completion_tokens) AS completion_tokens,
+  SUM(usage.total_tokens) AS total_tokens
+FROM lakecode_state.gateway_logs
+WHERE timestamp > current_date() - INTERVAL 7 DAYS
+GROUP BY request_metadata.user
+ORDER BY total_tokens DESC</code></pre>
+
+              <h3>Fallback routing</h3>
+              <p>Configure fallback models in case your primary model endpoint is unavailable:</p>
+              <pre><code>models:
+  gateway_endpoint: /serving-endpoints/ai-gateway
+  planner: claude-sonnet-4-20250514
+  planner_fallback: gpt-4o
+
+  sql: claude-sonnet-4-20250514
+  sql_fallback: gpt-4o
+
+  summarizer: claude-haiku-4-5-20251001
+  summarizer_fallback: gpt-4o-mini</code></pre>
+              <p>Fallback is automatic &mdash; if the primary model returns a 5xx or times out after 30 seconds, the request is retried against the fallback model.</p>
+
+            </div>
+
+            <div class="docs-pager">
+              <a href="/docs/enterprise/connectors" class="prev">
+                <span class="docs-pager-label">&larr; Previous</span>
+                <span class="docs-pager-title">Connectors</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+          <a href="/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script>
+    (function() {
+      var API_URL = 'https://api.lakecode.ai';
+      var key = localStorage.getItem('lk_key');
+      if (!key) return;
+      fetch(API_URL + '/account', { headers: { 'x-api-key': key } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.plan === 'enterprise') {
+            document.getElementById('enterprise-gate').style.display = 'none';
+            document.getElementById('enterprise-content').style.display = '';
+          }
+        })
+        .catch(function() {});
+    })();
+  </script>
+</body>
+</html>

@@ -43,14 +43,14 @@
       line-height: 1.5;
       margin: 0;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .docs-nav-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr !important;
       }
     }
     @media (max-width: 480px) {
       .docs-nav-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
   </style>
@@ -126,6 +126,36 @@
           <h3>Architecture</h3>
           <p>How the proxy, auth, and CLI fit together.</p>
         </a>
+      </div>
+
+      <!-- Enterprise docs -->
+      <div id="enterprise" style="margin-top: 64px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2 style="font-size: 1.5rem; font-weight: 700;">Enterprise</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9375rem;">Deployment, governance, and configuration for enterprise customers.</p>
+        </div>
+        <div class="docs-nav-grid" style="grid-template-columns: repeat(5, 1fr);">
+          <a href="/docs/enterprise/deployment" class="docs-nav-card">
+            <h3>Deployment</h3>
+            <p>Databricks Apps, Model Serving, and CLI setup.</p>
+          </a>
+          <a href="/docs/enterprise/approval-gates" class="docs-nav-card">
+            <h3>Approval Gates</h3>
+            <p>Safety classification and approval workflows.</p>
+          </a>
+          <a href="/docs/enterprise/assistantspec" class="docs-nav-card">
+            <h3>AssistantSpec</h3>
+            <p>Org-wide configuration reference.</p>
+          </a>
+          <a href="/docs/enterprise/connectors" class="docs-nav-card">
+            <h3>Connectors</h3>
+            <p>Slack and Jira integration setup.</p>
+          </a>
+          <a href="/docs/enterprise/ai-gateway" class="docs-nav-card">
+            <h3>AI Gateway</h3>
+            <p>Model governance and rate limiting.</p>
+          </a>
+        </div>
       </div>
     </div>
   </section>

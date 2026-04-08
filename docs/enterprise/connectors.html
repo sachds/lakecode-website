@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connectors — Lakecode Enterprise Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / <a href="/docs#enterprise">Enterprise</a> / Connectors</div>
+      <h1>Connectors</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+          <h4 style="margin-top: 24px;">Enterprise</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/enterprise/deployment">Deployment</a>
+            <a href="/docs/enterprise/approval-gates">Approval Gates</a>
+            <a href="/docs/enterprise/assistantspec">AssistantSpec</a>
+            <a href="/docs/enterprise/connectors" class="current">Connectors</a>
+            <a href="/docs/enterprise/ai-gateway">AI Gateway</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <!-- Enterprise gate -->
+          <div id="enterprise-gate" class="enterprise-gate">
+            <div class="enterprise-gate-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Enterprise documentation</h3>
+            <p>This content is available to Enterprise customers. Sign in with your enterprise account or contact sales to get access.</p>
+            <div class="enterprise-gate-actions">
+              <a href="/signin" class="btn btn-primary">Sign in</a>
+              <a href="mailto:team@lakecode.ai" class="btn btn-secondary">Contact Sales</a>
+            </div>
+          </div>
+
+          <!-- Gated content -->
+          <div id="enterprise-content" style="display: none;">
+            <div class="docs-content">
+
+              <h3>Overview</h3>
+              <p>Lakecode Enterprise integrates with Slack and Jira so your workflows connect to the tools your team already uses. Connectors deliver evidence packs, approval requests, and debug summaries without requiring anyone to leave their existing tools.</p>
+
+              <h2>Slack</h2>
+
+              <h3>Setup</h3>
+              <p>Slack integration uses an incoming webhook. Create one in your Slack workspace and store it in Databricks Secrets:</p>
+              <pre><code># Store the webhook URL as a secret
+databricks secrets put-secret lakecode slack-webhook \
+  --string-value "https://hooks.slack.com/services/T.../B.../xxx"</code></pre>
+              <p>Then configure the connector in your <a href="/docs/enterprise/assistantspec">AssistantSpec</a>:</p>
+              <pre><code>connectors:
+  slack:
+    webhook_url_secret: lakecode/slack-webhook
+    default_channel: "#data-ops"
+    approval_channel: "#data-approvals"</code></pre>
+
+              <h3>What gets posted</h3>
+              <ul>
+                <li><strong>Evidence pack summaries</strong> &mdash; after a <code>/prove</code> workflow completes, a summary is posted with key findings and a link to the full evidence pack</li>
+                <li><strong>Approval requests</strong> &mdash; when a workflow hits a WRITE or DESTRUCTIVE step, an interactive message is posted with Approve / Reject buttons</li>
+                <li><strong>Debug reports</strong> &mdash; after a <code>/debug</code> workflow, root cause analysis and suggested fixes are posted</li>
+                <li><strong>Workflow failures</strong> &mdash; if a workflow errors out, a notification is posted with the error context</li>
+              </ul>
+
+              <h3>Channel routing</h3>
+              <p>You can route different notification types to different channels:</p>
+              <pre><code>connectors:
+  slack:
+    webhook_url_secret: lakecode/slack-webhook
+    channels:
+      evidence: "#data-quality"
+      approvals: "#data-approvals"
+      debug: "#data-oncall"
+      errors: "#data-oncall"</code></pre>
+
+              <h2>Jira</h2>
+
+              <h3>Setup</h3>
+              <p>Jira integration uses the Jira REST API with an API token. Store credentials in Databricks Secrets:</p>
+              <pre><code># Store Jira API token
+databricks secrets put-secret lakecode jira-token \
+  --string-value "your-jira-api-token"
+
+# Store Jira user email (for API auth)
+databricks secrets put-secret lakecode jira-email \
+  --string-value "service-account@acme.com"</code></pre>
+              <p>Then configure in AssistantSpec:</p>
+              <pre><code>connectors:
+  jira:
+    base_url: https://acme.atlassian.net
+    api_token_secret: lakecode/jira-token
+    email_secret: lakecode/jira-email
+    default_project: DATA
+    evidence_label: lakecode-evidence</code></pre>
+
+              <h3>What gets created</h3>
+              <ul>
+                <li><strong>Evidence tickets</strong> &mdash; after a <code>/prove</code> workflow, findings can be attached to an existing ticket or a new ticket is created with the evidence summary</li>
+                <li><strong>Debug tickets</strong> &mdash; <code>/debug</code> workflows create or update an incident ticket with root cause analysis</li>
+                <li><strong>Data quality issues</strong> &mdash; when evidence packs surface data quality problems, a ticket is created with the details and suggested remediation</li>
+              </ul>
+
+              <h3>Ticket mapping</h3>
+              <p>You can map workflow types to Jira issue types:</p>
+              <pre><code>connectors:
+  jira:
+    base_url: https://acme.atlassian.net
+    api_token_secret: lakecode/jira-token
+    email_secret: lakecode/jira-email
+    default_project: DATA
+    issue_types:
+      evidence: Task
+      debug: Bug
+      data_quality: Bug
+    custom_fields:
+      severity: customfield_10042
+      data_source: customfield_10043</code></pre>
+
+            </div>
+
+            <div class="docs-pager">
+              <a href="/docs/enterprise/assistantspec" class="prev">
+                <span class="docs-pager-label">&larr; Previous</span>
+                <span class="docs-pager-title">AssistantSpec</span>
+              </a>
+              <a href="/docs/enterprise/ai-gateway" class="next">
+                <span class="docs-pager-label">Next &rarr;</span>
+                <span class="docs-pager-title">AI Gateway</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+          <a href="/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script>
+    (function() {
+      var API_URL = 'https://api.lakecode.ai';
+      var key = localStorage.getItem('lk_key');
+      if (!key) return;
+      fetch(API_URL + '/account', { headers: { 'x-api-key': key } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.plan === 'enterprise') {
+            document.getElementById('enterprise-gate').style.display = 'none';
+            document.getElementById('enterprise-content').style.display = '';
+          }
+        })
+        .catch(function() {});
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AssistantSpec — Lakecode Enterprise Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / <a href="/docs#enterprise">Enterprise</a> / AssistantSpec</div>
+      <h1>AssistantSpec</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+          <h4 style="margin-top: 24px;">Enterprise</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/enterprise/deployment">Deployment</a>
+            <a href="/docs/enterprise/approval-gates">Approval Gates</a>
+            <a href="/docs/enterprise/assistantspec" class="current">AssistantSpec</a>
+            <a href="/docs/enterprise/connectors">Connectors</a>
+            <a href="/docs/enterprise/ai-gateway">AI Gateway</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <!-- Enterprise gate -->
+          <div id="enterprise-gate" class="enterprise-gate">
+            <div class="enterprise-gate-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Enterprise documentation</h3>
+            <p>This content is available to Enterprise customers. Sign in with your enterprise account or contact sales to get access.</p>
+            <div class="enterprise-gate-actions">
+              <a href="/signin" class="btn btn-primary">Sign in</a>
+              <a href="mailto:team@lakecode.ai" class="btn btn-secondary">Contact Sales</a>
+            </div>
+          </div>
+
+          <!-- Gated content -->
+          <div id="enterprise-content" style="display: none;">
+            <div class="docs-content">
+
+              <h3>Overview</h3>
+              <p>AssistantSpec is the org-wide configuration file that controls how lakecode behaves across your entire team. It defines which workflows are available, what defaults apply, and what guardrails are enforced.</p>
+              <p>AssistantSpec is stored in Unity Catalog and applied automatically to every lakecode session in your organization.</p>
+
+              <h3>Configuration file</h3>
+              <p>AssistantSpec is defined as a YAML file and pushed to your workspace using the deployment CLI:</p>
+              <pre><code># assistantspec.yaml
+version: 1
+org: acme-corp
+
+# Default workspace settings
+defaults:
+  catalog: prod
+  schema: analytics
+  warehouse: lakecode_wh
+  timezone: America/New_York
+
+# Available workflows
+workflows:
+  - prove        # Evidence packs
+  - debug        # Job debugging
+  - profile      # Table profiling
+  - query        # Natural language SQL
+  - migrate      # Schema migrations
+
+# Disabled workflows (hidden from users)
+disabled_workflows:
+  - drop         # Disable destructive operations
+
+# Naming conventions
+naming:
+  table_prefix: ""
+  staging_schema: staging
+  archive_schema: archive
+  evidence_schema: lakecode_evidence</code></pre>
+
+              <h3>Applying configuration</h3>
+              <pre><code># Validate the spec
+lakecode-deploy spec validate assistantspec.yaml
+
+# Push to your workspace
+lakecode-deploy spec apply assistantspec.yaml
+
+# View the active spec
+lakecode-deploy spec show</code></pre>
+              <p>Configuration changes take effect immediately for all new sessions. Active sessions continue with their original configuration until they complete.</p>
+
+              <h3>Approval policies</h3>
+              <p>Approval gates are configured within AssistantSpec. See <a href="/docs/enterprise/approval-gates">Approval Gates</a> for the full reference.</p>
+              <pre><code>approval:
+  read: auto
+  write: require
+  destructive: require
+  destructive_reviewers: 2
+  exempt_catalogs: [sandbox, dev_scratch]
+  strict_catalogs: [prod, analytics]</code></pre>
+
+              <h3>Model configuration</h3>
+              <p>Control which LLMs lakecode uses and how requests are routed through <a href="/docs/enterprise/ai-gateway">AI Gateway</a>:</p>
+              <pre><code>models:
+  # Primary model for workflow planning
+  planner: claude-sonnet-4-20250514
+
+  # Model for SQL generation
+  sql: claude-sonnet-4-20250514
+
+  # Model for evidence summarization
+  summarizer: claude-haiku-4-5-20251001
+
+  # AI Gateway endpoint (Databricks)
+  gateway_endpoint: /serving-endpoints/ai-gateway
+
+  # Rate limits per user per hour
+  rate_limit: 100
+
+  # Max tokens per request
+  max_tokens: 8192</code></pre>
+
+              <h3>User permissions</h3>
+              <p>Control what individual users or groups can do:</p>
+              <pre><code>permissions:
+  # Admins can modify AssistantSpec and approve all operations
+  admins:
+    - admin-group@acme.com
+
+  # Reviewers can approve operations but not modify config
+  reviewers:
+    - data-eng@acme.com
+    - platform-team@acme.com
+
+  # Users can trigger workflows but need approval for WRITE/DESTRUCTIVE
+  users:
+    - analysts@acme.com
+    - data-science@acme.com
+
+  # Restrict specific catalogs to specific groups
+  catalog_access:
+    prod: [data-eng@acme.com, platform-team@acme.com]
+    analytics: [analysts@acme.com, data-science@acme.com]
+    sandbox: ["*"]  # Everyone</code></pre>
+
+              <h3>Connector configuration</h3>
+              <p>Configure Slack and Jira integrations within AssistantSpec. See <a href="/docs/enterprise/connectors">Connectors</a> for setup details.</p>
+              <pre><code>connectors:
+  slack:
+    webhook_url_secret: lakecode/slack-webhook
+    default_channel: "#data-ops"
+    approval_channel: "#data-approvals"
+
+  jira:
+    base_url: https://acme.atlassian.net
+    api_token_secret: lakecode/jira-token
+    default_project: DATA
+    evidence_label: lakecode-evidence</code></pre>
+
+              <h3>Full reference</h3>
+              <p>For the complete list of AssistantSpec fields, defaults, and validation rules, run:</p>
+              <pre><code>lakecode-deploy spec reference</code></pre>
+
+            </div>
+
+            <div class="docs-pager">
+              <a href="/docs/enterprise/approval-gates" class="prev">
+                <span class="docs-pager-label">&larr; Previous</span>
+                <span class="docs-pager-title">Approval Gates</span>
+              </a>
+              <a href="/docs/enterprise/connectors" class="next">
+                <span class="docs-pager-label">Next &rarr;</span>
+                <span class="docs-pager-title">Connectors</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+          <a href="/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script>
+    (function() {
+      var API_URL = 'https://api.lakecode.ai';
+      var key = localStorage.getItem('lk_key');
+      if (!key) return;
+      fetch(API_URL + '/account', { headers: { 'x-api-key': key } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.plan === 'enterprise') {
+            document.getElementById('enterprise-gate').style.display = 'none';
+            document.getElementById('enterprise-content').style.display = '';
+          }
+        })
+        .catch(function() {});
+    })();
+  </script>
+</body>
+</html>

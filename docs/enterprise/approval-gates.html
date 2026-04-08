@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Approval Gates — Lakecode Enterprise Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../pages.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#features">Features</a>
+        <a href="/#commands">Commands</a>
+        <a href="/docs" class="active">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-hero" style="padding-bottom: 0;">
+    <div class="container">
+      <div class="docs-breadcrumb"><a href="/docs">Docs</a> / <a href="/docs#enterprise">Enterprise</a> / Approval Gates</div>
+      <h1>Approval Gates</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <h4>Documentation</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/getting-started">Getting Started</a>
+            <a href="/docs/authentication">Authentication</a>
+            <a href="/docs/commands">Commands</a>
+            <a href="/docs/configuration">Configuration</a>
+            <a href="/docs/billing">Billing &amp; Credits</a>
+            <a href="/docs/evidence">Evidence Packs</a>
+            <a href="/docs/security">Security &amp; Safety</a>
+            <a href="/docs/architecture">Architecture</a>
+          </nav>
+          <h4 style="margin-top: 24px;">Enterprise</h4>
+          <nav class="docs-sidebar-nav">
+            <a href="/docs/enterprise/deployment">Deployment</a>
+            <a href="/docs/enterprise/approval-gates" class="current">Approval Gates</a>
+            <a href="/docs/enterprise/assistantspec">AssistantSpec</a>
+            <a href="/docs/enterprise/connectors">Connectors</a>
+            <a href="/docs/enterprise/ai-gateway">AI Gateway</a>
+          </nav>
+        </aside>
+
+        <div class="docs-main">
+          <!-- Enterprise gate -->
+          <div id="enterprise-gate" class="enterprise-gate">
+            <div class="enterprise-gate-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Enterprise documentation</h3>
+            <p>This content is available to Enterprise customers. Sign in with your enterprise account or contact sales to get access.</p>
+            <div class="enterprise-gate-actions">
+              <a href="/signin" class="btn btn-primary">Sign in</a>
+              <a href="mailto:team@lakecode.ai" class="btn btn-secondary">Contact Sales</a>
+            </div>
+          </div>
+
+          <!-- Gated content -->
+          <div id="enterprise-content" style="display: none;">
+            <div class="docs-content">
+
+              <h3>Overview</h3>
+              <p>Approval gates are the core governance mechanism in Lakecode Enterprise. Every operation the agent plans is <strong>classified by risk level</strong> and routed through an approval workflow before execution.</p>
+              <p>This means your team gets AI-powered velocity without losing control over what actually runs against your data.</p>
+
+              <h3>Safety classification</h3>
+              <p>Every operation lakecode plans is assigned one of three safety levels:</p>
+              <ul>
+                <li><strong>READ</strong> &mdash; queries, profiling, schema inspection. No state changes. Auto-approved by default.</li>
+                <li><strong>WRITE</strong> &mdash; creating tables, inserting data, updating records. Requires approval.</li>
+                <li><strong>DESTRUCTIVE</strong> &mdash; dropping tables, deleting data, altering schemas. Requires approval and is flagged with a warning.</li>
+              </ul>
+              <p>Classification is deterministic and based on the SQL or API operation, not the LLM's intent. A <code>CREATE TABLE</code> is always WRITE regardless of the prompt that produced it.</p>
+
+              <h3>Approval workflow</h3>
+              <p>When a workflow contains WRITE or DESTRUCTIVE steps, lakecode pauses execution and presents a <strong>step manifest</strong>:</p>
+              <pre><code>Step 3 of 5: Create staging table
+  Classification: WRITE
+  Operation:      CREATE TABLE staging.customer_dedup AS SELECT ...
+  Reason:         Deduplicate customer records before merge
+  Inputs:         prod.customers (READ)
+  Outputs:        staging.customer_dedup (WRITE)
+
+  [Approve]  [Reject]  [Modify]</code></pre>
+              <p>Reviewers can:</p>
+              <ul>
+                <li><strong>Approve</strong> &mdash; the step executes as planned</li>
+                <li><strong>Reject</strong> &mdash; the step is skipped and the workflow adapts</li>
+                <li><strong>Modify</strong> &mdash; edit the SQL or parameters before execution</li>
+              </ul>
+
+              <h3>Configuring approval policies</h3>
+              <p>Approval policies are defined in your <a href="/docs/enterprise/assistantspec">AssistantSpec</a> configuration:</p>
+              <pre><code># assistantspec.yaml
+approval:
+  # Auto-approve READ operations (default)
+  read: auto
+
+  # Require approval for WRITE operations
+  write: require
+
+  # Require approval + second reviewer for DESTRUCTIVE
+  destructive: require
+  destructive_reviewers: 2
+
+  # Exempt specific catalogs from approval (e.g., sandbox)
+  exempt_catalogs:
+    - sandbox
+    - dev_scratch
+
+  # Require approval for all operations in production catalogs
+  strict_catalogs:
+    - prod
+    - analytics</code></pre>
+
+              <h3>Approval channels</h3>
+              <p>Approval requests can be delivered through multiple channels:</p>
+              <ul>
+                <li><strong>Lakecode UI</strong> &mdash; approve directly in the Databricks App interface</li>
+                <li><strong>Slack</strong> &mdash; interactive approval buttons posted to a configured channel (see <a href="/docs/enterprise/connectors">Connectors</a>)</li>
+                <li><strong>CLI</strong> &mdash; inline approval prompts in the terminal for CLI users</li>
+              </ul>
+
+              <h3>Audit trail</h3>
+              <p>Every approval decision is logged to the <code>approval_log</code> table in Unity Catalog:</p>
+              <ul>
+                <li>Who requested the operation (user identity)</li>
+                <li>What was requested (full step manifest)</li>
+                <li>Who approved or rejected it (reviewer identity)</li>
+                <li>When the decision was made (timestamp)</li>
+                <li>Whether the step was modified before approval</li>
+              </ul>
+              <p>This log is immutable and governed by your Unity Catalog access policies. It serves as the compliance record for all AI-driven operations.</p>
+
+            </div>
+
+            <div class="docs-pager">
+              <a href="/docs/enterprise/deployment" class="prev">
+                <span class="docs-pager-label">&larr; Previous</span>
+                <span class="docs-pager-title">Deployment</span>
+              </a>
+              <a href="/docs/enterprise/assistantspec" class="next">
+                <span class="docs-pager-label">Next &rarr;</span>
+                <span class="docs-pager-title">AssistantSpec</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="../../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>Terminal-native data platform agent.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#features">Features</a>
+          <a href="/#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+          <a href="/blog">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="/signin">Sign in</a>
+          <a href="/dashboard">Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script>
+    (function() {
+      var API_URL = 'https://api.lakecode.ai';
+      var key = localStorage.getItem('lk_key');
+      if (!key) return;
+      fetch(API_URL + '/account', { headers: { 'x-api-key': key } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.plan === 'enterprise') {
+            document.getElementById('enterprise-gate').style.display = 'none';
+            document.getElementById('enterprise-content').style.display = '';
+          }
+        })
+        .catch(function() {});
+    })();
+  </script>
+</body>
+</html>
