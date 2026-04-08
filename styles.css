@@ -121,7 +121,7 @@ code {
   color: var(--text);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .logo:hover {
@@ -129,10 +129,11 @@ code {
 }
 
 .logo-icon {
-  height: 20px;
-  width: auto;
+  height: 12px;
+  width: 18px;
   display: inline-block;
   vertical-align: middle;
+  margin-right: 2px;
 }
 
 .logo-icon.logo-light { display: none; }
