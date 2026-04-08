@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Lakecode</title>
-  <meta name="description" content="Lakecode pricing — Free, Pro, and Enterprise plans starting at $20/month.">
+  <meta name="description" content="Lakecode pricing — Free with your own API key, Pro pay-as-you-go with managed proxy, and Enterprise Databricks App deployment.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
   <section class="page-hero">
     <div class="container">
       <h1>Simple, transparent pricing</h1>
-      <p class="page-sub">Start free. Upgrade when you need more.</p>
+      <p class="page-sub">Start free with your own API key. Upgrade to Pro for all workflows and managed access.</p>
     </div>
   </section>
 
@@ -55,17 +55,18 @@
             <h3>Free</h3>
             <div class="pricing-price">
               <span class="price-amount">$0</span>
+              <span class="price-period">/month</span>
             </div>
-            <p class="pricing-desc">Try lakecode with no commitment.</p>
+            <p class="pricing-desc">Get started with your own Anthropic API key</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Limited daily usage</li>
-            <li><span class="check">&#10003;</span> All platforms (Databricks & Snowflake)</li>
-            <li><span class="check">&#10003;</span> All commands & workflows</li>
-            <li><span class="check">&#10003;</span> Resets every 24 hours</li>
-            <li><span class="check">&#10003;</span> No credit card required</li>
+            <li><span class="check">&#10003;</span> Chat with your data platform</li>
+            <li><span class="check">&#10003;</span> Run jobs and basic commands</li>
+            <li><span class="check">&#10003;</span> 50 queries per day</li>
+            <li><span class="check">&#10003;</span> Databricks + Snowflake</li>
+            <li><span class="check">&#10003;</span> Bring your own API key</li>
           </ul>
-          <a href="/signin" class="btn btn-secondary btn-full">Get Started Free</a>
+          <a href="/signin" class="btn btn-secondary btn-full">Get Started</a>
         </div>
 
         <!-- Pro -->
@@ -74,86 +75,91 @@
           <div class="pricing-header">
             <h3>Pro</h3>
             <div class="pricing-price">
-              <span class="price-amount">$20</span>
-              <span class="price-period">/month</span>
+              <span class="price-amount">Pay as you go</span>
             </div>
-            <p class="pricing-desc">Unlimited usage for individual developers.</p>
+            <p class="pricing-desc">All workflows, managed proxy, no API key needed</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Unlimited daily usage</li>
-            <li><span class="check">&#10003;</span> No request limits</li>
-            <li><span class="check">&#10003;</span> Auto-reload when balance is low</li>
-            <li><span class="check">&#10003;</span> Priority support</li>
-            <li><span class="check">&#10003;</span> Cancel anytime</li>
+            <li><span class="check">&#10003;</span> Everything in Free</li>
+            <li><span class="check">&#10003;</span> All 25+ workflows (debug, cost, audit, prove)</li>
+            <li><span class="check">&#10003;</span> Managed proxy &mdash; no API key required</li>
+            <li><span class="check">&#10003;</span> GitHub + Confluence connectors</li>
+            <li><span class="check">&#10003;</span> Unlimited queries</li>
+            <li><span class="check">&#10003;</span> Session continuity (Engram)</li>
+            <li><span class="check">&#10003;</span> Auto-reload credits via Stripe</li>
           </ul>
           <a href="#" class="btn btn-primary btn-full" id="pro-btn" onclick="handleUpgrade('pro'); return false;">Upgrade to Pro</a>
         </div>
 
-        <!-- Enterprise -->
+        <!-- Enterprise / Databricks App -->
         <div class="pricing-card">
           <div class="pricing-header">
-            <h3>Enterprise</h3>
+            <h3>Databricks App Deployment</h3>
             <div class="pricing-price">
               <span class="price-amount">Custom</span>
             </div>
-            <p class="pricing-desc">Governed AI workflows for your team, deployed on your Databricks.</p>
+            <p class="pricing-desc">For teams that need governance, audit trails, and org-wide deployment. Lakecode runs as a native Databricks App inside your workspace.</p>
           </div>
           <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Everything in Pro</li>
-            <li><span class="check">&#10003;</span> Team management, SSO & shared billing</li>
-            <li><span class="check">&#10003;</span> Databricks-native deployment</li>
-            <li><span class="check">&#10003;</span> Approval gates & safety classification</li>
-            <li><span class="check">&#10003;</span> Evidence packs & audit trails</li>
-            <li><span class="check">&#10003;</span> AssistantSpec &mdash; org-wide config</li>
-            <li><span class="check">&#10003;</span> Slack & Jira connectors</li>
-            <li><span class="check">&#10003;</span> AI Gateway & model governance</li>
-            <li><span class="check">&#10003;</span> Dedicated support & onboarding</li>
+            <li><span class="check">&#10003;</span> Approval gates for write ops</li>
+            <li><span class="check">&#10003;</span> Full audit trail in Unity Catalog</li>
+            <li><span class="check">&#10003;</span> SSO via Databricks identity</li>
+            <li><span class="check">&#10003;</span> Custom workflows</li>
+            <li><span class="check">&#10003;</span> Compliance mode</li>
+            <li><span class="check">&#10003;</span> Dedicated support</li>
+            <li><span class="check">&#10003;</span> Terraform deployment</li>
+            <li><span class="check">&#10003;</span> Clean offboarding</li>
           </ul>
-          <a href="mailto:team@lakecode.ai" class="btn btn-primary btn-full">Contact Sales</a>
+          <a href="mailto:sachin@lakecode.ai" class="btn btn-primary btn-full">Contact Us</a>
         </div>
       </div>
 
-      <!-- How it works -->
+      <!-- Install -->
       <div class="credits-explainer">
-        <h3>How it works</h3>
+        <h3>Install in 30 seconds</h3>
         <div class="explainer-grid">
           <div class="explainer-item">
-            <strong>1. Sign up free</strong>
-            <p>Create an account with Google. You'll get a license key and limited daily usage to try everything out.</p>
+            <strong>1. Install</strong>
+            <p>Works on macOS, Linux, and WSL. Node 18+ required.</p>
+            <pre style="margin-top: 8px;"><code>npm install -g lakecode</code></pre>
           </div>
           <div class="explainer-item">
-            <strong>2. Upgrade when ready</strong>
-            <p>Save a payment method via Stripe from your dashboard. You're immediately upgraded and auto-reload is enabled.</p>
+            <strong>2. Sign in</strong>
+            <p>Authenticate with Google. You'll get a license key and 50 free queries per day to try everything out.</p>
           </div>
           <div class="explainer-item">
-            <strong>3. Never run out</strong>
-            <p>When your balance gets low, your card is automatically charged and your balance is topped up. Pause or cancel anytime.</p>
+            <strong>3. Upgrade when ready</strong>
+            <p>Add a payment method via Stripe, load credits ($20 minimum), and unlock all 25+ workflows with the managed proxy.</p>
           </div>
         </div>
       </div>
 
       <!-- FAQ -->
       <div class="pricing-faq">
-        <h2>Questions</h2>
+        <h2>Frequently Asked Questions</h2>
         <details class="faq-item">
-          <summary>Can I use my own API keys instead?</summary>
-          <p>Yes. Lakecode supports BYOK (bring your own key) for Anthropic and OpenAI. Your own keys bypass the billing system entirely.</p>
+          <summary>How does pay-as-you-go billing work?</summary>
+          <p>Pro users who use the managed proxy pay based on actual LLM usage. You add a payment method via Stripe, load credits ($20 minimum), and usage is deducted per request. Auto-reload tops up your balance when it gets low. If you bring your own API key, you pay Anthropic directly and lakecode costs nothing.</p>
         </details>
         <details class="faq-item">
-          <summary>What happens when I hit the free daily limit?</summary>
-          <p>You'll see a message that your daily usage is exhausted. It resets every 24 hours, or you can upgrade to Pro for unlimited usage.</p>
+          <summary>Can I use my own API key on Pro?</summary>
+          <p>Yes. Pro unlocks all workflows and features regardless of how you connect to the LLM. Bring your own Anthropic key, or use our managed proxy &mdash; your choice.</p>
         </details>
         <details class="faq-item">
-          <summary>Can I change or cancel my plan?</summary>
-          <p>Yes. On your dashboard, click "Manage Billing" to update your payment method, change plans, or cancel. Changes take effect immediately.</p>
+          <summary>What models are supported?</summary>
+          <p>Claude Sonnet 4, Claude Opus 4, and Claude Haiku 3.5/4.5 via the managed proxy or your own Anthropic key. Databricks FMAPI models and any OpenAI-compatible endpoint (vLLM, LM Studio, Ollama) are also supported.</p>
         </details>
         <details class="faq-item">
-          <summary>What does auto-reload mean?</summary>
-          <p>When your balance drops below 20% of your reload amount, we automatically charge your saved payment method and top up your account. Default reload is $20 (adjustable from $5 to $100). This way you never run out mid-session.</p>
+          <summary>What's the difference between CLI Pro and the Databricks App?</summary>
+          <p>CLI Pro is for individual developers &mdash; runs on your laptop, connects to your Databricks or Snowflake workspace. The Databricks App deployment is for teams &mdash; runs inside your workspace with SSO, approval gates, audit trail, and Unity Catalog state management.</p>
         </details>
         <details class="faq-item">
-          <summary>How does the Enterprise plan work?</summary>
-          <p>Contact us at <a href="mailto:team@lakecode.ai">team@lakecode.ai</a>. Enterprise includes team management, SSO, shared billing, governed workflows, Databricks-native deployment, approval gates, and audit trails. <a href="/enterprise">Learn more about Enterprise</a>.</p>
+          <summary>Can I cancel anytime?</summary>
+          <p>Yes. There are no contracts or commitments. Your credit balance stays available until used. You can manage billing through the Stripe portal from your dashboard.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What data does lakecode access?</summary>
+          <p>Lakecode connects to your Databricks or Snowflake workspace using your credentials. Workflow data (job configs, error logs, billing tables) is processed by the LLM for analysis. No data is stored on our servers.</p>
         </details>
       </div>
     </div>
