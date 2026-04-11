@@ -1,570 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lakecode — Pricing</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0e17;
-    --surface: #111827;
-    --surface-hover: #1a2335;
-    --border: #1e293b;
-    --text: #f1f5f9;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
-    --blue: #3b82f6;
-    --blue-glow: rgba(59, 130, 246, 0.12);
-    --green: #22c55e;
-    --green-glow: rgba(34, 197, 94, 0.12);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Instrument Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 80px 24px 120px;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 64px;
-  }
-
-  .header .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--blue);
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .header h1 {
-    font-size: clamp(36px, 5vw, 54px);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 16px;
-  }
-
-  .header p {
-    font-size: 18px;
-    color: var(--text-muted);
-    max-width: 540px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 16px;
-    padding-left: 2px;
-  }
-
-  /* ===== CLI CARD ===== */
-  .cli-section { margin-bottom: 48px; }
-
-  .cli-card {
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .cli-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--blue);
-    z-index: 1;
-  }
-
-  /* Trial Banner */
-  .trial-banner {
-    background: linear-gradient(135deg, #0f1d2f 0%, #111827 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-  }
-
-  .trial-banner-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .trial-icon {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: var(--green-glow);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-
-  .trial-text h3 { font-size: 15px; font-weight: 600; }
-  .trial-text h3 span { color: var(--green); }
-  .trial-text p { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-
-  .trial-cta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 9px 18px;
-    border-radius: 8px;
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    background: var(--green-glow);
-    color: var(--green);
-    cursor: pointer;
-    white-space: nowrap;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .trial-cta:hover {
-    background: rgba(34, 197, 94, 0.2);
-    border-color: rgba(34, 197, 94, 0.5);
-  }
-
-  /* Pro Body */
-  .pro-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: var(--surface);
-  }
-
-  .pro-left {
-    padding: 36px;
-    border-right: 1px solid var(--border);
-  }
-
-  .pro-right {
-    padding: 36px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 4px;
-    display: inline-block;
-    width: fit-content;
-    margin-bottom: 14px;
-  }
-
-  .badge-blue { color: var(--blue); background: var(--blue-glow); }
-
-  .pro-name {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-  }
-
-  .pro-desc {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-
-  /* Radio Options */
-  .llm-options { margin-bottom: 24px; }
-
-  .llm-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 8px;
-    user-select: none;
-  }
-
-  .llm-option:last-child { margin-bottom: 0; }
-  .llm-option:hover { border-color: var(--text-dim); }
-
-  .llm-option.active {
-    border-color: var(--blue);
-    background: var(--blue-glow);
-  }
-
-  .llm-option-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .radio {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    border: 2px solid var(--text-dim);
-    position: relative;
-    flex-shrink: 0;
-    transition: border-color 0.2s;
-  }
-
-  .llm-option.active .radio { border-color: var(--blue); }
-
-  .llm-option.active .radio::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--blue);
-  }
-
-  .radio-label { font-size: 14px; font-weight: 500; }
-  .radio-sub { font-size: 12px; color: var(--text-dim); margin-top: 1px; }
-
-  .radio-price {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .pro-cta {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    border: none;
-    background: var(--blue);
-    color: #fff;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    text-decoration: none;
-  }
-
-  .pro-cta:hover { background: #2563eb; }
-
-  /* Features */
-  .features-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 14px;
-  }
-
-  .features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex: 1;
-  }
-
-  .features li {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-    padding-left: 18px;
-    position: relative;
-  }
-
-  .features li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-  }
-
-  .features li.hl { color: var(--text); }
-
-  /* After trial */
-  .after-trial {
-    padding: 14px 36px;
-    background: rgba(100, 116, 139, 0.05);
-    border-top: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-
-  .after-trial strong { color: var(--text-muted); }
-
-  /* ===== PLATFORM ===== */
-  .platform-section { margin-bottom: 48px; }
-
-  .platform-card {
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 48px;
-    background: var(--surface);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-
-  .platform-card h2 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-
-  .platform-card .desc {
-    font-size: 15px;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-
-  .platform-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 28px;
-  }
-
-  .platform-features li {
-    font-size: 14px;
-    color: var(--text-muted);
-    padding-left: 18px;
-    position: relative;
-  }
-
-  .platform-features li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--blue);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-  }
-
-  .platform-cta {
-    display: inline-block;
-    padding: 14px 32px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .platform-cta:hover { border-color: var(--text-muted); background: var(--surface-hover); }
-
-  .deploy-options { display: flex; flex-direction: column; gap: 14px; }
-
-  .deploy-card {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px 24px;
-    background: var(--bg);
-  }
-
-  .deploy-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
-  .deploy-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
-
-  .deploy-card .mono {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--blue);
-    margin-top: 8px;
-    display: block;
-  }
-
-  /* ===== PACKS ===== */
-  .packs-section {}
-
-  .packs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .pack { background: var(--surface); padding: 24px; }
-  .pack h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-  .pack p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
-
-  .footer-note {
-    text-align: center;
-    margin-top: 48px;
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.8;
-  }
-
-  .footer-note a { color: var(--blue); text-decoration: none; }
-
-  @media (max-width: 800px) {
-    .trial-banner { flex-direction: column; align-items: flex-start; }
-    .pro-body { grid-template-columns: 1fr; }
-    .pro-left { border-right: none; border-bottom: 1px solid var(--border); }
-    .platform-card { grid-template-columns: 1fr; padding: 32px; }
-    .packs-grid { grid-template-columns: 1fr; }
-    .container { padding: 48px 16px 80px; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lakecode — AI-Powered CLI Agent for Databricks &amp; Snowflake</title>
+  <meta name="description" content="Lakecode is an AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy — all from your command line.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
 
-  <div class="header">
-    <span class="tag">Pricing</span>
-    <h1>Start fast. Scale governed.</h1>
-    <p>Governed AI workflows for Databricks and Snowflake. From individual exploration to team-wide governed operations.</p>
-  </div>
-
-  <!-- ===== CLI ===== -->
-  <div class="cli-section">
-    <div class="section-label">Lakecode CLI</div>
-    <div class="cli-card">
-
-      <div class="trial-banner">
-        <div class="trial-banner-left">
-          <div class="trial-icon">⚡</div>
-          <div class="trial-text">
-            <h3><span>7-day free trial</span> — full access, bring your own key</h3>
-            <p>All workflows, full connectivity, chat. Connect your Anthropic key or Databricks Model Serving.</p>
-          </div>
-        </div>
-        <a href="#" class="trial-cta">Start free trial →</a>
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="#docs">Docs</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/blog">Blog</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
       </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
 
-      <div class="pro-body">
-        <div class="pro-left">
-          <div class="badge badge-blue">For engineers</div>
-          <div class="pro-name">Lakecode CLI</div>
-          <div class="pro-desc">Chat-driven intelligence for your data stack — full connectivity, declarative workflows, safety classification, and policy engine.</div>
-
-          <div class="llm-options">
-            <div class="llm-option active" onclick="toggle(this)">
-              <div class="llm-option-left">
-                <div class="radio"></div>
-                <div>
-                  <div class="radio-label">Managed</div>
-                  <div class="radio-sub">We handle the LLM · ~2,000 turns/mo</div>
-                </div>
-              </div>
-              <div class="radio-price">$49/mo</div>
-            </div>
-            <div class="llm-option" onclick="toggle(this)">
-              <div class="llm-option-left">
-                <div class="radio"></div>
-                <div>
-                  <div class="radio-label">Bring your own key</div>
-                  <div class="radio-sub">Your Anthropic key or Databricks Model Serving</div>
-                </div>
-              </div>
-              <div class="radio-price">$29/mo</div>
-            </div>
-          </div>
-
-          <a href="#" class="pro-cta">Get started</a>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">AI-powered CLI agent for Databricks &amp; Snowflake</div>
+      <h1>Your data platform<br>command line.</h1>
+      <p class="hero-sub">
+        An AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy &mdash; without leaving your terminal.
+      </p>
+      <div class="hero-install">
+        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
+          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
+          <span class="copy-hint">click to copy</span>
+          <span class="copy-done">copied!</span>
         </div>
+      </div>
+      <div class="hero-actions">
+        <a href="/signin" class="btn btn-primary">Get Started Free</a>
+        <a href="/docs" class="btn btn-secondary">View Docs</a>
+      </div>
+      <div class="hero-terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode /debug job 4827</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line dim">  Diagnosing job 4827...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Job config loaded &mdash; nightly_etl_pipeline</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Last 5 runs fetched &mdash; 3 failures in 24h</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Error logs extracted &mdash; OOM on task 3</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Query history analyzed &mdash; skew on join key</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Cluster metrics checked &mdash; 98% memory util</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Root cause:</strong> Data skew on customer_id join</div>
+          <div class="terminal-line">    causing OOM. Recommend salted join or larger</div>
+          <div class="terminal-line">    instance type. Full report saved to ./debug/</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="pro-right">
-          <div class="features-label">Includes</div>
-          <ul class="features">
-            <li class="hl">22 built-in workflows</li>
-            <li class="hl">Full Databricks & Snowflake connectivity</li>
-            <li class="hl">Every action classified — reads run, writes require approval</li>
-            <li class="hl">Configurable policy engine</li>
-            <li>Natural language chat with your entire stack</li>
+  <!-- What it does -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>What it does</h2>
+        <p>An AI agent that actually understands your Databricks and Snowflake workspace.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <h3>AI-powered debugging</h3>
+          <ul>
+            <li>Diagnose failed jobs end-to-end in seconds</li>
+            <li>LLM analyzes logs, query history, and cluster metrics</li>
+            <li>Get root-cause summaries, not just stack traces</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Data quality evidence</h3>
+          <ul>
+            <li>Generate evidence packs: schema, nulls, freshness, stats, samples</li>
+            <li>AI writes a plain-English health assessment</li>
+            <li>Attach to PRs, tickets, or audit trails</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Spend intelligence</h3>
+          <ul>
+            <li>Top spend breakdown from system billing tables</li>
+            <li>AI detects spikes and explains what changed</li>
+            <li>Audit jobs for missing timeouts, SLA risk, and failure patterns</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          </div>
+          <h3>Deploy &amp; execute</h3>
+          <ul>
+            <li>Deploy files to your workspace from the terminal</li>
+            <li>Trigger job runs and poll until completion</li>
+            <li>Natural language commands &mdash; just describe what you need</li>
           </ul>
         </div>
       </div>
-
-      <div class="after-trial">
-        <strong>After your 7-day trial:</strong>&nbsp; Everything stays — pay $29 or $49/mo to continue. Ready for your team? Talk to us about Platform.
-      </div>
-
     </div>
-  </div>
+  </section>
 
-  <!-- ===== PLATFORM ===== -->
-  <div class="platform-section">
-    <div class="section-label">Lakecode Platform</div>
-    <div class="platform-card">
-      <div>
-        <div class="badge badge-blue">For teams & enterprise</div>
-        <h2>Lakecode Platform</h2>
-        <div class="desc">Everything in Lakecode CLI, shared across your organization — with governance, persistent institutional memory, and enterprise identity. Deployed as a Databricks App. Includes a 2-week guided POC.</div>
-        <ul class="platform-features">
-          <li>Shared workflows, runs, and artifacts</li>
-          <li>Engram — institutional memory that compounds over time</li>
-          <li>Governance, approval gates, and audit trails</li>
-          <li>SSO / SAML</li>
-          <li>Role-scoped access</li>
-          <li>Slack, Jira, GitHub, Confluence integrations</li>
-          <li>Dedicated onboarding & support</li>
-        </ul>
-        <a href="#" class="platform-cta">Talk to us</a>
+  <!-- How it works -->
+  <section id="how-it-works" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>How it works</h2>
+        <p>From install to running workflows in under two minutes.</p>
       </div>
-      <div class="deploy-options">
-        <div class="deploy-card">
-          <h4>We host it</h4>
-          <p>We provision a dedicated Databricks workspace and deploy Lakecode. Your team gets a URL. Same-day setup.</p>
-          <span class="mono">Annual software license + managed infrastructure</span>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Install</h3>
+            <p>Install lakecode with npm. One command, no dependencies to manage.</p>
+          </div>
         </div>
-        <div class="deploy-card">
-          <h4>You host it</h4>
-          <p>Lakecode deploys into your existing Databricks workspace. Your data, your compute, your SSO. Nothing leaves your perimeter.</p>
-          <span class="mono">Annual software license</span>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Connect</h3>
+            <p>Sign in with Google OAuth and connect your Databricks or Snowflake workspace. Lakecode automatically profiles your catalogs, schemas, and jobs.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Run</h3>
+            <p>Use slash commands or describe what you need in plain English. The AI agent collects context, executes workflows, and delivers actionable results.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
+  <!-- Commands -->
+  <section id="commands" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Commands</h2>
+        <p>Opinionated workflows for real Databricks and Snowflake engineering tasks.</p>
+      </div>
+      <div class="commands-grid">
+        <div class="command-group">
+          <h3>Debugging &amp; Monitoring</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/status job &lt;id&gt;</code>
+              <span>Job config + last 5 runs at a glance</span>
+            </div>
+            <div class="command">
+              <code>/logs &lt;run-id&gt;</code>
+              <span>Run output + AI error analysis</span>
+            </div>
+            <div class="command">
+              <code>/debug job &lt;id&gt;</code>
+              <span>Full diagnosis: config, failures, logs, queries, root-cause summary</span>
+            </div>
+            <div class="command">
+              <code>/queries job &lt;id&gt;</code>
+              <span>SQL query history for the latest run</span>
+            </div>
+            <div class="command">
+              <code>/queries run &lt;run-id&gt;</code>
+              <span>SQL query history for a specific run</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Data Quality</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/prove &lt;table&gt;</code>
+              <span>Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span>
+            </div>
+            <div class="command">
+              <code>/audit jobs</code>
+              <span>Scan for SLA gaps, missing timeouts, recurring failures</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Platform Ops</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/audit jobs</code>
+              <span>Scan jobs for SLA gaps, missing timeouts, runtime variability, failures; risk-scored report</span>
+            </div>
+            <div class="command">
+              <code>/cost top</code>
+              <span>Top spend drivers from billing system tables</span>
+            </div>
+            <div class="command">
+              <code>/cost spike</code>
+              <span>Compare day vs baseline; AI identifies likely drivers</span>
+            </div>
+            <div class="command">
+              <code>/drift detect</code>
+              <span>Compare deployed resources against bundle definitions</span>
+            </div>
+          </div>
+        </div>
+        <div class="command-group">
+          <h3>Deployment</h3>
+          <div class="command-list">
+            <div class="command">
+              <code>/deploy &lt;local&gt; &lt;ws-path&gt;</code>
+              <span>Import a local file into the workspace</span>
+            </div>
+            <div class="command">
+              <code>/run job &lt;id&gt;</code>
+              <span>Trigger job run + poll until completion</span>
+            </div>
+            <div class="command">
+              <code>/capture job &lt;id&gt;</code>
+              <span>Capture a job or pipeline into a Databricks Asset Bundle</span>
+            </div>
+            <div class="command">
+              <code>/uc explain-access</code>
+              <span>Trace why a principal has (or lacks) access to a Unity Catalog object</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- Why lakecode -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why lakecode</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>AI that understands your workspace</h3>
+          <p>Lakecode profiles your Databricks or Snowflake environment on connect &mdash; catalogs, schemas, jobs, warehouses. The AI reasons with real context, not generic prompts.</p>
+        </div>
+        <div class="why-card">
+          <h3>Evidence, not just answers</h3>
+          <p>Every workflow produces shareable artifacts &mdash; evidence packs, debug reports, cost breakdowns. Attach them to PRs, incidents, or audit trails.</p>
+        </div>
+        <div class="why-card">
+          <h3>Terminal-native, zero context switching</h3>
+          <p>Stop bouncing between Jobs UI, cluster logs, SQL editor, and dashboards. One command replaces five browser tabs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-</div>
+  <!-- Security -->
+  <section id="security" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Security &amp; trust</h2>
+      </div>
+      <div class="security-grid">
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>Runs locally</h3>
+          <p>Lakecode runs on your machine. Your credentials never leave your environment.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Respects your permissions</h3>
+          <p>Lakecode only sees what your platform identity can see. Unity Catalog, Snowflake RBAC &mdash; no elevated permissions, no backdoors.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+          </div>
+          <h3>Safe by default</h3>
+          <p>Plan/approval flow for risky operations. Built-in guardrails prevent common high-cost mistakes.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Ed25519 license keys</h3>
+          <p>Authentication uses cryptographically signed license keys. No shared secrets, no tokens stored on our servers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script>
-function toggle(el) {
-  document.querySelectorAll('.llm-option').forEach(o => o.classList.remove('active'));
-  el.classList.add('active');
-}
-</script>
+  <!-- Install -->
+  <section id="install" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Get started</h2>
+        <p>Requires <a href="https://nodejs.org">Node.js 18+</a>. Two commands and you're in.</p>
+      </div>
+      <div class="install-block">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span> npm install -g lakecode</div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode login</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line dim">  Opening browser for Google sign-in...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Authenticated as alice@company.com</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> License key saved</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Workspace connected &mdash; profiling...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> 3 catalogs, 12 schemas, 847 tables indexed</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line">  Ready. Type a command or describe what you need.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>FAQ</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is this free?</summary>
+          <p>Yes. Every account gets free daily credits &mdash; enough for a few commands per day. Resets every night. No credit card required. For heavier workloads, the Pro plan auto-reloads your balance so you never run out.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need my own API keys?</summary>
+          <p>No. Lakecode includes a built-in AI proxy &mdash; just sign in and start running commands. If you prefer, you can bring your own Anthropic or OpenAI keys (BYOK) and use them directly.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What models does it use?</summary>
+          <p>By default, lakecode uses Claude (Anthropic) via our managed proxy. With BYOK, you can use your own Anthropic or OpenAI keys and choose which model to run.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does lakecode modify my workspace?</summary>
+          <p>Most commands are read-only (debug, prove, cost, audit). Write commands like /deploy and /run job perform actions, but lakecode is explicit about what it's doing and uses plan/approval for risky operations.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is this just a CLI wrapper?</summary>
+          <p>No. Lakecode is an AI agent with a workflow engine that chains steps, manages workspace context, and produces structured reports. It collects facts via APIs and SQL, then uses AI to interpret, summarize, and recommend.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How does billing work?</summary>
+          <p>Usage-based. Each command consumes credits based on the AI tokens used. Free accounts get daily credits that reset at midnight UTC. Pro accounts add a payment method and auto-reload when the balance gets low. You only pay for what you use.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing teaser -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Simple pricing</h2>
+        <p>Start free. Scale when you need to.</p>
+      </div>
+      <div class="why-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 720px; margin: 0 auto;">
+        <div class="why-card">
+          <h3>Free</h3>
+          <p>Free daily credits, reset every night. Enough for a few commands per day &mdash; debug a job, prove a table, check spend. No credit card required.</p>
+        </div>
+        <div class="why-card">
+          <h3>Pro</h3>
+          <p>Add a payment method, get auto-reloading credits when your balance is low. Default reload at $20. Usage-based &mdash; pay only for what you use.</p>
+        </div>
+      </div>
+      <div class="hero-actions" style="margin-top: 36px; margin-bottom: 0;">
+        <a href="/pricing" class="btn btn-secondary">View full pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Docs -->
+  <section id="docs" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Documentation</h2>
+        <p>Everything you need to get the most out of lakecode.</p>
+      </div>
+      <div class="docs-grid">
+        <div class="doc-card">
+          <h3>Getting started</h3>
+          <p>Install lakecode, sign in with Google, connect your Databricks or Snowflake workspace, and run your first command.</p>
+          <a href="/docs/getting-started" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>How it works</h3>
+          <p>The step-based workflow engine: deterministic steps, AI interpretation, context management, and evidence generation.</p>
+          <a href="/docs/architecture" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Commands reference</h3>
+          <p>Complete reference for all commands: debugging, data quality, platform ops, deployment, and configuration.</p>
+          <a href="/docs/commands" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Configuration</h3>
+          <p>Conventions files, default catalogs/schemas, workspace profiles, naming patterns, and team standards.</p>
+          <a href="/docs/configuration" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Authentication &amp; billing</h3>
+          <p>Google OAuth, license keys, free and Pro tiers, BYOK setup, and managing your account.</p>
+          <a href="/docs/authentication" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Safety &amp; plan mode</h3>
+          <p>Plan/approval flow, guardrails, output truncation, and how lakecode keeps your workspace safe.</p>
+          <a href="/docs/security" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Evidence packs</h3>
+          <p>What evidence packs contain, how /prove generates them, and how to use them in your workflow.</p>
+          <a href="/docs/evidence" class="doc-link">Read &rarr;</a>
+        </div>
+        <div class="doc-card">
+          <h3>Billing &amp; credits</h3>
+          <p>Free tier, auto-reload, cost model, BYOK billing, and managing your balance.</p>
+          <a href="/docs/billing" class="doc-link">Read &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <h2>Start building with lakecode.</h2>
+      <p>Free to try, no credit card required.</p>
+      <div class="hero-actions">
+        <a href="/signin" class="btn btn-primary">Get Started Free</a>
+        <a href="/docs" class="btn btn-secondary">View Docs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>AI-powered terminal agent for Databricks &amp; Snowflake. Debug, prove, analyze, and deploy &mdash; all from your command line.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#commands">Commands</a>
+          <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+          <a href="/dashboard">Dashboard</a>
+          <a href="#security">Security</a>
+          <a href="#install">Install</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Docs</h4>
+          <a href="/docs/getting-started">Getting started</a>
+          <a href="/docs/commands">Commands</a>
+          <a href="/docs/configuration">Configuration</a>
+          <a href="/docs/security">Safety</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
