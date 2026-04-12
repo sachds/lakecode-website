@@ -3,517 +3,534 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lakecode — AI-Powered CLI Agent for Databricks &amp; Snowflake</title>
-  <meta name="description" content="Lakecode is an AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy — all from your command line.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <title>Lakecode — Governed AI for Databricks &amp; Snowflake with Persistent Memory</title>
+  <meta name="description" content="Lakecode gives AI agents persistent memory for Databricks and Snowflake. Every session compounds.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    /* Typing animation — hero terminal only */
+    .hero-term .term-body > div { opacity: 0; }
+    .hero-term .term-body > div.typed { opacity: 1; }
+    .tcur { display: inline-block; width: 8px; height: 18px; background: #3ecf8e; vertical-align: text-bottom; animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    /* Video placeholder aspect ratio */
+    .vid-aspect { aspect-ratio: 16 / 9; }
+    /* Comparison arrow hide on mobile */
+    @media (max-width: 768px) {
+      .cmp-arrow-col { display: none; }
+      .cmp-grid { grid-template-columns: 1fr !important; }
+      .nav-desktop { display: none !important; }
+      .nav-mobile { display: flex !important; }
+    }
+    /* Copy interaction */
+    .install-box.copied .copy-label { opacity: 0; }
+    .install-box.copied .copy-done { opacity: 1; }
+    .copy-done { opacity: 0; transition: opacity 0.15s; }
+    .copy-label { transition: opacity 0.15s; }
+  </style>
 </head>
-<body>
+<body class="bg-black text-zinc-400 antialiased">
 
-  <!-- Nav -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="#" class="logo">
-        <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 w-full z-50 border-b border-transparent transition-all duration-300">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono">
+        <img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode
       </a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#commands">Commands</a>
-        <a href="#docs">Docs</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
-        <a href="/blog">Blog</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
+      <div class="nav-desktop flex items-center gap-8">
+        <a href="/product" class="text-sm text-zinc-400 hover:text-white transition">Product</a>
+        <a href="/pricing" class="text-sm text-zinc-400 hover:text-white transition">Pricing</a>
+        <a href="/docs" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog" class="text-sm text-zinc-400 hover:text-white transition">Blog</a>
+        <a href="/signin" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+      <button id="nav-toggle" class="nav-mobile hidden flex-col gap-1.5 p-1">
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
       </button>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge">AI-powered CLI agent for Databricks &amp; Snowflake</div>
-      <h1>Your data platform<br>command line.</h1>
-      <p class="hero-sub">
-        An AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy &mdash; without leaving your terminal.
-      </p>
-      <div class="hero-install">
-        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
-          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
-          <span class="copy-hint">click to copy</span>
-          <span class="copy-done">copied!</span>
+  <!-- HERO — split layout -->
+  <section class="pt-36 pb-24 px-6 hero-term">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: text -->
+      <div>
+        <h1 class="text-6xl font-bold tracking-tight text-white leading-[1.08]">Unblock AI agents on your data platform.</h1>
+        <p class="mt-6 text-lg text-zinc-400 leading-relaxed max-w-lg">AI agents are powerful but forgetful &mdash; every session starts from zero. Lakecode gives them memory that persists and compounds, so your team ships more with less.</p>
+        <div class="mt-10 flex flex-col items-start gap-4">
+          <div class="install-box bg-zinc-900 border border-white/[0.06] rounded-lg px-6 py-3 font-mono text-sm text-zinc-300 cursor-pointer hover:border-white/10 transition relative" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
+            <span class="text-green-400">$</span> npm install -g lakecode
+            <span class="copy-label ml-4 text-zinc-600 text-xs">click to copy</span>
+            <span class="copy-done absolute right-6 text-green-400 text-xs">copied</span>
+          </div>
+          <a href="mailto:sachin@lakecode.ai" class="text-sm text-zinc-400 border border-white/[0.1] rounded-md px-6 py-3 hover:bg-white/[0.04] hover:text-white transition">Talk to us about a 2-week pilot</a>
+        </div>
+        <div class="mt-8 flex items-center gap-6">
+          <span class="text-sm text-zinc-500">Built for</span>
+          <img src="/images/databricks-logo.png" alt="Databricks" class="h-6" style="filter:brightness(0) invert(1)">
+          <img src="/images/snowflake-logo.png" alt="Snowflake" class="h-6" style="filter:brightness(0) invert(1)">
         </div>
       </div>
-      <div class="hero-actions">
-        <a href="/signin" class="btn btn-primary">Get Started Free</a>
-        <a href="/docs" class="btn btn-secondary">View Docs</a>
-      </div>
-      <div class="hero-terminal">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">terminal</span>
+
+      <!-- Right: terminal -->
+      <div class="relative">
+        <div class="absolute -inset-8 bg-green-400/[0.03] rounded-3xl blur-2xl pointer-events-none"></div>
+        <div class="relative bg-[#0a0a0a] rounded-xl border border-white/[0.06] overflow-hidden shadow-2xl">
+          <div class="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-white/10"></div>
+            <div class="w-3 h-3 rounded-full bg-white/10"></div>
+            <div class="w-3 h-3 rounded-full bg-white/10"></div>
+            <span class="ml-auto text-xs text-zinc-600 font-mono">@priya &middot; 12s</span>
+          </div>
+          <div class="term-body p-6 font-mono text-sm leading-7 text-zinc-400">
+            <div><span class="text-white font-medium">$ lakecode /debug job 5091</span></div>
+            <br>
+            <div class="text-zinc-600">Analyzing job 5091...</div>
+            <br>
+            <div class="text-green-400">&#9889; Pattern match: similar to job 4827 failure on April 1</div>
+            <div class="text-zinc-500">  &#8594; Same upstream table (analytics.daily_summary)</div>
+            <div class="text-zinc-500">  &#8594; Same root cause: schema change increased row volume</div>
+            <div class="text-zinc-500">  &#8594; Previous fix: autoscale max 4 &#8594; 8 (applied by <span class="text-blue-500">@marcus</span>)</div>
+            <br>
+            <div>Applying known fix...</div>
+            <div class="text-green-400">&#10003; Cluster config updated. Job re-queued.</div>
+            <br>
+            <div class="text-zinc-700">Evidence saved &#8594; /artifacts/debug-5091.json<span class="tcur"></span></div>
+          </div>
         </div>
-        <div class="terminal-body">
-          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode /debug job 4827</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line dim">  Diagnosing job 4827...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Job config loaded &mdash; nightly_etl_pipeline</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Last 5 runs fetched &mdash; 3 failures in 24h</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Error logs extracted &mdash; OOM on task 3</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Query history analyzed &mdash; skew on join key</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Cluster metrics checked &mdash; 98% memory util</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Root cause:</strong> Data skew on customer_id join</div>
-          <div class="terminal-line">    causing OOM. Recommend salted join or larger</div>
-          <div class="terminal-line">    instance type. Full report saved to ./debug/</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHAT USED TO TAKE 45 MINUTES -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">What used to take 45 minutes.</h2>
+      <div class="mt-16 space-y-20">
+
+        <!-- Comparison 1 -->
+        <div class="cmp-grid grid grid-cols-[1fr_40px_1fr] gap-0 items-start">
+          <div>
+            <p class="text-sm text-zinc-500 mb-3">In Databricks</p>
+            <div class="vid-aspect bg-[#080808] rounded-xl border border-white/[0.04] relative overflow-hidden cursor-pointer">
+              <div class="absolute inset-0 flex flex-col">
+                <div class="bg-[#060606] px-3.5 py-2.5 flex items-center gap-1.5 border-b border-white/[0.04]">
+                  <div class="w-[7px] h-[7px] rounded-full bg-[#ff5f57] opacity-35"></div>
+                  <div class="w-[7px] h-[7px] rounded-full bg-[#febc2e] opacity-35"></div>
+                  <div class="w-[7px] h-[7px] rounded-full bg-[#28c840] opacity-35"></div>
+                  <div class="flex gap-px ml-3"><span class="text-[9.5px] bg-white/[0.04] text-zinc-500 px-2 py-0.5 rounded-sm">Job Runs</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Logs</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Cluster</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">SQL History</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Lineage</span></div>
+                </div>
+                <div class="flex-1 p-3.5 grid grid-cols-[120px_1fr] gap-2.5">
+                  <div class="flex flex-col gap-1.5"><div class="h-[7px] rounded-sm bg-[#141414] w-[80%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[90%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[60%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[75%]"></div></div>
+                  <div class="flex flex-col gap-1.5"><div class="h-6 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="h-10 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="flex-1 rounded bg-[#0a0a0a] border border-white/[0.02]"></div></div>
+                </div>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center z-10"><div class="w-12 h-12 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/[0.08] flex items-center justify-center"><svg class="w-4 h-4 fill-white ml-0.5" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div></div>
+              <div class="absolute bottom-3 left-4 z-10 text-[11px] text-white/25">Watch: debugging a failed job in Databricks</div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">Navigating logs, run history, cluster config, and query history to piece together root cause &mdash; <span class="text-red-400 font-semibold">~45 minutes</span></p>
+          </div>
+          <div class="cmp-arrow-col flex items-center justify-center text-xl text-zinc-700 pt-36">&#8594;</div>
+          <div>
+            <p class="text-sm text-green-400 mb-3">With Lakecode</p>
+            <div class="relative">
+              <div class="absolute -inset-10 bg-[radial-gradient(ellipse_at_center,rgba(62,207,142,0.04)_0%,transparent_70%)] pointer-events-none -z-10"></div>
+              <div class="bg-[#060606] rounded-xl border border-white/[0.06] overflow-hidden shadow-[inset_0_1px_4px_rgba(0,0,0,0.6)]">
+                <div class="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><span class="mx-auto text-[11px] text-zinc-700">terminal</span></div>
+                <div class="p-5 font-mono text-sm leading-7 text-zinc-400">
+                  <div><span class="text-green-400">$</span> <span class="text-white font-medium">lakecode /debug job 4827</span></div>
+                  <br>
+                  <div class="text-zinc-700">  Diagnosing job 4827 (nightly_etl_pipeline)...</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Job history &mdash; 3 failures in 24h, last success 2026-04-08</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Error logs &mdash; OOM on task 3, executor 5 at 98% heap</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Upstream &mdash; 2.3M row bulk import on 2026-04-10</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Incidents &mdash; <span class="text-green-400">pattern match found</span></div>
+                  <br>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Root cause:</span> Data skew on customer_id join.</div>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Prior incident:</span> Same failure <span class="text-blue-500">March 12</span>.</div>
+                  <div>    Fixed by <span class="text-blue-500">@marcus</span> &mdash; salted join, commit <span class="text-blue-500">a3f8c21</span>.</div>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Recommended:</span> Apply same salt strategy.</div>
+                  <br>
+                  <div class="text-zinc-700">  Evidence &#8594; ./debug/job-4827.json</div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">One command. Full diagnosis. Structured evidence. <span class="text-green-400 font-semibold">90 seconds</span></p>
+          </div>
+        </div>
+
+        <!-- Comparison 2 -->
+        <div class="cmp-grid grid grid-cols-[1fr_40px_1fr] gap-0 items-start">
+          <div>
+            <p class="text-sm text-zinc-500 mb-3">In Databricks</p>
+            <div class="vid-aspect bg-[#080808] rounded-xl border border-white/[0.04] relative overflow-hidden cursor-pointer">
+              <div class="absolute inset-0 flex flex-col">
+                <div class="bg-[#060606] px-3.5 py-2.5 flex items-center gap-1.5 border-b border-white/[0.04]">
+                  <div class="w-[7px] h-[7px] rounded-full bg-[#ff5f57] opacity-35"></div><div class="w-[7px] h-[7px] rounded-full bg-[#febc2e] opacity-35"></div><div class="w-[7px] h-[7px] rounded-full bg-[#28c840] opacity-35"></div>
+                  <div class="flex gap-px ml-3"><span class="text-[9.5px] bg-white/[0.04] text-zinc-500 px-2 py-0.5 rounded-sm">Billing</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Warehouses</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Jobs</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Clusters</span></div>
+                </div>
+                <div class="flex-1 p-3.5 grid grid-cols-[120px_1fr] gap-2.5">
+                  <div class="flex flex-col gap-1.5"><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[75%]"></div><div class="h-[7px] rounded-sm bg-[#141414] w-[90%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[60%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[80%]"></div></div>
+                  <div class="flex flex-col gap-1.5"><div class="h-10 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="h-6 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="flex-1 rounded bg-[#0a0a0a] border border-white/[0.02]"></div></div>
+                </div>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center z-10"><div class="w-12 h-12 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/[0.08] flex items-center justify-center"><svg class="w-4 h-4 fill-white ml-0.5" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div></div>
+              <div class="absolute bottom-3 left-4 z-10 text-[11px] text-white/25">Watch: tracing a cost spike in Databricks</div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">Querying billing tables, cross-referencing workloads, comparing baselines, attributing spend &mdash; <span class="text-red-400 font-semibold">~2 hours</span></p>
+          </div>
+          <div class="cmp-arrow-col flex items-center justify-center text-xl text-zinc-700 pt-36">&#8594;</div>
+          <div>
+            <p class="text-sm text-green-400 mb-3">With Lakecode</p>
+            <div class="relative">
+              <div class="absolute -inset-10 bg-[radial-gradient(ellipse_at_center,rgba(62,207,142,0.04)_0%,transparent_70%)] pointer-events-none -z-10"></div>
+              <div class="bg-[#060606] rounded-xl border border-white/[0.06] overflow-hidden shadow-[inset_0_1px_4px_rgba(0,0,0,0.6)]">
+                <div class="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><span class="mx-auto text-[11px] text-zinc-700">terminal</span></div>
+                <div class="p-5 font-mono text-sm leading-7 text-zinc-400">
+                  <div><span class="text-green-400">$</span> <span class="text-white font-medium">lakecode /cost spike</span></div>
+                  <br>
+                  <div class="text-zinc-700">  Comparing this week vs 30-day baseline...</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Billing &mdash; $11,204 this week vs $8,102 baseline</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Attribution &mdash; 3 jobs, 2 teams</div>
+                  <br>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Spike:</span> +$3,102 (+38% over baseline)</div>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Top driver:</span> <span class="text-blue-500">daily_aggregation</span> ($2,180)</div>
+                  <div>    Warehouse: <span class="text-blue-500">analytics_prod</span></div>
+                  <div>    Config changed Tue by <span class="text-blue-500">@sarah</span> &mdash; autoscale 4x&#8594;16x</div>
+                  <div>    <span class="text-green-400">Same pattern Jan 15</span> &mdash; reverted same day.</div>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Recommendation:</span> Revert autoscaling policy.</div>
+                  <br>
+                  <div class="text-zinc-700">  Evidence &#8594; ./cost/spike-20260411.json</div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">One command. Full attribution. <span class="text-green-400 font-semibold">2 minutes</span></p>
+          </div>
+        </div>
+
+        <!-- Comparison 3 -->
+        <div class="cmp-grid grid grid-cols-[1fr_40px_1fr] gap-0 items-start">
+          <div>
+            <p class="text-sm text-zinc-500 mb-3">In Databricks</p>
+            <div class="vid-aspect bg-[#080808] rounded-xl border border-white/[0.04] relative overflow-hidden cursor-pointer">
+              <div class="absolute inset-0 flex flex-col">
+                <div class="bg-[#060606] px-3.5 py-2.5 flex items-center gap-1.5 border-b border-white/[0.04]">
+                  <div class="w-[7px] h-[7px] rounded-full bg-[#ff5f57] opacity-35"></div><div class="w-[7px] h-[7px] rounded-full bg-[#febc2e] opacity-35"></div><div class="w-[7px] h-[7px] rounded-full bg-[#28c840] opacity-35"></div>
+                  <div class="flex gap-px ml-3"><span class="text-[9.5px] bg-white/[0.04] text-zinc-500 px-2 py-0.5 rounded-sm">SQL Editor</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Schema</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">History</span><span class="text-[9.5px] text-zinc-700 px-2 py-0.5">Catalog</span></div>
+                </div>
+                <div class="flex-1 p-3.5 grid grid-cols-[120px_1fr] gap-2.5">
+                  <div class="flex flex-col gap-1.5"><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[75%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[90%]"></div><div class="h-[7px] rounded-sm bg-[#141414] w-[60%]"></div><div class="h-[7px] rounded-sm bg-[#0d0d0d] w-[80%]"></div></div>
+                  <div class="flex flex-col gap-1.5"><div class="h-6 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="flex-1 rounded bg-[#0a0a0a] border border-white/[0.02]"></div><div class="h-10 rounded bg-[#0a0a0a] border border-white/[0.02]"></div></div>
+                </div>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center z-10"><div class="w-12 h-12 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/[0.08] flex items-center justify-center"><svg class="w-4 h-4 fill-white ml-0.5" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div></div>
+              <div class="absolute bottom-3 left-4 z-10 text-[11px] text-white/25">Watch: validating a table in Databricks</div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">Writing validation queries by hand &mdash; row counts, null checks, freshness, documenting results &mdash; <span class="text-red-400 font-semibold">~30 minutes</span></p>
+          </div>
+          <div class="cmp-arrow-col flex items-center justify-center text-xl text-zinc-700 pt-36">&#8594;</div>
+          <div>
+            <p class="text-sm text-green-400 mb-3">With Lakecode</p>
+            <div class="relative">
+              <div class="absolute -inset-10 bg-[radial-gradient(ellipse_at_center,rgba(62,207,142,0.04)_0%,transparent_70%)] pointer-events-none -z-10"></div>
+              <div class="bg-[#060606] rounded-xl border border-white/[0.06] overflow-hidden shadow-[inset_0_1px_4px_rgba(0,0,0,0.6)]">
+                <div class="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><div class="w-2 h-2 rounded-full bg-white/10"></div><span class="mx-auto text-[11px] text-zinc-700">terminal</span></div>
+                <div class="p-5 font-mono text-sm leading-7 text-zinc-400">
+                  <div><span class="text-green-400">$</span> <span class="text-white font-medium">lakecode /prove analytics.orders_v2</span></div>
+                  <br>
+                  <div class="text-zinc-700">  Generating evidence pack...</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Schema &mdash; 24 columns, 3 partitions</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Rows &mdash; 12.4M (+2.1% vs baseline)</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Freshness &mdash; 47 min ago (SLA: 1h) <span class="text-green-400">OK</span></div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Nulls &mdash; order_id: 0.00%, discount_code: 4.1%</div>
+                  <div class="text-zinc-700">  <span class="text-green-400">&#10003;</span> Duplicates &mdash; 0 on primary key</div>
+                  <br>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Health:</span> <span class="text-green-400">PASS</span> &mdash; all checks within baseline.</div>
+                  <div>  <span class="text-green-400">&#9679;</span> <span class="text-white font-medium">Note:</span> discount_code nulls up 3.2%&#8594;4.1%.</div>
+                  <div>    Consistent with Q2 promo ending.</div>
+                  <br>
+                  <div class="text-zinc-700">  Evidence &#8594; ./prove/orders_v2.json</div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-zinc-500 leading-relaxed">One command. Structured proof. <span class="text-green-400 font-semibold">60 seconds</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 text-center"><a href="/docs/commands" class="text-sm text-zinc-500 hover:text-white transition">See all 22 workflows &rarr;</a></div>
+    </div>
+  </section>
+
+  <!-- COMPOUNDING CHART -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Every session makes the next one better</h2>
+      <p class="mt-4 text-sm text-zinc-500 max-w-md">Most AI tools reset when you close the tab. Lakecode remembers.</p>
+      <div class="mt-16 max-w-3xl mx-auto">
+        <svg class="w-full h-auto" viewBox="0 0 820 300" fill="none">
+          <line x1="60" y1="30" x2="60" y2="240" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <line x1="60" y1="240" x2="670" y2="240" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <text x="52" y="55" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">45m</text>
+          <text x="52" y="120" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">5m</text>
+          <text x="52" y="175" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">2m</text>
+          <text x="52" y="215" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">30s</text>
+          <text x="52" y="235" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">12s</text>
+          <text x="80" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">1</text>
+          <text x="146" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">2</text>
+          <text x="212" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">3</text>
+          <text x="278" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">4</text>
+          <text x="344" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">5</text>
+          <text x="410" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">6</text>
+          <text x="476" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">7</text>
+          <text x="542" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">8</text>
+          <text x="608" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">9</text>
+          <text x="658" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#333">10</text>
+          <text x="370" y="280" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#444">Sessions</text>
+          <path d="M 80 52 L 146 52 L 212 52 L 278 52 L 344 52 L 410 52 L 476 52 L 542 52 L 608 52 L 658 52 L 658 230 C 608 230, 542 228, 476 222 C 410 215, 344 195, 278 170 C 212 150, 146 120, 80 115 Z" fill="rgba(62,207,142,.03)"/>
+          <path d="M 80 52 L 146 52 L 212 53 L 278 51 L 344 53 L 410 52 L 476 51 L 542 53 L 608 52 L 658 52" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M 80 115 C 120 108, 146 95, 212 150 S 278 170, 344 195 C 380 205, 410 215, 476 222 C 510 226, 542 228, 608 230 C 630 231, 650 231, 658 230" stroke="#3ecf8e" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="80" cy="115" r="3" fill="#3ecf8e"/><circle cx="212" cy="150" r="3" fill="#3ecf8e"/><circle cx="344" cy="195" r="3" fill="#3ecf8e"/><circle cx="476" cy="222" r="3" fill="#3ecf8e"/><circle cx="608" cy="230" r="3" fill="#3ecf8e"/><circle cx="658" cy="230" r="3" fill="#3ecf8e"/>
+          <circle cx="80" cy="52" r="2.5" fill="#333"/><circle cx="658" cy="52" r="2.5" fill="#333"/>
+          <text x="672" y="49" font-family="JetBrains Mono,monospace" font-size="10" fill="#444" dominant-baseline="middle">Stateless</text>
+          <text x="672" y="228" font-family="JetBrains Mono,monospace" font-size="10" fill="#3ecf8e" dominant-baseline="middle">Lakecode</text>
+          <line x1="80" y1="290" x2="96" y2="290" stroke="#333" stroke-width="1.5"/>
+          <text x="102" y="291" font-family="JetBrains Mono,monospace" font-size="9" fill="#444" dominant-baseline="middle">Stateless — every session starts from zero</text>
+          <line x1="380" y1="290" x2="396" y2="290" stroke="#3ecf8e" stroke-width="2"/>
+          <text x="402" y="291" font-family="JetBrains Mono,monospace" font-size="9" fill="#3ecf8e" dominant-baseline="middle">Persistent memory — each session builds on the last</text>
+        </svg>
+      </div>
+      <p class="mt-10 text-sm text-zinc-400 text-center max-w-2xl mx-auto leading-relaxed">Session 1, the agent learns your environment. Session 5, it recognizes patterns. Session 10, it fixes known issues automatically.</p>
+      <p class="mt-4 text-sm text-zinc-500 text-center">This is <strong class="text-zinc-400 font-medium">Engram</strong> &mdash; persistent memory that compounds across every engineer, every session.</p>
+    </div>
+  </section>
+
+  <!-- THE AGENT ALREADY KNOWS -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">The agent already knows.</h2>
+      <p class="mt-4 text-sm text-zinc-500 max-w-md">These answers require institutional context that lives nowhere in your codebase.</p>
+      <div class="mt-16 max-w-3xl mx-auto space-y-3">
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-8">
+          <div class="font-mono text-sm text-white mb-5 pb-4 border-b border-white/[0.04]"><span class="text-green-400 mr-1.5">&#10095;</span> What will break if I drop the sessions table?</div>
+          <div class="font-mono text-sm leading-7 text-zinc-400">
+            <div><span class="text-white font-medium">12 downstream jobs</span> depend on sessions:</div>
+            <div>  &#8594; <span class="text-blue-500">daily_aggregation</span> (SLA: 6am, owner: <span class="text-blue-500">@marcus</span>)</div>
+            <div>  &#8594; <span class="text-blue-500">user_engagement_report</span> (SLA: 9am, owner: <span class="text-blue-500">@priya</span>)</div>
+            <div>  &#8594; <span class="text-blue-500">churn_model_training</span> (weekly, owner: <span class="text-blue-500">@data-science</span>)</div>
+            <div>  &#8594; ...9 more</div>
+            <br>
+            <div><span class="text-green-400">&#9888;</span> Dropping this table will breach <span class="text-green-400">3 SLAs</span>.</div>
+            <div>  Last schema change: Feb 14 &mdash; added session_duration column.</div>
+          </div>
+        </div>
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-8">
+          <div class="font-mono text-sm text-white mb-5 pb-4 border-b border-white/[0.04]"><span class="text-green-400 mr-1.5">&#10095;</span> Who owns the revenue pipeline and what's the SLA?</div>
+          <div class="font-mono text-sm leading-7 text-zinc-400">
+            <div><span class="text-white font-medium">Pipeline:</span> revenue_daily_rollup (job <span class="text-blue-500">7201</span>)</div>
+            <div><span class="text-white font-medium">Owner:</span> <span class="text-blue-500">@sarah</span> (data-analytics)</div>
+            <div><span class="text-white font-medium">SLA:</span> 7:00 AM UTC, 99.5% target (actual: 99.2% last 90d)</div>
+            <div><span class="text-white font-medium">Dependencies:</span> orders_v2, payments, refunds</div>
+            <div><span class="text-white font-medium">Last incident:</span> March 3 &mdash; delayed 2h due to upstream schema change.</div>
+            <div>  Resolved by adding column mapping in transform step.</div>
+          </div>
+        </div>
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-8">
+          <div class="font-mono text-sm text-white mb-5 pb-4 border-b border-white/[0.04]"><span class="text-green-400 mr-1.5">&#10095;</span> What did we do last time the churn model alert fired?</div>
+          <div class="font-mono text-sm leading-7 text-zinc-400">
+            <div><span class="text-white font-medium">Alert:</span> churn_model_accuracy_drop (fired 2026-02-18)</div>
+            <div><span class="text-white font-medium">Root cause:</span> Training data included test accounts after migration.</div>
+            <div><span class="text-white font-medium">Resolution:</span> <span class="text-blue-500">@priya</span> added filter on account_type != 'test'</div>
+            <div>  Commit: <span class="text-blue-500">b8e4f21</span>, deployed 2026-02-18 14:30 UTC</div>
+            <div><span class="text-white font-medium">Recurrence:</span> None since fix. Model accuracy restored to 94.2%.</div>
+            <div><span class="text-white font-medium">Current status:</span> <span class="text-green-400">&#10003; Healthy</span> &mdash; accuracy 93.8% (within threshold).</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- What it does -->
-  <section id="features" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>What it does</h2>
-        <p>An AI agent that actually understands your Databricks and Snowflake workspace.</p>
+  <!-- COMMANDS -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">One command. Work that used to take hours.</h2>
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Debugging &amp; Monitoring</h3>
+          <div class="space-y-4">
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/status job &lt;id&gt;</code><span class="block mt-1 text-sm text-zinc-500">Job config + last 5 runs at a glance</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/logs &lt;run-id&gt;</code><span class="block mt-1 text-sm text-zinc-500">Run output + AI error analysis</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/debug job &lt;id&gt;</code><span class="block mt-1 text-sm text-zinc-500">Full diagnosis: config, failures, logs, queries, root-cause summary</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/queries job &lt;id&gt;</code><span class="block mt-1 text-sm text-zinc-500">SQL query history for the latest run</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/queries run &lt;run-id&gt;</code><span class="block mt-1 text-sm text-zinc-500">SQL query history for a specific run</span></div>
+          </div>
+        </div>
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Data Quality</h3>
+          <div class="space-y-4">
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/prove &lt;table&gt;</code><span class="block mt-1 text-sm text-zinc-500">Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/audit jobs</code><span class="block mt-1 text-sm text-zinc-500">Scan for SLA gaps, missing timeouts, recurring failures</span></div>
+          </div>
+        </div>
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Platform Ops</h3>
+          <div class="space-y-4">
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/audit jobs</code><span class="block mt-1 text-sm text-zinc-500">Scan jobs for SLA gaps, missing timeouts, runtime variability, failures; risk-scored report</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/cost top</code><span class="block mt-1 text-sm text-zinc-500">Top spend drivers from billing system tables</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/cost spike</code><span class="block mt-1 text-sm text-zinc-500">Compare day vs baseline; AI identifies likely drivers</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/drift detect</code><span class="block mt-1 text-sm text-zinc-500">Compare deployed resources against bundle definitions</span></div>
+          </div>
+        </div>
+        <div class="bg-[#080808] rounded-xl border border-white/[0.04] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Deployment</h3>
+          <div class="space-y-4">
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/deploy &lt;local&gt; &lt;ws-path&gt;</code><span class="block mt-1 text-sm text-zinc-500">Import a local file into the workspace</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/run job &lt;id&gt;</code><span class="block mt-1 text-sm text-zinc-500">Trigger job run + poll until completion</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/capture job &lt;id&gt;</code><span class="block mt-1 text-sm text-zinc-500">Capture a job or pipeline into a Databricks Asset Bundle</span></div>
+            <div><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/uc explain-access</code><span class="block mt-1 text-sm text-zinc-500">Trace why a principal has (or lacks) access to a Unity Catalog object</span></div>
+          </div>
+        </div>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      <div class="mt-12 text-center"><a href="/docs/commands" class="text-sm text-zinc-500 hover:text-white transition">See all 22 commands &rarr;</a></div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white text-center">Security &amp; trust</h2>
+      <p class="mt-4 text-base text-zinc-500 text-center max-w-xl mx-auto">Enterprise-grade security without enterprise-grade complexity.</p>
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
           </div>
-          <h3>AI-powered debugging</h3>
-          <ul>
-            <li>Diagnose failed jobs end-to-end in seconds</li>
-            <li>LLM analyzes logs, query history, and cluster metrics</li>
-            <li>Get root-cause summaries, not just stack traces</li>
-          </ul>
+          <h3 class="text-lg font-semibold text-white">Runs locally</h3>
+          <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Lakecode runs on your machine. Your credentials, API keys, and workspace tokens never leave your environment.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
           </div>
-          <h3>Data quality evidence</h3>
-          <ul>
-            <li>Generate evidence packs: schema, nulls, freshness, stats, samples</li>
-            <li>AI writes a plain-English health assessment</li>
-            <li>Attach to PRs, tickets, or audit trails</li>
-          </ul>
+          <h3 class="text-lg font-semibold text-white">Respects your permissions</h3>
+          <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Lakecode only sees what your platform identity can see. Unity Catalog and Snowflake RBAC &mdash; no elevated permissions, no backdoors.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
           </div>
-          <h3>Spend intelligence</h3>
-          <ul>
-            <li>Top spend breakdown from system billing tables</li>
-            <li>AI detects spikes and explains what changed</li>
-            <li>Audit jobs for missing timeouts, SLA risk, and failure patterns</li>
-          </ul>
+          <h3 class="text-lg font-semibold text-white">Safe by default</h3>
+          <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Every action is classified before execution. Read operations run automatically. Write and destructive operations require explicit approval.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>
           </div>
-          <h3>Deploy &amp; execute</h3>
-          <ul>
-            <li>Deploy files to your workspace from the terminal</li>
-            <li>Trigger job runs and poll until completion</li>
-            <li>Natural language commands &mdash; just describe what you need</li>
-          </ul>
+          <h3 class="text-lg font-semibold text-white">Ed25519 license keys</h3>
+          <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Authentication uses cryptographically signed license keys. No shared secrets, no tokens stored on our servers.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How it works -->
-  <section id="how-it-works" class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>How it works</h2>
-        <p>From install to running workflows in under two minutes.</p>
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
       </div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Install</h3>
-            <p>Install lakecode with npm. One command, no dependencies to manage.</p>
-          </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4>
+          <a href="/product" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a>
+          <a href="/pricing" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a>
+          <a href="/docs" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a>
+          <a href="/dashboard" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Connect</h3>
-            <p>Sign in with Google OAuth and connect your Databricks or Snowflake workspace. Lakecode automatically profiles your catalogs, schemas, and jobs.</p>
-          </div>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4>
+          <a href="/docs/getting-started" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a>
+          <a href="/docs/commands" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a>
+          <a href="/docs/architecture" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a>
+          <a href="/docs/configuration" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a>
+          <a href="/docs/security" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Run</h3>
-            <p>Use slash commands or describe what you need in plain English. The AI agent collects context, executes workflows, and delivers actionable results.</p>
-          </div>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4>
+          <a href="/about" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a>
+          <a href="/blog" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a>
+          <a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Commands -->
-  <section id="commands" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Commands</h2>
-        <p>Opinionated workflows for real Databricks and Snowflake engineering tasks.</p>
-      </div>
-      <div class="commands-grid">
-        <div class="command-group">
-          <h3>Debugging &amp; Monitoring</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/status job &lt;id&gt;</code>
-              <span>Job config + last 5 runs at a glance</span>
-            </div>
-            <div class="command">
-              <code>/logs &lt;run-id&gt;</code>
-              <span>Run output + AI error analysis</span>
-            </div>
-            <div class="command">
-              <code>/debug job &lt;id&gt;</code>
-              <span>Full diagnosis: config, failures, logs, queries, root-cause summary</span>
-            </div>
-            <div class="command">
-              <code>/queries job &lt;id&gt;</code>
-              <span>SQL query history for the latest run</span>
-            </div>
-            <div class="command">
-              <code>/queries run &lt;run-id&gt;</code>
-              <span>SQL query history for a specific run</span>
-            </div>
-          </div>
-        </div>
-        <div class="command-group">
-          <h3>Data Quality</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/prove &lt;table&gt;</code>
-              <span>Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span>
-            </div>
-            <div class="command">
-              <code>/audit jobs</code>
-              <span>Scan for SLA gaps, missing timeouts, recurring failures</span>
-            </div>
-          </div>
-        </div>
-        <div class="command-group">
-          <h3>Platform Ops</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/audit jobs</code>
-              <span>Scan jobs for SLA gaps, missing timeouts, runtime variability, failures; risk-scored report</span>
-            </div>
-            <div class="command">
-              <code>/cost top</code>
-              <span>Top spend drivers from billing system tables</span>
-            </div>
-            <div class="command">
-              <code>/cost spike</code>
-              <span>Compare day vs baseline; AI identifies likely drivers</span>
-            </div>
-            <div class="command">
-              <code>/drift detect</code>
-              <span>Compare deployed resources against bundle definitions</span>
-            </div>
-          </div>
-        </div>
-        <div class="command-group">
-          <h3>Deployment</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/deploy &lt;local&gt; &lt;ws-path&gt;</code>
-              <span>Import a local file into the workspace</span>
-            </div>
-            <div class="command">
-              <code>/run job &lt;id&gt;</code>
-              <span>Trigger job run + poll until completion</span>
-            </div>
-            <div class="command">
-              <code>/capture job &lt;id&gt;</code>
-              <span>Capture a job or pipeline into a Databricks Asset Bundle</span>
-            </div>
-            <div class="command">
-              <code>/uc explain-access</code>
-              <span>Trace why a principal has (or lacks) access to a Unity Catalog object</span>
-            </div>
-          </div>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4>
+          <a href="/signin" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a>
+          <a href="/dashboard" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Why lakecode -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Why lakecode</h2>
-      </div>
-      <div class="why-grid">
-        <div class="why-card">
-          <h3>AI that understands your workspace</h3>
-          <p>Lakecode profiles your Databricks or Snowflake environment on connect &mdash; catalogs, schemas, jobs, warehouses. The AI reasons with real context, not generic prompts.</p>
-        </div>
-        <div class="why-card">
-          <h3>Evidence, not just answers</h3>
-          <p>Every workflow produces shareable artifacts &mdash; evidence packs, debug reports, cost breakdowns. Attach them to PRs, incidents, or audit trails.</p>
-        </div>
-        <div class="why-card">
-          <h3>Terminal-native, zero context switching</h3>
-          <p>Stop bouncing between Jobs UI, cluster logs, SQL editor, and dashboards. One command replaces five browser tabs.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Security -->
-  <section id="security" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Security &amp; trust</h2>
-      </div>
-      <div class="security-grid">
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <h3>Runs locally</h3>
-          <p>Lakecode runs on your machine. Your credentials never leave your environment.</p>
-        </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3>Respects your permissions</h3>
-          <p>Lakecode only sees what your platform identity can see. Unity Catalog, Snowflake RBAC &mdash; no elevated permissions, no backdoors.</p>
-        </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
-          </div>
-          <h3>Safe by default</h3>
-          <p>Plan/approval flow for risky operations. Built-in guardrails prevent common high-cost mistakes.</p>
-        </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          </div>
-          <h3>Ed25519 license keys</h3>
-          <p>Authentication uses cryptographically signed license keys. No shared secrets, no tokens stored on our servers.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Install -->
-  <section id="install" class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Get started</h2>
-        <p>Requires <a href="https://nodejs.org">Node.js 18+</a>. Two commands and you're in.</p>
-      </div>
-      <div class="install-block">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">terminal</span>
-        </div>
-        <div class="terminal-body">
-          <div class="terminal-line"><span class="terminal-prompt">$</span> npm install -g lakecode</div>
-          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode login</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line dim">  Opening browser for Google sign-in...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Authenticated as alice@company.com</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> License key saved</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Workspace connected &mdash; profiling...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> 3 catalogs, 12 schemas, 847 tables indexed</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line">  Ready. Type a command or describe what you need.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>FAQ</h2>
-      </div>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Is this free?</summary>
-          <p>Yes. Every account gets free daily credits &mdash; enough for a few commands per day. Resets every night. No credit card required. For heavier workloads, the Pro plan auto-reloads your balance so you never run out.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Do I need my own API keys?</summary>
-          <p>No. Lakecode includes a built-in AI proxy &mdash; just sign in and start running commands. If you prefer, you can bring your own Anthropic or OpenAI keys (BYOK) and use them directly.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What models does it use?</summary>
-          <p>By default, lakecode uses Claude (Anthropic) via our managed proxy. With BYOK, you can use your own Anthropic or OpenAI keys and choose which model to run.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Does lakecode modify my workspace?</summary>
-          <p>Most commands are read-only (debug, prove, cost, audit). Write commands like /deploy and /run job perform actions, but lakecode is explicit about what it's doing and uses plan/approval for risky operations.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Is this just a CLI wrapper?</summary>
-          <p>No. Lakecode is an AI agent with a workflow engine that chains steps, manages workspace context, and produces structured reports. It collects facts via APIs and SQL, then uses AI to interpret, summarize, and recommend.</p>
-        </details>
-        <details class="faq-item">
-          <summary>How does billing work?</summary>
-          <p>Usage-based. Each command consumes credits based on the AI tokens used. Free accounts get daily credits that reset at midnight UTC. Pro accounts add a payment method and auto-reload when the balance gets low. You only pay for what you use.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing teaser -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Simple pricing</h2>
-        <p>Start free. Scale when you need to.</p>
-      </div>
-      <div class="why-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 720px; margin: 0 auto;">
-        <div class="why-card">
-          <h3>Free</h3>
-          <p>Free daily credits, reset every night. Enough for a few commands per day &mdash; debug a job, prove a table, check spend. No credit card required.</p>
-        </div>
-        <div class="why-card">
-          <h3>Pro</h3>
-          <p>Add a payment method, get auto-reloading credits when your balance is low. Default reload at $20. Usage-based &mdash; pay only for what you use.</p>
-        </div>
-      </div>
-      <div class="hero-actions" style="margin-top: 36px; margin-bottom: 0;">
-        <a href="/pricing" class="btn btn-secondary">View full pricing</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Docs -->
-  <section id="docs" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Documentation</h2>
-        <p>Everything you need to get the most out of lakecode.</p>
-      </div>
-      <div class="docs-grid">
-        <div class="doc-card">
-          <h3>Getting started</h3>
-          <p>Install lakecode, sign in with Google, connect your Databricks or Snowflake workspace, and run your first command.</p>
-          <a href="/docs/getting-started" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>How it works</h3>
-          <p>The step-based workflow engine: deterministic steps, AI interpretation, context management, and evidence generation.</p>
-          <a href="/docs/architecture" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Commands reference</h3>
-          <p>Complete reference for all commands: debugging, data quality, platform ops, deployment, and configuration.</p>
-          <a href="/docs/commands" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Configuration</h3>
-          <p>Conventions files, default catalogs/schemas, workspace profiles, naming patterns, and team standards.</p>
-          <a href="/docs/configuration" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Authentication &amp; billing</h3>
-          <p>Google OAuth, license keys, free and Pro tiers, BYOK setup, and managing your account.</p>
-          <a href="/docs/authentication" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Safety &amp; plan mode</h3>
-          <p>Plan/approval flow, guardrails, output truncation, and how lakecode keeps your workspace safe.</p>
-          <a href="/docs/security" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Evidence packs</h3>
-          <p>What evidence packs contain, how /prove generates them, and how to use them in your workflow.</p>
-          <a href="/docs/evidence" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Billing &amp; credits</h3>
-          <p>Free tier, auto-reload, cost model, BYOK billing, and managing your balance.</p>
-          <a href="/docs/billing" class="doc-link">Read &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section cta-section">
-    <div class="container">
-      <h2>Start building with lakecode.</h2>
-      <p>Free to try, no credit card required.</p>
-      <div class="hero-actions">
-        <a href="/signin" class="btn btn-primary">Get Started Free</a>
-        <a href="/docs" class="btn btn-secondary">View Docs</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>AI-powered terminal agent for Databricks &amp; Snowflake. Debug, prove, analyze, and deploy &mdash; all from your command line.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#features">Features</a>
-          <a href="#commands">Commands</a>
-          <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
-          <a href="/dashboard">Dashboard</a>
-          <a href="#security">Security</a>
-          <a href="#install">Install</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:hello@lakecode.ai">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Docs</h4>
-          <a href="/docs/getting-started">Getting started</a>
-          <a href="/docs/commands">Commands</a>
-          <a href="/docs/configuration">Configuration</a>
-          <a href="/docs/security">Safety</a>
-        </div>
-      </div>
-    </div>
-    <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]">
+      <p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('bg-black/80', window.scrollY > 10);
+      nav.classList.toggle('backdrop-blur-xl', window.scrollY > 10);
+      nav.classList.toggle('border-white/[0.06]', window.scrollY > 10);
+      nav.classList.toggle('border-transparent', window.scrollY <= 10);
+    });
+
+    // Mobile toggle
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+      const links = document.querySelector('.nav-desktop');
+      links.classList.toggle('!flex');
+      links.classList.toggle('!flex-col');
+      links.classList.toggle('!absolute');
+      links.classList.toggle('!top-16');
+      links.classList.toggle('!left-0');
+      links.classList.toggle('!right-0');
+      links.classList.toggle('!bg-black');
+      links.classList.toggle('!border-b');
+      links.classList.toggle('!border-white/[0.06]');
+      links.classList.toggle('!p-6');
+    });
+
+    // Hero terminal typing animation
+    (function(){
+      const lines = document.querySelectorAll('.hero-term .term-body > div, .hero-term .term-body > br');
+      let i = 0;
+      function next() {
+        if (i >= lines.length) return;
+        const el = lines[i];
+        if (el.tagName === 'BR') { el.style.display = 'block'; i++; setTimeout(next, 80); return; }
+        const isAha = el.innerHTML && el.innerHTML.includes('Matched prior');
+        el.classList.add('typed');
+        i++;
+        setTimeout(next, isAha ? 400 : 150);
+      }
+      setTimeout(next, 600);
+    })();
+  </script>
 </body>
 </html>

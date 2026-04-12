@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Lakecode</title>
-  <meta name="description" content="Lakecode pricing — Free with your own API key, Pro pay-as-you-go with managed proxy, and Enterprise Databricks App deployment.">
+  <meta name="description" content="Lakecode pricing — 7-day free trial, then $29/mo with your own key or $49/mo managed. Platform for teams with annual licensing.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,13 +20,12 @@
         <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
-        <a href="/#features">Features</a>
-        <a href="/#commands">Commands</a>
-        <a href="/#docs">Docs</a>
+        <a href="/product">Product</a>
         <a href="/pricing" class="active">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
+        <a href="/docs">Docs</a>
         <a href="/blog">Blog</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <a href="/signin">Sign in</a>
+        <a href="/signin" class="btn btn-sm nav-auth-btn">Get started</a>
         <button class="theme-toggle" aria-label="Toggle theme">
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -38,98 +37,109 @@
     </div>
   </nav>
 
-  <!-- Pricing -->
+  <!-- Hero -->
   <section class="page-hero">
     <div class="container">
-      <h1>Simple, transparent pricing</h1>
-      <p class="page-sub">Start free with your own API key. Upgrade to Pro for all workflows and managed access.</p>
+      <h1>Start fast. Scale governed.</h1>
+      <p class="page-sub">From individual exploration to team-wide governed operations.</p>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" style="padding-top: 32px;">
     <div class="container">
-      <div class="pricing-grid three-col">
-        <!-- Free -->
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <h3>Free</h3>
-            <div class="pricing-price">
-              <span class="price-amount">$0</span>
-              <span class="price-period">/month</span>
-            </div>
-            <p class="pricing-desc">Get started with your own Anthropic API key</p>
-          </div>
-          <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Chat with your data platform</li>
-            <li><span class="check">&#10003;</span> Run jobs and basic commands</li>
-            <li><span class="check">&#10003;</span> 50 queries per day</li>
-            <li><span class="check">&#10003;</span> Databricks + Snowflake</li>
-            <li><span class="check">&#10003;</span> Bring your own API key</li>
-          </ul>
-          <a href="/signin" class="btn btn-secondary btn-full">Get Started</a>
-        </div>
 
-        <!-- Pro -->
-        <div class="pricing-card featured">
-          <div class="pricing-badge">Most Popular</div>
-          <div class="pricing-header">
-            <h3>Pro</h3>
-            <div class="pricing-price">
-              <span class="price-amount">Pay as you go</span>
-            </div>
-            <p class="pricing-desc">All workflows, managed proxy, no API key needed</p>
+      <!-- Trial Banner -->
+      <div class="trial-banner">
+        <div class="trial-banner-left">
+          <div class="trial-icon-box">&#9889;</div>
+          <div>
+            <strong><span style="color: var(--green);">7-day free trial</span> &mdash; full access, bring your own key</strong>
+            <p style="font-size: 0.8125rem; color: var(--text-dim); margin-top: 2px;">All workflows, full connectivity, chat. Connect your Anthropic key or Databricks Model Serving.</p>
           </div>
-          <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Everything in Free</li>
-            <li><span class="check">&#10003;</span> All 25+ workflows (debug, cost, audit, prove)</li>
-            <li><span class="check">&#10003;</span> Managed proxy &mdash; no API key required</li>
-            <li><span class="check">&#10003;</span> GitHub + Confluence connectors</li>
-            <li><span class="check">&#10003;</span> Unlimited queries</li>
-            <li><span class="check">&#10003;</span> Session continuity (Engram)</li>
-            <li><span class="check">&#10003;</span> Auto-reload credits via Stripe</li>
-          </ul>
-          <a href="#" class="btn btn-primary btn-full" id="pro-btn" onclick="handleUpgrade('pro'); return false;">Upgrade to Pro</a>
         </div>
+        <a href="/signin" class="btn btn-trial">Start free trial &rarr;</a>
+      </div>
 
-        <!-- Enterprise / Databricks App -->
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <h3>Databricks App Deployment</h3>
-            <div class="pricing-price">
-              <span class="price-amount">Custom</span>
+      <!-- CLI Pricing -->
+      <div class="pricing-section-label">Lakecode CLI</div>
+      <div class="cli-pricing-card">
+        <div class="cli-pricing-grid">
+          <div class="cli-pricing-left">
+            <div class="pricing-tier-badge">For engineers</div>
+            <h3>Lakecode CLI</h3>
+            <p class="pricing-tier-desc">Chat-driven intelligence for your data stack &mdash; full connectivity, declarative workflows, safety classification, and policy engine.</p>
+
+            <div class="llm-options">
+              <div class="llm-option active" onclick="toggleLLM(this)">
+                <div class="llm-option-left">
+                  <div class="radio-circle"></div>
+                  <div>
+                    <div class="radio-label">Managed</div>
+                    <div class="radio-sub">We handle the LLM &middot; ~2,000 turns/mo</div>
+                  </div>
+                </div>
+                <div class="radio-price">$49/mo</div>
+              </div>
+              <div class="llm-option" onclick="toggleLLM(this)">
+                <div class="llm-option-left">
+                  <div class="radio-circle"></div>
+                  <div>
+                    <div class="radio-label">Bring your own key</div>
+                    <div class="radio-sub">Your Anthropic key or Databricks Model Serving</div>
+                  </div>
+                </div>
+                <div class="radio-price">$29/mo</div>
+              </div>
             </div>
-            <p class="pricing-desc">For teams that need governance, audit trails, and org-wide deployment. Lakecode runs as a native Databricks App inside your workspace.</p>
+
+            <a href="/signin" class="btn btn-primary btn-full">Get started</a>
           </div>
-          <ul class="pricing-features">
-            <li><span class="check">&#10003;</span> Approval gates for write ops</li>
-            <li><span class="check">&#10003;</span> Full audit trail in Unity Catalog</li>
-            <li><span class="check">&#10003;</span> SSO via Databricks identity</li>
-            <li><span class="check">&#10003;</span> Custom workflows</li>
-            <li><span class="check">&#10003;</span> Compliance mode</li>
-            <li><span class="check">&#10003;</span> Dedicated support</li>
-            <li><span class="check">&#10003;</span> Terraform deployment</li>
-            <li><span class="check">&#10003;</span> Clean offboarding</li>
-          </ul>
-          <a href="mailto:sachin@lakecode.ai" class="btn btn-primary btn-full">Contact Us</a>
+          <div class="cli-pricing-right">
+            <div class="cli-features-label">Includes</div>
+            <ul class="cli-features-list">
+              <li class="hl">22 built-in workflows</li>
+              <li class="hl">Full Databricks &amp; Snowflake connectivity</li>
+              <li class="hl">Every action classified &mdash; reads run, writes require approval</li>
+              <li class="hl">Configurable policy engine</li>
+              <li>Natural language chat with your entire stack</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cli-pricing-footer">
+          <strong>After your 7-day trial:</strong> Everything stays &mdash; pay $29 or $49/mo to continue. Ready for your team? Talk to us about Platform.
         </div>
       </div>
 
-      <!-- Install -->
-      <div class="credits-explainer">
-        <h3>Install in 30 seconds</h3>
-        <div class="explainer-grid">
-          <div class="explainer-item">
-            <strong>1. Install</strong>
-            <p>Works on macOS, Linux, and WSL. Node 18+ required.</p>
-            <pre style="margin-top: 8px;"><code>npm install -g lakecode</code></pre>
+      <!-- Platform Pricing -->
+      <div class="pricing-section-label" style="margin-top: 48px;">Lakecode Platform</div>
+      <div class="platform-pricing-card">
+        <div class="platform-pricing-grid">
+          <div class="platform-pricing-left">
+            <div class="pricing-tier-badge">For teams &amp; enterprise</div>
+            <h3>Lakecode Platform</h3>
+            <p class="pricing-tier-desc">Everything in Lakecode CLI, shared across your organization &mdash; with governance, persistent institutional memory, and enterprise identity. Deployed as a Databricks App. Includes a 2-week guided POC.</p>
+            <ul class="platform-features-list">
+              <li>Shared workflows, runs, and artifacts</li>
+              <li>Engram &mdash; institutional memory that compounds over time</li>
+              <li>Governance, approval gates, and audit trails</li>
+              <li>SSO / SAML</li>
+              <li>Role-scoped access</li>
+              <li>Slack, Jira, GitHub, Confluence integrations</li>
+              <li>Dedicated onboarding &amp; support</li>
+            </ul>
+            <a href="mailto:sachin@lakecode.ai" class="btn btn-secondary">Talk to us</a>
           </div>
-          <div class="explainer-item">
-            <strong>2. Sign in</strong>
-            <p>Authenticate with Google. You'll get a license key and 50 free queries per day to try everything out.</p>
-          </div>
-          <div class="explainer-item">
-            <strong>3. Upgrade when ready</strong>
-            <p>Add a payment method via Stripe, load credits ($20 minimum), and unlock all 25+ workflows with the managed proxy.</p>
+          <div class="platform-pricing-right">
+            <div class="deploy-option">
+              <h4>We host it</h4>
+              <p>We provision a dedicated Databricks workspace and deploy Lakecode. Your team gets a URL. Same-day setup.</p>
+              <span class="deploy-note">Annual software license + managed infrastructure</span>
+            </div>
+            <div class="deploy-option">
+              <h4>You host it</h4>
+              <p>Lakecode deploys into your existing Databricks workspace. Your data, your compute, your SSO. Nothing leaves your perimeter.</p>
+              <span class="deploy-note">Annual software license</span>
+            </div>
           </div>
         </div>
       </div>
@@ -138,30 +148,35 @@
       <div class="pricing-faq">
         <h2>Frequently Asked Questions</h2>
         <details class="faq-item">
-          <summary>How does pay-as-you-go billing work?</summary>
-          <p>Pro users who use the managed proxy pay based on actual LLM usage. You add a payment method via Stripe, load credits ($20 minimum), and usage is deducted per request. Auto-reload tops up your balance when it gets low. If you bring your own API key, you pay Anthropic directly and lakecode costs nothing.</p>
+          <summary>What's included in the 7-day free trial?</summary>
+          <p>Everything. All 22 workflows, full Databricks and Snowflake connectivity, chat, safety classification, and the policy engine. You bring your own Anthropic API key or connect via Databricks Model Serving. No credit card required.</p>
         </details>
         <details class="faq-item">
-          <summary>Can I use my own API key on Pro?</summary>
-          <p>Yes. Pro unlocks all workflows and features regardless of how you connect to the LLM. Bring your own Anthropic key, or use our managed proxy &mdash; your choice.</p>
+          <summary>What's the difference between Managed and BYOK?</summary>
+          <p>Managed ($49/mo): We handle the LLM infrastructure. You get ~2,000 turns per month with no API key setup. BYOK ($29/mo): You connect your own Anthropic API key or Databricks Model Serving endpoint. You pay the LLM provider directly for token usage; Lakecode charges $29/mo for the platform.</p>
         </details>
         <details class="faq-item">
           <summary>What models are supported?</summary>
-          <p>Claude Sonnet 4, Claude Opus 4, and Claude Haiku 3.5/4.5 via the managed proxy or your own Anthropic key. Databricks FMAPI models and any OpenAI-compatible endpoint (vLLM, LM Studio, Ollama) are also supported.</p>
+          <p>Claude Sonnet 4, Claude Opus 4, and Claude Haiku 3.5/4.5 via the managed proxy or your own Anthropic key. Databricks Foundation Model API and any OpenAI-compatible endpoint (vLLM, LM Studio, Ollama) are also supported with BYOK.</p>
         </details>
         <details class="faq-item">
-          <summary>What's the difference between CLI Pro and the Databricks App?</summary>
-          <p>CLI Pro is for individual developers &mdash; runs on your laptop, connects to your Databricks or Snowflake workspace. The Databricks App deployment is for teams &mdash; runs inside your workspace with SSO, approval gates, audit trail, and Unity Catalog state management.</p>
+          <summary>How is Platform different from CLI?</summary>
+          <p>CLI is for individual engineers &mdash; runs on your laptop, connects to your workspace. Platform is for teams &mdash; deployed as a Databricks App with shared workflows, Engram (persistent institutional memory), governance/approval gates, audit trails, SSO/SAML, and role-scoped access. Platform includes everything in CLI plus organizational infrastructure.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does the 2-week guided POC include?</summary>
+          <p>We deploy Lakecode Platform into your environment (or a dedicated workspace we provision), configure it for your team's workflows, connect your data sources, and work with your engineers to validate the value. At the end of the POC, you have a working deployment and can decide to continue.</p>
         </details>
         <details class="faq-item">
           <summary>Can I cancel anytime?</summary>
-          <p>Yes. There are no contracts or commitments. Your credit balance stays available until used. You can manage billing through the Stripe portal from your dashboard.</p>
+          <p>CLI subscriptions are month-to-month with no commitments. Cancel anytime from your dashboard. Platform is annual licensing &mdash; terms are discussed during the POC.</p>
         </details>
         <details class="faq-item">
-          <summary>What data does lakecode access?</summary>
-          <p>Lakecode connects to your Databricks or Snowflake workspace using your credentials. Workflow data (job configs, error logs, billing tables) is processed by the LLM for analysis. No data is stored on our servers.</p>
+          <summary>What data does Lakecode access?</summary>
+          <p>Lakecode connects to your Databricks or Snowflake workspace using your credentials. It accesses job configs, run logs, query history, billing tables, and Unity Catalog metadata to run workflows. With the managed proxy, only token counts are tracked for billing. With BYOK, your data goes directly to your LLM provider.</p>
         </details>
       </div>
+
     </div>
   </section>
 
@@ -170,14 +185,14 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native data platform agent.</p>
+        <p>Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
-          <a href="/#features">Features</a>
-          <a href="/#commands">Commands</a>
+          <a href="/product">How it works</a>
           <a href="/pricing">Pricing</a>
+          <a href="/docs">Docs</a>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
@@ -199,18 +214,9 @@
 
   <script src="script.js"></script>
   <script>
-    const API_URL = 'https://api.lakecode.ai';
-
-    function handleUpgrade(plan) {
-      const existingKey = localStorage.getItem('lakecode_key');
-      if (existingKey) {
-        // Already signed in — go to dashboard with upgrade intent
-        window.location.href = `/dashboard?upgrade=${plan}`;
-      } else {
-        // Not signed in — start OAuth with plan in state, so after sign-in
-        // they land on dashboard with upgrade intent
-        window.location.href = `${API_URL}/auth/start?state=web:${plan}`;
-      }
+    function toggleLLM(el) {
+      document.querySelectorAll('.llm-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
     }
   </script>
 </body>
