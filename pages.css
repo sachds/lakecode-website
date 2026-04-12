@@ -915,3 +915,337 @@
     flex-wrap: wrap;
   }
 }
+
+/* ── New Pricing Page ── */
+
+/* Trial Banner */
+.trial-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin-bottom: 32px;
+}
+
+.trial-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.trial-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.btn-trial {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--green);
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-trial:hover {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.5);
+  color: var(--green);
+}
+
+/* Section Labels */
+.pricing-section-label {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  padding-left: 2px;
+}
+
+/* CLI Pricing Card */
+.cli-pricing-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.cli-pricing-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  z-index: 1;
+}
+
+.cli-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+}
+
+.cli-pricing-left {
+  padding: 36px;
+  border-right: 1px solid var(--border);
+}
+
+.cli-pricing-right {
+  padding: 36px;
+}
+
+.pricing-tier-badge {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 14px;
+  color: var(--accent-hover);
+  background: var(--accent-glow);
+}
+
+.cli-pricing-left h3,
+.platform-pricing-left h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.pricing-tier-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Radio Options */
+.llm-options {
+  margin-bottom: 24px;
+}
+
+.llm-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.llm-option:last-child { margin-bottom: 0; }
+.llm-option:hover { border-color: var(--text-dim); }
+
+.llm-option.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.llm-option-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.radio-circle {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-dim);
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.llm-option.active .radio-circle { border-color: var(--accent); }
+
+.llm-option.active .radio-circle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.radio-label { font-size: 0.875rem; font-weight: 500; }
+.radio-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 1px; }
+
+.radio-price {
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* CLI Features */
+.cli-features-label {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.cli-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cli-features-list li {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 18px;
+  position: relative;
+}
+
+.cli-features-list li::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+}
+
+.cli-features-list li.hl { color: var(--text); }
+
+.cli-pricing-footer {
+  padding: 14px 36px;
+  background: rgba(100, 116, 139, 0.05);
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+
+.cli-pricing-footer strong { color: var(--text-secondary); }
+
+/* Platform Pricing Card */
+.platform-pricing-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.platform-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding: 48px;
+  align-items: start;
+}
+
+.platform-pricing-left h3 {
+  font-size: 1.75rem;
+}
+
+.platform-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.platform-features-list li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding-left: 18px;
+  position: relative;
+}
+
+.platform-features-list li::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  color: var(--accent-hover);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.platform-pricing-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.deploy-option {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  background: var(--bg);
+}
+
+.deploy-option h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.deploy-option p {
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.deploy-note {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--accent-hover);
+  margin-top: 8px;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trial-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cli-pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cli-pricing-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .platform-pricing-grid {
+    grid-template-columns: 1fr;
+    padding: 32px;
+  }
+}

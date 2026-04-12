@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Lakecode</title>
+  <meta name="description" content="How Lakecode works — 22 governed workflows, persistent memory with Engram, safety classification, and enterprise governance for Databricks and Snowflake.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-zinc-400 antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+      <div class="flex items-center gap-8">
+        <a href="/product.html" class="text-sm text-white">Product</a>
+        <a href="/pricing.html" class="text-sm text-zinc-400 hover:text-white transition">Pricing</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog/" class="text-sm text-zinc-400 hover:text-white transition">Blog</a>
+        <a href="/signin.html" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin.html" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-36 pb-16 px-6">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-4xl font-bold tracking-tight text-white">How Lakecode works</h1>
+      <p class="mt-4 text-lg text-zinc-400 max-w-2xl">Governed workflows, persistent memory, and structured evidence &mdash; from your terminal to your entire organization.</p>
+    </div>
+  </section>
+
+  <!-- ===== CLI EXPERIENCE ===== -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">The CLI experience</h2>
+      <p class="mt-4 text-base text-zinc-500 max-w-2xl">22 built-in workflows for real Databricks and Snowflake engineering tasks. Install in 30 seconds, running workflows in under two minutes.</p>
+
+      <!-- How it works steps -->
+      <div class="mt-12 flex flex-col gap-8">
+
+        <div class="flex gap-5 items-start">
+          <div class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-sm font-semibold text-white shrink-0 mt-0.5">1</div>
+          <div>
+            <h3 class="text-lg font-semibold text-white">Install and connect</h3>
+            <p class="mt-2 text-sm text-zinc-400 leading-relaxed"><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">npm install -g lakecode</code> &mdash; sign in with Google OAuth, connect your Databricks or Snowflake workspace. Lakecode automatically profiles your catalogs, schemas, jobs, and clusters.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-5 items-start">
+          <div class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-sm font-semibold text-white shrink-0 mt-0.5">2</div>
+          <div>
+            <h3 class="text-lg font-semibold text-white">Run workflows or chat</h3>
+            <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Use slash commands for structured workflows (<code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/debug</code>, <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/prove</code>, <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/cost</code>) or describe what you need in plain English. Every action is classified before execution &mdash; reads run immediately, writes require your approval.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-5 items-start">
+          <div class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-sm font-semibold text-white shrink-0 mt-0.5">3</div>
+          <div>
+            <h3 class="text-lg font-semibold text-white">Get structured evidence, not chat transcripts</h3>
+            <p class="mt-2 text-sm text-zinc-400 leading-relaxed">Every workflow produces shareable artifacts &mdash; debug reports, evidence packs, cost breakdowns &mdash; with provenance. Attach them to PRs, incidents, Jira tickets, or audit trails.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Workflow categories -->
+      <div class="mt-14 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Debugging &amp; Monitoring</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/debug job &lt;id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Full diagnosis: config, failures, logs, queries, root-cause summary with historical context</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/status job &lt;id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Job config + last 5 runs at a glance</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/logs &lt;run-id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Run output + AI error analysis</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/queries job &lt;id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">SQL query history for the latest run</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Data Quality</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/prove &lt;table&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Evidence pack: schema, row counts, nulls, freshness, stats, duplicates, samples + health assessment</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/audit jobs</code>
+              <p class="mt-1 text-sm text-zinc-500">Scan for SLA gaps, missing timeouts, recurring failures &mdash; risk-scored report</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Cost &amp; Platform Ops</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/cost top</code>
+              <p class="mt-1 text-sm text-zinc-500">Top spend drivers from system billing tables</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/cost spike</code>
+              <p class="mt-1 text-sm text-zinc-500">Compare day vs baseline; AI identifies likely drivers</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/drift detect</code>
+              <p class="mt-1 text-sm text-zinc-500">Compare deployed resources against bundle definitions</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/uc explain-access</code>
+              <p class="mt-1 text-sm text-zinc-500">Trace why a principal has (or lacks) access to a Unity Catalog object</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-7">
+          <h3 class="font-mono text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-5">Deployment</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/deploy &lt;local&gt; &lt;ws-path&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Import a local file into the workspace</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/run job &lt;id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Trigger job run + poll until completion</p>
+            </div>
+            <div>
+              <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] rounded px-2 py-0.5">/capture job &lt;id&gt;</code>
+              <p class="mt-1 text-sm text-zinc-500">Capture a job or pipeline into a Databricks Asset Bundle</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SAFETY CLASSIFICATION ===== -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Safety classification</h2>
+      <p class="mt-4 text-base text-zinc-500 max-w-2xl">Every action is classified before execution. No surprises against production.</p>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">READ &mdash; runs immediately</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Fetching job configs, run history, logs</li>
+            <li>Querying billing tables, cluster metrics</li>
+            <li>Profiling schemas, checking access patterns</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-yellow-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">WRITE &mdash; requires approval</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Deploying files to workspace</li>
+            <li>Triggering job runs</li>
+            <li>Modifying configurations</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-red-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">DESTRUCTIVE &mdash; explicit confirmation</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Dropping tables or schemas</li>
+            <li>Deleting jobs or clusters</li>
+            <li>Revoking access grants</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Configurable policy engine</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Define which operations require approval per org</li>
+            <li>Set default catalogs, schemas, naming conventions</li>
+            <li>Enforce guardrails that match your security posture</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ENGRAM ===== -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Engram: persistent institutional memory</h2>
+      <p class="mt-4 text-base text-zinc-500 max-w-2xl">The knowledge layer that makes every session smarter than the last.</p>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">What it stores</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Dependencies, ownership, incident history, cost patterns, healthy baselines, resolution playbooks, operational SLAs. Structured as claims with provenance &mdash; not raw text embeddings.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">How it learns</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Every workflow execution contributes observations. Debug a job? The failure pattern and resolution get recorded. Prove a table? The baseline stats become the reference. The knowledge graph grows organically with use.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">Role-scoped access</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Different teams see what's relevant to them. The data engineering team sees pipeline health; the platform team sees cost trends and cluster utilization. Scoped by role, not by chat history.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">Claims, not embeddings</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Engram stores structured claims &mdash; "job 4827 failed due to data skew on 2026-04-10, resolved by salting join key" &mdash; with provenance, not 500K tokens of raw context. 200 tokens of structured claims replace half a million tokens of re-discovery.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">Survives attrition</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">When someone leaves, their operational expertise stays. The knowledge graph is persistent and organizational, not personal. New hires inherit the full context on day one.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <h3 class="text-lg font-semibold text-white">Governed and auditable</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Every claim has a source, a timestamp, and a confidence level. You can inspect what the agent knows, correct it, and trace how it informed a decision. No black box.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLATFORM ===== -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Platform: Lakecode for your organization</h2>
+      <p class="mt-4 text-base text-zinc-500 max-w-2xl">Everything in the CLI, shared across your team with enterprise governance.</p>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Governance &amp; approval gates</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Human-in-the-loop before any state-changing operation</li>
+            <li>Step manifests show exactly what will execute and why</li>
+            <li>Full audit trail tied to user identity and timestamp</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Enterprise identity</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>SSO / SAML integration</li>
+            <li>Role-scoped access controls</li>
+            <li>Databricks-native authentication</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Databricks-native deployment</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Deployed as a Databricks App &mdash; not a sidecar</li>
+            <li>UC-backed state store for execution history and evidence</li>
+            <li>Runs where your data lives</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Integrations</h3>
+          <ul class="mt-3 flex flex-col gap-1.5 text-sm text-zinc-400 leading-relaxed list-disc list-inside">
+            <li>Slack &mdash; post evidence packs and approval requests</li>
+            <li>Jira &mdash; create tickets with structured evidence</li>
+            <li>GitHub &amp; Confluence connectors</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="mt-12 flex gap-4">
+        <a href="mailto:sachin@lakecode.ai" class="text-sm text-white bg-white/[0.06] border border-white/[0.1] rounded-md px-6 py-3 hover:bg-white/[0.1] transition">Talk to us about a 2-week pilot</a>
+        <a href="/pricing.html" class="text-sm text-zinc-400 border border-white/[0.1] rounded-md px-6 py-3 hover:text-white hover:bg-white/[0.06] transition">View pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECURITY ===== -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Security &amp; trust</h2>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Runs locally (CLI) or in your perimeter (Platform)</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">CLI runs on your machine. Platform deploys into your Databricks workspace. Your credentials never leave your environment.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Respects your permissions</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Lakecode only sees what your platform identity can see. Unity Catalog RBAC, Snowflake grants &mdash; no elevated permissions, no backdoors.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Safe by default</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Every action classified. Write operations require approval. Configurable policy engine enforces your org's guardrails.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8">
+          <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Ed25519 license keys</h3>
+          <p class="mt-3 text-sm text-zinc-400 leading-relaxed">Cryptographically signed license keys. No shared secrets, no tokens stored on our servers.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Stop re-explaining your stack to AI.</h2>
+      <p class="mt-4 text-base text-zinc-500">7-day free trial. Full access to all workflows.</p>
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <a href="/signin.html" class="text-sm text-white bg-white/[0.06] border border-white/[0.1] rounded-md px-6 py-3 hover:bg-white/[0.1] transition">Start free trial</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 border border-white/[0.1] rounded-md px-6 py-3 hover:text-white hover:bg-white/[0.06] transition">View docs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
+      </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4><a href="/product.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a><a href="/pricing.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a><a href="/docs.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4><a href="/docs/getting-started.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a><a href="/docs/commands.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a><a href="/docs/architecture.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a><a href="/docs/configuration.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a><a href="/docs/security.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4><a href="/about.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a><a href="/blog/" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a><a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4><a href="/signin.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
+      </div>
+    </div>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]"><p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p></div>
+  </footer>
+
+</body>
+</html>

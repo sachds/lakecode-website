@@ -5,172 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Debugging Failed Databricks Jobs with a Single Command — Lakecode Blog</title>
   <meta name="description" content="How /debug job automates root cause analysis for failed Databricks jobs — pulling configs, logs, query history, and cluster events into one diagnosis.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../pages.css">
-  <style>
-    .blog-article { max-width: 720px; margin: 0 auto; }
-    .blog-article h3 { margin-top: 32px; }
-    .blog-article p { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
-    .blog-article ul, .blog-article ol { color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; padding-left: 24px; }
-    .blog-article li { margin-bottom: 6px; font-size: 0.9375rem; }
-    .blog-article pre { margin-bottom: 20px; }
-    .blog-article code { font-size: 0.8125rem; }
-    .blog-back { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 24px; display: block; }
-    .blog-back:hover { color: var(--accent); }
-    .blog-article-meta { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 32px; }
-    .blog-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
-    .blog-step strong { display: block; margin-bottom: 6px; font-size: 0.9375rem; }
-    .blog-step p { margin-bottom: 0; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  tailwind.config = {
+    theme: { extend: { fontFamily: { sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] } } }
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-black text-zinc-400 antialiased">
 
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
-      </a>
-      <div class="nav-links">
-        <a href="/#features">Features</a>
-        <a href="/#commands">Commands</a>
-        <a href="/docs">Docs</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
-        <a href="/blog" class="active">Blog</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
+  <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+      <div class="flex items-center gap-8">
+        <a href="/product.html" class="text-sm text-zinc-400 hover:text-white transition">Product</a>
+        <a href="/pricing.html" class="text-sm text-zinc-400 hover:text-white transition">Pricing</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog/" class="text-sm text-white">Blog</a>
+        <a href="/signin.html" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin.html" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </nav>
 
-  <section class="page-hero" style="padding-bottom: 0;">
-    <div class="container" style="max-width: 720px;">
-      <a href="/blog" class="blog-back">&larr; Back to Blog</a>
-      <h1>Debugging Failed Databricks Jobs with a Single Command</h1>
-      <p class="blog-article-meta">March 28, 2026 &middot; Workflow Guide</p>
+  <div class="pt-36 pb-8 px-6">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog/" class="text-sm text-zinc-500 hover:text-white transition">&larr; Back to Blog</a>
+      <h1 class="text-4xl font-bold tracking-tight text-white mt-4">Debugging Failed Databricks Jobs with a Single Command</h1>
+      <p class="text-xs font-mono text-zinc-600 mt-4">March 28, 2026 &middot; Workflow Guide</p>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="blog-article">
+  <div class="max-w-3xl mx-auto px-6 py-12">
 
-        <p>A Databricks job fails at 3 AM. By the time you see the alert, you need to figure out: what task failed, what error was thrown, what queries ran, whether the cluster had issues, and whether this is a data problem or a code problem. That usually means opening 4-5 different tabs and cross-referencing information manually.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">A Databricks job fails at 3 AM. By the time you see the alert, you need to figure out: what task failed, what error was thrown, what queries ran, whether the cluster had issues, and whether this is a data problem or a code problem. That usually means opening 4-5 different tabs and cross-referencing information manually.</p>
 
-        <p>The <code>/debug job</code> command does all of this in one shot.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug job</code> command does all of this in one shot.</p>
 
-        <h3>What happens when you run /debug job</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">What happens when you run /debug job</h3>
 
-        <pre><code>lakecode /debug job 123456</code></pre>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /debug job 123456</code></pre>
 
-        <p>Behind the scenes, Lakecode executes a structured workflow with multiple steps. Here's exactly what it does:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Behind the scenes, Lakecode executes a structured workflow with multiple steps. Here's exactly what it does:</p>
 
-        <div class="blog-step">
-          <strong>1. Fetch the job configuration</strong>
-          <p>Pulls the full job definition from the Databricks Jobs API &mdash; schedule, tasks, cluster config, parameters, timeout settings. This gives context about what the job is supposed to do.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">1. Fetch the job configuration</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">Pulls the full job definition from the Databricks Jobs API &mdash; schedule, tasks, cluster config, parameters, timeout settings. This gives context about what the job is supposed to do.</p>
+    </div>
 
-        <div class="blog-step">
-          <strong>2. Find the most recent failed run</strong>
-          <p>Lists recent runs and identifies the latest failure. Extracts the run ID, start time, duration, and which specific task(s) failed.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">2. Find the most recent failed run</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">Lists recent runs and identifies the latest failure. Extracts the run ID, start time, duration, and which specific task(s) failed.</p>
+    </div>
 
-        <div class="blog-step">
-          <strong>3. Pull task-level error details</strong>
-          <p>For each failed task, fetches the full error output: Python tracebacks, SQL errors, notebook cell outputs. This is the raw evidence.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">3. Pull task-level error details</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">For each failed task, fetches the full error output: Python tracebacks, SQL errors, notebook cell outputs. This is the raw evidence.</p>
+    </div>
 
-        <div class="blog-step">
-          <strong>4. Check query history</strong>
-          <p>Queries the SQL Statement History API to find all queries executed during the failed run. Identifies slow queries, failed queries, and any that returned unexpected results.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">4. Check query history</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">Queries the SQL Statement History API to find all queries executed during the failed run. Identifies slow queries, failed queries, and any that returned unexpected results.</p>
+    </div>
 
-        <div class="blog-step">
-          <strong>5. Inspect cluster events</strong>
-          <p>Pulls cluster events (startup, autoscaling, termination) to check if the failure was infrastructure-related &mdash; OOM kills, spot instance preemption, driver crashes.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">5. Inspect cluster events</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">Pulls cluster events (startup, autoscaling, termination) to check if the failure was infrastructure-related &mdash; OOM kills, spot instance preemption, driver crashes.</p>
+    </div>
 
-        <div class="blog-step">
-          <strong>6. Produce a root cause analysis</strong>
-          <p>With all the evidence collected, the AI analyzes the full picture and produces a structured diagnosis: what failed, why, and what to do about it. If the fix is straightforward (e.g., a typo in SQL, a missing permission), it can suggest a specific code change.</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
+      <strong class="block text-white font-medium mb-2">6. Produce a root cause analysis</strong>
+      <p class="text-base text-zinc-400 leading-relaxed">With all the evidence collected, the AI analyzes the full picture and produces a structured diagnosis: what failed, why, and what to do about it. If the fix is straightforward (e.g., a typo in SQL, a missing permission), it can suggest a specific code change.</p>
+    </div>
 
-        <h3>What the output looks like</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">What the output looks like</h3>
 
-        <p>The final output is a structured report that includes:</p>
-        <ul>
-          <li><strong>Summary</strong> &mdash; one-line root cause</li>
-          <li><strong>Failed task</strong> &mdash; which task in the multi-task job failed and at what stage</li>
-          <li><strong>Error evidence</strong> &mdash; the specific error message and traceback</li>
-          <li><strong>Contributing factors</strong> &mdash; cluster issues, data problems, or upstream dependencies</li>
-          <li><strong>Recommended fix</strong> &mdash; actionable steps to resolve the issue</li>
-        </ul>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The final output is a structured report that includes:</p>
+    <ul class="text-base text-zinc-400 leading-relaxed mb-4 list-disc pl-6 space-y-2">
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Summary</strong> &mdash; one-line root cause</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Failed task</strong> &mdash; which task in the multi-task job failed and at what stage</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Error evidence</strong> &mdash; the specific error message and traceback</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Contributing factors</strong> &mdash; cluster issues, data problems, or upstream dependencies</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Recommended fix</strong> &mdash; actionable steps to resolve the issue</li>
+    </ul>
 
-        <h3>When to use /debug vs other commands</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">When to use /debug vs other commands</h3>
 
-        <p>If you already know the run ID and just want logs, use <code>/logs &lt;run-id&gt;</code> &mdash; it's faster and cheaper. If you want to check a job's schedule and recent run history without deep analysis, use <code>/status job &lt;id&gt;</code>.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">If you already know the run ID and just want logs, use <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/logs &lt;run-id&gt;</code> &mdash; it's faster and cheaper. If you want to check a job's schedule and recent run history without deep analysis, use <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/status job &lt;id&gt;</code>.</p>
 
-        <p><code>/debug job</code> is for when something is broken and you don't know why. It collects everything and connects the dots.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug job</code> is for when something is broken and you don't know why. It collects everything and connects the dots.</p>
 
-        <h3>Snowflake equivalent</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Snowflake equivalent</h3>
 
-        <p>On Snowflake, the equivalent command is <code>/debug task &lt;name&gt;</code>. It follows the same pattern: fetch the task definition, pull run history, extract errors, and produce a diagnosis &mdash; adapted for Snowflake's task execution model.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">On Snowflake, the equivalent command is <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug task &lt;name&gt;</code>. It follows the same pattern: fetch the task definition, pull run history, extract errors, and produce a diagnosis &mdash; adapted for Snowflake's task execution model.</p>
 
-        <pre><code>lakecode /debug task DAILY_REFRESH</code></pre>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /debug task DAILY_REFRESH</code></pre>
 
-        <h3>Try it</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Try it</h3>
 
-        <p>Install Lakecode and point it at a failed job:</p>
-        <pre><code>npm install -g lakecode
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Install Lakecode and point it at a failed job:</p>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>npm install -g lakecode
 lakecode login
 lakecode /debug job &lt;your-job-id&gt;</code></pre>
-        <p>The whole workflow typically takes 15-30 seconds and costs $0.30-$0.80 in credits depending on the complexity of the failure.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The whole workflow typically takes 15-30 seconds and costs $0.30-$0.80 in credits depending on the complexity of the failure.</p>
 
-      </div>
-    </div>
-  </section>
+  </div>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native data platform agent.</p>
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="/#features">Features</a>
-          <a href="/#commands">Commands</a>
-          <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:hello@lakecode.ai">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
-        </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4><a href="/product.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a><a href="/pricing.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a><a href="/docs.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4><a href="/docs/getting-started.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a><a href="/docs/commands.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a><a href="/docs/architecture.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a><a href="/docs/configuration.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a><a href="/docs/security.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4><a href="/about.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a><a href="/blog/" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a><a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4><a href="/signin.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
       </div>
     </div>
-    <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
-    </div>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]"><p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p></div>
   </footer>
 
-  <script src="../script.js"></script>
 </body>
 </html>
