@@ -5,170 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Managing Unity Catalog Permissions from the Terminal — Lakecode Blog</title>
   <meta name="description" content="How the /uc commands let you trace access, diff grants, and apply changes to Unity Catalog permissions — all from your terminal.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../pages.css">
-  <style>
-    .blog-article { max-width: 720px; margin: 0 auto; }
-    .blog-article h3 { margin-top: 32px; }
-    .blog-article p { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
-    .blog-article ul, .blog-article ol { color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; padding-left: 24px; }
-    .blog-article li { margin-bottom: 6px; font-size: 0.9375rem; }
-    .blog-article pre { margin-bottom: 20px; }
-    .blog-article code { font-size: 0.8125rem; }
-    .blog-back { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 24px; display: block; }
-    .blog-back:hover { color: var(--accent); }
-    .blog-article-meta { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 32px; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  tailwind.config = {
+    theme: { extend: { fontFamily: { sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] } } }
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-black text-zinc-400 antialiased">
 
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
-      </a>
-      <div class="nav-links">
-        <a href="/product">Product</a>
-        <a href="/docs">Docs</a>
-        <a href="/pricing">Pricing</a>
-        
-        <a href="/blog" class="active">Blog</a>
-        <a href="/signin">Sign in</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Get started</a>
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
+  <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+      <div class="flex items-center gap-8">
+        <a href="/product.html" class="text-sm text-zinc-400 hover:text-white transition">Product</a>
+        <a href="/pricing.html" class="text-sm text-zinc-400 hover:text-white transition">Pricing</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog/" class="text-sm text-white">Blog</a>
+        <a href="/signin.html" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin.html" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </nav>
 
-  <section class="page-hero" style="padding-bottom: 0;">
-    <div class="container" style="max-width: 720px;">
-      <a href="/blog" class="blog-back">&larr; Back to Blog</a>
-      <h1>Managing Unity Catalog Permissions from the Terminal</h1>
-      <p class="blog-article-meta">March 28, 2026 &middot; Workflow Guide</p>
+  <div class="pt-36 pb-8 px-6">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog/" class="text-sm text-zinc-500 hover:text-white transition">&larr; Back to Blog</a>
+      <h1 class="text-4xl font-bold tracking-tight text-white mt-4">Managing Unity Catalog Permissions from the Terminal</h1>
+      <p class="text-xs font-mono text-zinc-600 mt-4">March 28, 2026 &middot; Workflow Guide</p>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="blog-article">
+  <div class="max-w-3xl mx-auto px-6 py-12">
 
-        <p>Unity Catalog permissions are powerful but hard to reason about. Grants cascade through catalogs, schemas, and tables. Groups inherit from other groups. And when something goes wrong &mdash; "why can't this service principal read this table?" &mdash; the debugging process usually involves clicking through multiple Databricks UI screens.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Unity Catalog permissions are powerful but hard to reason about. Grants cascade through catalogs, schemas, and tables. Groups inherit from other groups. And when something goes wrong &mdash; "why can't this service principal read this table?" &mdash; the debugging process usually involves clicking through multiple Databricks UI screens.</p>
 
-        <p>Lakecode's <code>/uc</code> commands bring this entire workflow to the terminal.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode's <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc</code> commands bring this entire workflow to the terminal.</p>
 
-        <h3>Tracing access: /uc explain-access</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Tracing access: /uc explain-access</h3>
 
-        <p>The most common question: "Does this principal have access to this object, and if so, how?"</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The most common question: "Does this principal have access to this object, and if so, how?"</p>
 
-        <pre><code>lakecode /uc explain-access data-eng@company.com analytics.prod.orders</code></pre>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /uc explain-access data-eng@company.com analytics.prod.orders</code></pre>
 
-        <p>This walks the entire grant hierarchy from the catalog level down to the specific table. It shows:</p>
-        <ul>
-          <li>Direct grants on the object</li>
-          <li>Inherited grants from parent schemas and catalogs</li>
-          <li>Group memberships that contribute permissions</li>
-          <li>The effective permission set (SELECT, MODIFY, etc.)</li>
-        </ul>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">This walks the entire grant hierarchy from the catalog level down to the specific table. It shows:</p>
+    <ul class="text-base text-zinc-400 leading-relaxed mb-4 list-disc pl-6 space-y-2">
+      <li class="text-base text-zinc-400">Direct grants on the object</li>
+      <li class="text-base text-zinc-400">Inherited grants from parent schemas and catalogs</li>
+      <li class="text-base text-zinc-400">Group memberships that contribute permissions</li>
+      <li class="text-base text-zinc-400">The effective permission set (SELECT, MODIFY, etc.)</li>
+    </ul>
 
-        <p>You can also test for a specific action:</p>
-        <pre><code>lakecode /uc explain-access data-eng@company.com analytics.prod.orders --action SELECT</code></pre>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">You can also test for a specific action:</p>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /uc explain-access data-eng@company.com analytics.prod.orders --action SELECT</code></pre>
 
-        <p>This returns a clear yes/no answer with the full explanation chain.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">This returns a clear yes/no answer with the full explanation chain.</p>
 
-        <h3>Diffing grants: /uc diff-grants</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Diffing grants: /uc diff-grants</h3>
 
-        <p>For teams managing permissions as code, you often have a desired-state YAML that describes who should have access to what. The <code>/uc diff-grants</code> command compares reality against that desired state:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">For teams managing permissions as code, you often have a desired-state YAML that describes who should have access to what. The <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc diff-grants</code> command compares reality against that desired state:</p>
 
-        <pre><code>lakecode /uc diff-grants analytics.prod --to grants.yml</code></pre>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /uc diff-grants analytics.prod --to grants.yml</code></pre>
 
-        <p>The output is a reviewable plan showing:</p>
-        <ul>
-          <li><strong>Additions</strong> &mdash; grants that exist in the desired state but not in UC</li>
-          <li><strong>Removals</strong> &mdash; grants that exist in UC but not in the desired state</li>
-          <li><strong>No change</strong> &mdash; grants that already match</li>
-        </ul>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The output is a reviewable plan showing:</p>
+    <ul class="text-base text-zinc-400 leading-relaxed mb-4 list-disc pl-6 space-y-2">
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Additions</strong> &mdash; grants that exist in the desired state but not in UC</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Removals</strong> &mdash; grants that exist in UC but not in the desired state</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">No change</strong> &mdash; grants that already match</li>
+    </ul>
 
-        <p>Think of it like <code>terraform plan</code> for Unity Catalog permissions. You review the diff before applying anything.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Think of it like <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">terraform plan</code> for Unity Catalog permissions. You review the diff before applying anything.</p>
 
-        <h3>Applying changes: /uc apply-grants</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Applying changes: /uc apply-grants</h3>
 
-        <p>Once you've reviewed the plan, apply it:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Once you've reviewed the plan, apply it:</p>
 
-        <pre><code>lakecode /uc apply-grants --plan abc123</code></pre>
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /uc apply-grants --plan abc123</code></pre>
 
-        <p>This executes the grant/revoke statements with full safety measures:</p>
-        <ul>
-          <li>Takes a before-snapshot of current grants</li>
-          <li>Applies each change individually</li>
-          <li>Takes an after-snapshot for comparison</li>
-          <li>Produces an audit report showing exactly what changed</li>
-        </ul>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">This executes the grant/revoke statements with full safety measures:</p>
+    <ul class="text-base text-zinc-400 leading-relaxed mb-4 list-disc pl-6 space-y-2">
+      <li class="text-base text-zinc-400">Takes a before-snapshot of current grants</li>
+      <li class="text-base text-zinc-400">Applies each change individually</li>
+      <li class="text-base text-zinc-400">Takes an after-snapshot for comparison</li>
+      <li class="text-base text-zinc-400">Produces an audit report showing exactly what changed</li>
+    </ul>
 
-        <p>The before/after snapshots serve as an audit trail. If something goes wrong, you can see exactly what was changed and when.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The before/after snapshots serve as an audit trail. If something goes wrong, you can see exactly what was changed and when.</p>
 
-        <h3>A typical workflow</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">A typical workflow</h3>
 
-        <ol>
-          <li>A new team member needs access to the analytics catalog</li>
-          <li>Update your <code>grants.yml</code> to add their group</li>
-          <li>Run <code>/uc diff-grants</code> to see what will change</li>
-          <li>Review the plan in your terminal</li>
-          <li>Run <code>/uc apply-grants</code> to execute</li>
-          <li>The audit report is saved for compliance</li>
-        </ol>
+    <ol class="text-base text-zinc-400 leading-relaxed mb-4 list-decimal pl-6 space-y-2">
+      <li class="text-base text-zinc-400">A new team member needs access to the analytics catalog</li>
+      <li class="text-base text-zinc-400">Update your <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">grants.yml</code> to add their group</li>
+      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc diff-grants</code> to see what will change</li>
+      <li class="text-base text-zinc-400">Review the plan in your terminal</li>
+      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc apply-grants</code> to execute</li>
+      <li class="text-base text-zinc-400">The audit report is saved for compliance</li>
+    </ol>
 
-        <p>The entire process takes under a minute and produces a paper trail. No clicking through the UI, no guessing about what permissions cascade where.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The entire process takes under a minute and produces a paper trail. No clicking through the UI, no guessing about what permissions cascade where.</p>
 
-        <h3>Try it</h3>
+    <h3 class="text-xl font-semibold text-white mt-10 mb-4">Try it</h3>
 
-        <pre><code>npm install -g lakecode
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>npm install -g lakecode
 lakecode login
 lakecode /uc explain-access &lt;principal&gt; &lt;catalog.schema.table&gt;</code></pre>
 
-      </div>
-    </div>
-  </section>
+  </div>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native data platform agent.</p>
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="/product">How it works</a>
-          <a href="/pricing">Pricing</a>
-        
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:hello@lakecode.ai">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
-        </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4><a href="/product.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a><a href="/pricing.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a><a href="/docs.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4><a href="/docs/getting-started.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a><a href="/docs/commands.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a><a href="/docs/architecture.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a><a href="/docs/configuration.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a><a href="/docs/security.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4><a href="/about.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a><a href="/blog/" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a><a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4><a href="/signin.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
       </div>
     </div>
-    <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
-    </div>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]"><p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p></div>
   </footer>
 
-  <script src="../script.js"></script>
 </body>
 </html>

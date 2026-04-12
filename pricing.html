@@ -4,218 +4,248 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Lakecode</title>
-  <meta name="description" content="Lakecode pricing — 7-day free trial, then $29/mo with your own key or $49/mo managed. Platform for teams with annual licensing.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="pages.css">
+  <meta name="description" content="Lakecode pricing — 7-day free trial, $29/mo BYOK or $49/mo managed. Platform for teams with annual licensing.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    .llm-opt { transition: border-color 0.15s, background 0.15s; }
+    .llm-opt:hover { border-color: rgba(255,255,255,0.12); }
+    .llm-opt.active { border-color: rgba(62,207,142,0.3); background: rgba(62,207,142,0.04); }
+    .llm-opt.active .rdot::after { content:''; position:absolute; top:3px; left:3px; width:6px; height:6px; border-radius:50%; background:#3ecf8e; }
+    .llm-opt.active .rdot { border-color: #3ecf8e; }
+    .rdot { position: relative; }
+    @media (max-width: 768px) {
+      .pricing-cols { grid-template-columns: 1fr !important; }
+      .nav-desktop { display: none !important; }
+      .nav-mobile { display: flex !important; }
+    }
+  </style>
 </head>
-<body>
+<body class="bg-black text-zinc-400 antialiased">
 
-  <!-- Nav -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="logo">
-        <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono">
+        <img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode
       </a>
-      <div class="nav-links">
-        <a href="/product">Product</a>
-        <a href="/pricing" class="active">Pricing</a>
-        <a href="/docs">Docs</a>
-        <a href="/blog">Blog</a>
-        <a href="/signin">Sign in</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Get started</a>
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
+      <div class="nav-desktop flex items-center gap-8">
+        <a href="/product.html" class="text-sm text-zinc-400 hover:text-white transition">Product</a>
+        <a href="/pricing.html" class="text-sm text-white">Pricing</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog/" class="text-sm text-zinc-400 hover:text-white transition">Blog</a>
+        <a href="/signin.html" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin.html" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+      <button id="nav-toggle" class="nav-mobile hidden flex-col gap-1.5 p-1">
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
+        <span class="w-4 h-[1.5px] bg-zinc-400"></span>
       </button>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="page-hero">
-    <div class="container">
-      <h1>Start fast. Scale governed.</h1>
-      <p class="page-sub">From individual exploration to team-wide governed operations.</p>
+  <!-- HEADER -->
+  <section class="pt-36 pb-16 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-white">Pricing</h1>
+      <p class="mt-4 text-lg text-zinc-400">From individual exploration to team-wide governed operations.</p>
     </div>
   </section>
 
-  <section class="section" style="padding-top: 32px;">
-    <div class="container">
-
-      <!-- Trial Banner -->
-      <div class="trial-banner">
-        <div class="trial-banner-left">
-          <div class="trial-icon-box">&#9889;</div>
-          <div>
-            <strong><span style="color: var(--green);">7-day free trial</span> &mdash; full access, bring your own key</strong>
-            <p style="font-size: 0.8125rem; color: var(--text-dim); margin-top: 2px;">All workflows, full connectivity, chat. Connect your Anthropic key or Databricks Model Serving.</p>
-          </div>
+  <!-- TRIAL BANNER -->
+  <section class="px-6 pb-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <p class="text-sm text-white font-medium">7-day free trial &mdash; full access, bring your own key</p>
+          <p class="text-xs text-zinc-500 mt-1">All workflows, full connectivity, chat. Connect your Anthropic key or Databricks Model Serving. No credit card required.</p>
         </div>
-        <a href="/signin" class="btn btn-trial">Start free trial &rarr;</a>
+        <a href="/signin.html" class="text-sm text-black bg-[#3ecf8e] hover:bg-[#34b87c] rounded-md px-5 py-2.5 font-medium transition whitespace-nowrap">Start free trial &rarr;</a>
       </div>
+    </div>
+  </section>
 
-      <!-- CLI Pricing -->
-      <div class="pricing-section-label">Lakecode CLI</div>
-      <div class="cli-pricing-card">
-        <div class="cli-pricing-grid">
-          <div class="cli-pricing-left">
-            <div class="pricing-tier-badge">For engineers</div>
-            <h3>Lakecode CLI</h3>
-            <p class="pricing-tier-desc">Chat-driven intelligence for your data stack &mdash; full connectivity, declarative workflows, safety classification, and policy engine.</p>
+  <!-- PRICING CARDS -->
+  <section class="px-6 pb-10">
+    <div class="pricing-cols max-w-4xl mx-auto grid grid-cols-2 gap-6">
 
-            <div class="llm-options">
-              <div class="llm-option active" onclick="toggleLLM(this)">
-                <div class="llm-option-left">
-                  <div class="radio-circle"></div>
-                  <div>
-                    <div class="radio-label">Managed</div>
-                    <div class="radio-sub">We handle the LLM &middot; ~2,000 turns/mo</div>
-                  </div>
-                </div>
-                <div class="radio-price">$49/mo</div>
-              </div>
-              <div class="llm-option" onclick="toggleLLM(this)">
-                <div class="llm-option-left">
-                  <div class="radio-circle"></div>
-                  <div>
-                    <div class="radio-label">Bring your own key</div>
-                    <div class="radio-sub">Your Anthropic key or Databricks Model Serving</div>
-                  </div>
-                </div>
-                <div class="radio-price">$29/mo</div>
+      <!-- CLI -->
+      <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8 flex flex-col">
+        <p class="text-xs font-mono tracking-widest text-zinc-500 uppercase">Lakecode CLI</p>
+        <h2 class="mt-3 text-xl font-bold text-white">For engineers</h2>
+        <p class="mt-2 text-sm text-zinc-500 leading-relaxed">Chat-driven intelligence for your data stack &mdash; full connectivity, declarative workflows, safety classification, and policy engine.</p>
+
+        <div class="mt-6 space-y-2">
+          <div class="llm-opt active flex items-center justify-between p-4 rounded-lg border border-white/[0.06] cursor-pointer" onclick="toggle(this)">
+            <div class="flex items-center gap-3">
+              <div class="rdot w-4 h-4 rounded-full border-2 border-zinc-600 flex-shrink-0"></div>
+              <div>
+                <p class="text-sm font-medium text-white">Managed</p>
+                <p class="text-xs text-zinc-500 mt-0.5">We handle the LLM &middot; ~2,000 turns/mo</p>
               </div>
             </div>
-
-            <a href="/signin" class="btn btn-primary btn-full">Get started</a>
+            <span class="font-mono text-lg font-bold text-white">$49<span class="text-xs font-normal text-zinc-500">/mo</span></span>
           </div>
-          <div class="cli-pricing-right">
-            <div class="cli-features-label">Includes</div>
-            <ul class="cli-features-list">
-              <li class="hl">22 built-in workflows</li>
-              <li class="hl">Full Databricks &amp; Snowflake connectivity</li>
-              <li class="hl">Every action classified &mdash; reads run, writes require approval</li>
-              <li class="hl">Configurable policy engine</li>
-              <li>Natural language chat with your entire stack</li>
-            </ul>
+          <div class="llm-opt flex items-center justify-between p-4 rounded-lg border border-white/[0.06] cursor-pointer" onclick="toggle(this)">
+            <div class="flex items-center gap-3">
+              <div class="rdot w-4 h-4 rounded-full border-2 border-zinc-600 flex-shrink-0"></div>
+              <div>
+                <p class="text-sm font-medium text-white">Bring your own key</p>
+                <p class="text-xs text-zinc-500 mt-0.5">Your Anthropic key or Databricks Model Serving</p>
+              </div>
+            </div>
+            <span class="font-mono text-lg font-bold text-white">$29<span class="text-xs font-normal text-zinc-500">/mo</span></span>
           </div>
         </div>
-        <div class="cli-pricing-footer">
-          <strong>After your 7-day trial:</strong> Everything stays &mdash; pay $29 or $49/mo to continue. Ready for your team? Talk to us about Platform.
+
+        <a href="/signin.html" class="mt-6 block w-full text-center bg-white hover:bg-zinc-200 text-black text-sm font-semibold py-3 rounded-lg transition">Get started</a>
+
+        <div class="mt-8 space-y-3 flex-1">
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">22 built-in workflows</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Full Databricks &amp; Snowflake connectivity</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Every action classified &mdash; reads run, writes require approval</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Configurable policy engine</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-500">Natural language chat with your entire stack</span></div>
         </div>
       </div>
 
-      <!-- Platform Pricing -->
-      <div class="pricing-section-label" style="margin-top: 48px;">Lakecode Platform</div>
-      <div class="platform-pricing-card">
-        <div class="platform-pricing-grid">
-          <div class="platform-pricing-left">
-            <div class="pricing-tier-badge">For teams &amp; enterprise</div>
-            <h3>Lakecode Platform</h3>
-            <p class="pricing-tier-desc">Everything in Lakecode CLI, shared across your organization &mdash; with governance, persistent institutional memory, and enterprise identity. Deployed as a Databricks App. Includes a 2-week guided POC.</p>
-            <ul class="platform-features-list">
-              <li>Shared workflows, runs, and artifacts</li>
-              <li>Engram &mdash; institutional memory that compounds over time</li>
-              <li>Governance, approval gates, and audit trails</li>
-              <li>SSO / SAML</li>
-              <li>Role-scoped access</li>
-              <li>Slack, Jira, GitHub, Confluence integrations</li>
-              <li>Dedicated onboarding &amp; support</li>
-            </ul>
-            <a href="mailto:sachin@lakecode.ai" class="btn btn-secondary">Talk to us</a>
+      <!-- PLATFORM -->
+      <div class="bg-[#0a0a0a] rounded-xl border border-white/[0.06] p-8 flex flex-col">
+        <p class="text-xs font-mono tracking-widest text-zinc-500 uppercase">Lakecode Platform</p>
+        <h2 class="mt-3 text-xl font-bold text-white">For teams &amp; enterprise</h2>
+        <p class="mt-2 text-sm text-zinc-500 leading-relaxed">Everything in CLI, shared across your organization &mdash; with governance, persistent institutional memory, and enterprise identity. Deployed as a Databricks App. Includes a 2-week guided POC.</p>
+
+        <div class="mt-6 space-y-3">
+          <div class="bg-black rounded-lg border border-white/[0.06] p-5">
+            <h3 class="text-sm font-semibold text-white">We host it</h3>
+            <p class="mt-1.5 text-xs text-zinc-500 leading-relaxed">We provision a dedicated Databricks workspace and deploy Lakecode. Your team gets a URL. Same-day setup.</p>
+            <p class="mt-2 font-mono text-xs text-zinc-500">Annual software license + managed infrastructure</p>
           </div>
-          <div class="platform-pricing-right">
-            <div class="deploy-option">
-              <h4>We host it</h4>
-              <p>We provision a dedicated Databricks workspace and deploy Lakecode. Your team gets a URL. Same-day setup.</p>
-              <span class="deploy-note">Annual software license + managed infrastructure</span>
-            </div>
-            <div class="deploy-option">
-              <h4>You host it</h4>
-              <p>Lakecode deploys into your existing Databricks workspace. Your data, your compute, your SSO. Nothing leaves your perimeter.</p>
-              <span class="deploy-note">Annual software license</span>
-            </div>
+          <div class="bg-black rounded-lg border border-white/[0.06] p-5">
+            <h3 class="text-sm font-semibold text-white">You host it</h3>
+            <p class="mt-1.5 text-xs text-zinc-500 leading-relaxed">Lakecode deploys into your existing Databricks workspace. Your data, your compute, your SSO. Nothing leaves your perimeter.</p>
+            <p class="mt-2 font-mono text-xs text-zinc-500">Annual software license</p>
           </div>
         </div>
-      </div>
 
-      <!-- FAQ -->
-      <div class="pricing-faq">
-        <h2>Frequently Asked Questions</h2>
-        <details class="faq-item">
-          <summary>What's included in the 7-day free trial?</summary>
-          <p>Everything. All 22 workflows, full Databricks and Snowflake connectivity, chat, safety classification, and the policy engine. You bring your own Anthropic API key or connect via Databricks Model Serving. No credit card required.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What's the difference between Managed and BYOK?</summary>
-          <p>Managed ($49/mo): We handle the LLM infrastructure. You get ~2,000 turns per month with no API key setup. BYOK ($29/mo): You connect your own Anthropic API key or Databricks Model Serving endpoint. You pay the LLM provider directly for token usage; Lakecode charges $29/mo for the platform.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What models are supported?</summary>
-          <p>Claude Sonnet 4, Claude Opus 4, and Claude Haiku 3.5/4.5 via the managed proxy or your own Anthropic key. Databricks Foundation Model API and any OpenAI-compatible endpoint (vLLM, LM Studio, Ollama) are also supported with BYOK.</p>
-        </details>
-        <details class="faq-item">
-          <summary>How is Platform different from CLI?</summary>
-          <p>CLI is for individual engineers &mdash; runs on your laptop, connects to your workspace. Platform is for teams &mdash; deployed as a Databricks App with shared workflows, Engram (persistent institutional memory), governance/approval gates, audit trails, SSO/SAML, and role-scoped access. Platform includes everything in CLI plus organizational infrastructure.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What does the 2-week guided POC include?</summary>
-          <p>We deploy Lakecode Platform into your environment (or a dedicated workspace we provision), configure it for your team's workflows, connect your data sources, and work with your engineers to validate the value. At the end of the POC, you have a working deployment and can decide to continue.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Can I cancel anytime?</summary>
-          <p>CLI subscriptions are month-to-month with no commitments. Cancel anytime from your dashboard. Platform is annual licensing &mdash; terms are discussed during the POC.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What data does Lakecode access?</summary>
-          <p>Lakecode connects to your Databricks or Snowflake workspace using your credentials. It accesses job configs, run logs, query history, billing tables, and Unity Catalog metadata to run workflows. With the managed proxy, only token counts are tracked for billing. With BYOK, your data goes directly to your LLM provider.</p>
-        </details>
+        <a href="mailto:sachin@lakecode.ai" class="mt-6 block w-full text-center text-white text-sm font-semibold py-3 rounded-lg border border-white/20 hover:bg-white/[0.05] transition">Talk to us</a>
+
+        <div class="mt-8 space-y-3 flex-1">
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Shared workflows, runs, and artifacts</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Engram &mdash; institutional memory that compounds over time</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Governance, approval gates, and audit trails</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">SSO / SAML</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Role-scoped access</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Slack, Jira, GitHub, Confluence integrations</span></div>
+          <div class="flex items-start gap-2.5"><span class="text-zinc-600 font-mono text-xs mt-0.5">&rarr;</span><span class="text-sm text-zinc-300">Dedicated onboarding &amp; support</span></div>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
+  <!-- AFTER TRIAL NOTE -->
+  <section class="px-6 pb-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-sm text-zinc-600">After your 7-day trial: Everything stays &mdash; pay $29 or $49/mo to continue. Ready for your team? <a href="mailto:sachin@lakecode.ai" class="text-zinc-400 hover:text-white transition">Talk to us about Platform.</a></p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 px-6 border-t border-white/[0.06]">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-4xl font-bold tracking-tight text-white text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>What's included in the 7-day free trial?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">Everything. All 22 workflows, full Databricks and Snowflake connectivity, chat, safety classification, and the policy engine. You bring your own Anthropic API key or connect via Databricks Model Serving. No credit card required.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>What's the difference between Managed and BYOK?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">Managed ($49/mo): We handle the LLM infrastructure. You get ~2,000 turns per month with no API key setup. BYOK ($29/mo): You connect your own Anthropic API key or Databricks Model Serving endpoint. You pay the LLM provider directly for token usage; Lakecode charges $29/mo for the platform.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>What models are supported?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">Claude Sonnet 4, Claude Opus 4, and Claude Haiku 3.5/4.5 via the managed proxy or your own Anthropic key. Databricks Foundation Model API and any OpenAI-compatible endpoint (vLLM, LM Studio, Ollama) are also supported with BYOK.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>How is Platform different from CLI?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">CLI is for individual engineers &mdash; runs on your laptop, connects to your workspace. Platform is for teams &mdash; deployed as a Databricks App with shared workflows, Engram (persistent institutional memory), governance/approval gates, audit trails, SSO/SAML, and role-scoped access.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>What does the 2-week guided POC include?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">We deploy Lakecode Platform into your environment (or a dedicated workspace we provision), configure it for your team's workflows, connect your data sources, and work with your engineers to validate the value. At the end you have a working deployment.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>Can I cancel anytime?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">CLI subscriptions are month-to-month with no commitments. Cancel anytime from your dashboard. Platform is annual licensing &mdash; terms are discussed during the POC.</p>
+        </details>
+        <details class="group bg-[#0a0a0a] rounded-xl border border-white/[0.06]">
+          <summary class="px-6 py-5 text-sm font-medium text-white flex items-center justify-between cursor-pointer list-none"><span>What data does Lakecode access?</span><span class="text-zinc-600 text-lg group-open:rotate-45 transition-transform">+</span></summary>
+          <p class="px-6 pb-5 text-sm text-zinc-500 leading-relaxed">Lakecode connects to your Databricks or Snowflake workspace using your credentials. It accesses job configs, run logs, query history, billing tables, and Unity Catalog metadata. With the managed proxy, only token counts are tracked for billing. With BYOK, your data goes directly to your LLM provider.</p>
+        </details>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="/product">How it works</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/docs">Docs</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
+      </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4>
+          <a href="/product.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a>
+          <a href="/pricing.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a>
+          <a href="/docs.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a>
+          <a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a>
         </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:hello@lakecode.ai">Contact</a>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4>
+          <a href="/docs/getting-started.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a>
+          <a href="/docs/commands.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a>
+          <a href="/docs/architecture.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a>
+          <a href="/docs/configuration.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a>
+          <a href="/docs/security.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a>
         </div>
-        <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4>
+          <a href="/about.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a>
+          <a href="/blog/" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a>
+          <a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a>
+        </div>
+        <div class="flex flex-col gap-2">
+          <h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4>
+          <a href="/signin.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a>
+          <a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a>
         </div>
       </div>
     </div>
-    <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]">
+      <p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="script.js"></script>
   <script>
-    function toggleLLM(el) {
-      document.querySelectorAll('.llm-option').forEach(o => o.classList.remove('active'));
+    function toggle(el) {
+      document.querySelectorAll('.llm-opt').forEach(o => o.classList.remove('active'));
       el.classList.add('active');
     }
   </script>

@@ -5,278 +5,302 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>From Eight Tabs to One Prompt — Lakecode Blog</title>
   <meta name="description" content="Four real Databricks workflows that take hours in the browser and minutes with lakecode — incident debugging, Hive-to-UC migration, security audit, and workspace bootstrap.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../pages.css">
-  <style>
-    .blog-article { max-width: 720px; margin: 0 auto; }
-    .blog-article h2 { margin-top: 48px; font-size: 1.375rem; }
-    .blog-article h3 { margin-top: 28px; font-size: 1.0625rem; }
-    .blog-article p { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
-    .blog-article ul, .blog-article ol { color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; padding-left: 24px; }
-    .blog-article li { margin-bottom: 6px; font-size: 0.9375rem; }
-    .blog-article pre { margin-bottom: 20px; }
-    .blog-article code { font-size: 0.8125rem; }
-    .blog-article blockquote {
-      border-left: 3px solid var(--accent);
-      margin: 20px 0;
-      padding: 12px 20px;
-      background: var(--surface);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    .blog-article blockquote p { margin-bottom: 0; }
-    .blog-back { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 24px; display: block; }
-    .blog-back:hover { color: var(--accent); }
-    .blog-article-meta { font-size: 0.8125rem; color: var(--text-dim); margin-bottom: 32px; }
-    .blog-article table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-      font-size: 0.8125rem;
-    }
-    .blog-article th {
-      text-align: left;
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-      padding: 8px 12px;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
-    }
-    .blog-article td {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-secondary);
-    }
-    .blog-article tr:last-child td { border-bottom: none; }
-    .blog-article strong { color: var(--text); }
-    .blog-article hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 48px 0;
-    }
-    .blog-timing {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      margin: 20px 0;
-      font-size: 0.875rem;
-    }
-    .blog-timing p { margin-bottom: 4px; }
-    .blog-timing p:last-child { margin-bottom: 0; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  tailwind.config = {
+    theme: { extend: { fontFamily: { sans: ['"General Sans"', '-apple-system', 'system-ui', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] } } }
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-black text-zinc-400 antialiased">
 
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
-      </a>
-      <div class="nav-links">
-        <a href="/product">Product</a>
-        <a href="/docs">Docs</a>
-        <a href="/pricing">Pricing</a>
-        
-        <a href="/blog" class="active">Blog</a>
-        <a href="/signin">Sign in</a>
-        <a href="/signin" class="btn btn-sm nav-auth-btn">Get started</a>
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
+  <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+      <div class="flex items-center gap-8">
+        <a href="/product.html" class="text-sm text-zinc-400 hover:text-white transition">Product</a>
+        <a href="/pricing.html" class="text-sm text-zinc-400 hover:text-white transition">Pricing</a>
+        <a href="/docs.html" class="text-sm text-zinc-400 hover:text-white transition">Docs</a>
+        <a href="/blog/" class="text-sm text-white">Blog</a>
+        <a href="/signin.html" class="text-sm text-zinc-400 hover:text-white transition">Sign in</a>
+        <a href="/signin.html" class="text-sm text-white border border-white/20 rounded-md px-4 py-2 hover:bg-white/10 transition">Get started</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </nav>
 
-  <section class="page-hero" style="padding-bottom: 0;">
-    <div class="container" style="max-width: 720px;">
-      <a href="/blog" class="blog-back">&larr; Back to Blog</a>
-      <h1>From Eight Tabs to One Prompt: The Databricks Tasks That Waste Half Your Day</h1>
-      <p class="blog-article-meta">March 28, 2026 &middot; Deep Dive</p>
+  <div class="pt-36 pb-8 px-6">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog/" class="text-sm text-zinc-500 hover:text-white transition">&larr; Back to Blog</a>
+      <h1 class="text-4xl font-bold tracking-tight text-white mt-4">From Eight Tabs to One Prompt: The Databricks Tasks That Waste Half Your Day</h1>
+      <p class="text-xs font-mono text-zinc-600 mt-4">March 28, 2026 &middot; Deep Dive</p>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="blog-article">
+  <div class="max-w-3xl mx-auto px-6 py-12">
 
-        <p>Every Databricks engineer knows the feeling. You're not stuck on a <em>hard</em> problem &mdash; you're stuck on a <em>scattered</em> one. The logic is straightforward, but the execution requires bouncing between the Jobs UI, SQL Editor, Data Explorer, Permissions panel, cluster logs, and system tables. What should take five minutes takes an hour. What should take an hour takes a day.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Every Databricks engineer knows the feeling. You're not stuck on a <em>hard</em> problem &mdash; you're stuck on a <em>scattered</em> one. The logic is straightforward, but the execution requires bouncing between the Jobs UI, SQL Editor, Data Explorer, Permissions panel, cluster logs, and system tables. What should take five minutes takes an hour. What should take an hour takes a day.</p>
 
-        <p>We built <a href="https://lakecode.ai">lakecode</a> to collapse that friction. It's a terminal-native AI agent for Databricks &mdash; you describe what you need in plain English, and it orchestrates the cross-cutting API calls, SQL queries, and configuration changes that would normally require a full tour of the Databricks UI.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">We built <a href="https://lakecode.ai" class="text-zinc-200 underline hover:text-white">lakecode</a> to collapse that friction. It's a terminal-native AI agent for Databricks &mdash; you describe what you need in plain English, and it orchestrates the cross-cutting API calls, SQL queries, and configuration changes that would normally require a full tour of the Databricks UI.</p>
 
-        <p>Below are four real workflows we ran against a live Databricks workspace. Each one shows the actual lakecode output &mdash; lightly formatted for readability, but faithful to what the agent produced. We'll publish sanitized session transcripts alongside this post so you can see the full tool-call chains.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Below are four real workflows we ran against a live Databricks workspace. Each one shows the actual lakecode output &mdash; lightly formatted for readability, but faithful to what the agent produced. We'll publish sanitized session transcripts alongside this post so you can see the full tool-call chains.</p>
 
-        <blockquote>
-          <p><strong>Note:</strong> Examples that reference <code>system.access.audit</code> and <code>system.query.history</code> assume system tables are enabled and the operator has the required access. Both are currently in Public Preview, and <code>system.query.history</code> is admin-only by default.</p>
-        </blockquote>
+    <blockquote class="border-l-2 border-white/20 pl-5 my-6 bg-white/[0.02] rounded-r-lg py-4 pr-4">
+      <p class="text-base text-zinc-400 leading-relaxed"><strong class="text-white font-medium">Note:</strong> Examples that reference <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">system.access.audit</code> and <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">system.query.history</code> assume system tables are enabled and the operator has the required access. Both are currently in Public Preview, and <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">system.query.history</code> is admin-only by default.</p>
+    </blockquote>
 
-        <hr>
+    <hr class="border-none border-t border-white/[0.06] my-12">
 
-        <h2>1. Production Incident Root Cause Analysis</h2>
+    <h2 class="text-2xl font-bold text-white mt-12 mb-4">1. Production Incident Root Cause Analysis</h2>
 
-        <h3>The browser experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The browser experience</h3>
 
-        <p>A job fails at 2am. You open the job run page to read the error. Click into the cluster to check driver logs. Switch to SQL Editor to query the output table. Open Data Explorer to trace upstream lineage. Run <code>DESCRIBE HISTORY</code> on each upstream table looking for schema changes. Query <code>system.access.audit</code> for recent permission modifications. Cross-reference timestamps across all of these to build a timeline.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">A job fails at 2am. You open the job run page to read the error. Click into the cluster to check driver logs. Switch to SQL Editor to query the output table. Open Data Explorer to trace upstream lineage. Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">DESCRIBE HISTORY</code> on each upstream table looking for schema changes. Query <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">system.access.audit</code> for recent permission modifications. Cross-reference timestamps across all of these to build a timeline.</p>
 
-        <p>Databricks documents exactly this kind of multi-step investigation for failed jobs &mdash; and supports repairing failed runs afterward. The platform gives you all the tools. The problem is that the tools live in eight different places, and you're the glue stitching the results together.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Databricks documents exactly this kind of multi-step investigation for failed jobs &mdash; and supports repairing failed runs afterward. The platform gives you all the tools. The problem is that the tools live in eight different places, and you're the glue stitching the results together.</p>
 
-        <h3>The lakecode experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The lakecode experience</h3>
 
-        <p>We staged a realistic failure: a scheduled ETL job (<code>debug_workflow_etl</code>) that had been running successfully for several hours. Then we renamed a column on an upstream table (<code>amount</code> &rarr; <code>order_amount</code>), inserted 50,000 anomalous rows with 180&times; the normal dollar amounts, and revoked a permission &mdash; all within a few minutes. The next job run failed.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">We staged a realistic failure: a scheduled ETL job (<code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">debug_workflow_etl</code>) that had been running successfully for several hours. Then we renamed a column on an upstream table (<code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">amount</code> &rarr; <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">order_amount</code>), inserted 50,000 anomalous rows with 180&times; the normal dollar amounts, and revoked a permission &mdash; all within a few minutes. The next job run failed.</p>
 
-        <pre><code>&gt; debug the latest failure of debug_workflow_etl — check if any upstream
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>&gt; debug the latest failure of debug_workflow_etl — check if any upstream
   tables had schema changes or data volume anomalies in the last 24 hours</code></pre>
 
-        <p>Lakecode fetched the failed run, extracted the error (<code>UNRESOLVED_COLUMN: o.amount cannot be resolved</code>), pulled <code>DESCRIBE HISTORY</code> on all upstream tables, and surfaced three distinct findings:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode fetched the failed run, extracted the error (<code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">UNRESOLVED_COLUMN: o.amount cannot be resolved</code>), pulled <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">DESCRIBE HISTORY</code> on all upstream tables, and surfaced three distinct findings:</p>
 
-        <p><strong>Schema Changes &mdash; raw_orders (last 24h)</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Schema Changes &mdash; raw_orders (last 24h)</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Version</th><th>Operation</th><th>Detail</th><th>Breaking?</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>v5</td><td>RENAME COLUMN</td><td><code>amount</code> &rarr; <code>order_amount</code></td><td><strong>Yes &mdash; direct cause</strong></td></tr>
-            <tr><td>v4</td><td>WRITE (Append)</td><td>+50,000 rows, 369 KB</td><td>Data anomaly</td></tr>
-            <tr><td>v3</td><td>RENAME COLUMN</td><td><code>order_status</code> &rarr; <code>status_code</code></td><td>Latent risk</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Version</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Operation</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Detail</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Breaking?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">v5</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">RENAME COLUMN</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400"><code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">amount</code> &rarr; <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">order_amount</code></td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400"><strong class="text-white font-medium">Yes &mdash; direct cause</strong></td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">v4</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">WRITE (Append)</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">+50,000 rows, 369 KB</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Data anomaly</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">v3</td>
+            <td class="px-3 py-2 text-zinc-400">RENAME COLUMN</td>
+            <td class="px-3 py-2 text-zinc-400"><code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">order_status</code> &rarr; <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">status_code</code></td>
+            <td class="px-3 py-2 text-zinc-400">Latent risk</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p><strong>Data Volume Anomaly</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Data Volume Anomaly</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Row Count</th><th>Avg Amount</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>2026-03-28 (today)</td><td>50,000</td><td>$53,926</td></tr>
-            <tr><td>Historical (per day)</td><td>1</td><td>~$300</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Date</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Row Count</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Avg Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">2026-03-28 (today)</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">50,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">$53,926</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">Historical (per day)</td>
+            <td class="px-3 py-2 text-zinc-400">1</td>
+            <td class="px-3 py-2 text-zinc-400">~$300</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p>A 50,000&times; volume spike and a 180&times; amount spike &mdash; flagged as a data quality issue that would have silently corrupted downstream aggregations even if the job had succeeded.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">A 50,000&times; volume spike and a 180&times; amount spike &mdash; flagged as a data quality issue that would have silently corrupted downstream aggregations even if the job had succeeded.</p>
 
-        <p>When we escalated to a full root cause analysis, lakecode produced an eight-section structured diagnosis: failure summary, root cause with the exact SQL line, complete Delta changelog, run history timeline correlating the last success (18:36 UTC) to the breaking rename (18:40 UTC) to the failed run (18:44 UTC), correlated anomalies, query history scan, audit log status, and the one-line fix with the corrected SQL ready to apply.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">When we escalated to a full root cause analysis, lakecode produced an eight-section structured diagnosis: failure summary, root cause with the exact SQL line, complete Delta changelog, run history timeline correlating the last success (18:36 UTC) to the breaking rename (18:40 UTC) to the failed run (18:44 UTC), correlated anomalies, query history scan, audit log status, and the one-line fix with the corrected SQL ready to apply.</p>
 
-        <p>It also traced the causal chain behind the rename: a failed first attempt (column mapping wasn't enabled), the <code>SET TBLPROPERTIES</code> that enabled column mapping, and then the successful rename &mdash; three events that together explain not just <em>what</em> broke but <em>how</em> it became possible to break.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">It also traced the causal chain behind the rename: a failed first attempt (column mapping wasn't enabled), the <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">SET TBLPROPERTIES</code> that enabled column mapping, and then the successful rename &mdash; three events that together explain not just <em>what</em> broke but <em>how</em> it became possible to break.</p>
 
-        <p>The output is the kind of structured postmortem you'd paste directly into a Slack incident channel or attach to a repair run.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The output is the kind of structured postmortem you'd paste directly into a Slack incident channel or attach to a repair run.</p>
 
-        <div class="blog-timing">
-          <p><strong>Time in the browser:</strong> 20+ minutes across 8 tabs, manually correlating timestamps</p>
-          <p><strong>Time in lakecode:</strong> One prompt, under a minute</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 my-5">
+      <p class="text-base text-zinc-400 mb-1"><strong class="text-white font-medium">Time in the browser:</strong> 20+ minutes across 8 tabs, manually correlating timestamps</p>
+      <p class="text-base text-zinc-400"><strong class="text-white font-medium">Time in lakecode:</strong> One prompt, under a minute</p>
+    </div>
 
-        <hr>
+    <hr class="border-none border-t border-white/[0.06] my-12">
 
-        <h2>2. Hive Metastore &rarr; Unity Catalog Table Migration</h2>
+    <h2 class="text-2xl font-bold text-white mt-12 mb-4">2. Hive Metastore &rarr; Unity Catalog Table Migration</h2>
 
-        <h3>The browser experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The browser experience</h3>
 
-        <p>Databricks recommends migrating legacy Hive Metastore assets to Unity Catalog, and it has invested in multiple migration paths &mdash; including federation for zero-copy access, <code>SYNC</code> for in-place upgrades that preserve table history, <code>CREATE TABLE AS SELECT</code> for simple copies, and UCX for broader workspace-level migration workflows. The right approach depends on your table types, whether you need to preserve history, and how many downstream jobs reference the old namespace.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Databricks recommends migrating legacy Hive Metastore assets to Unity Catalog, and it has invested in multiple migration paths &mdash; including federation for zero-copy access, <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">SYNC</code> for in-place upgrades that preserve table history, <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">CREATE TABLE AS SELECT</code> for simple copies, and UCX for broader workspace-level migration workflows. The right approach depends on your table types, whether you need to preserve history, and how many downstream jobs reference the old namespace.</p>
 
-        <p>Regardless of which path you choose, the operational work is the same: inventory tables, understand their storage types, execute the migration, validate row counts, remap grants (which work differently between hive_metastore and Unity Catalog), and find every job that references the old three-level namespace. In the browser, that means cycling between Data Explorer, SQL Editor, the Permissions tab, and the Jobs list &mdash; tracking progress in a spreadsheet.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Regardless of which path you choose, the operational work is the same: inventory tables, understand their storage types, execute the migration, validate row counts, remap grants (which work differently between hive_metastore and Unity Catalog), and find every job that references the old three-level namespace. In the browser, that means cycling between Data Explorer, SQL Editor, the Permissions tab, and the Jobs list &mdash; tracking progress in a spreadsheet.</p>
 
-        <h3>The lakecode experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The lakecode experience</h3>
 
-        <p>We tested against a small, self-contained demo set: five tables in <code>hive_metastore.legacy_sales</code> with 16,320 total rows, grants applied to <code>account users</code>, and a job with saved SQL referencing the old namespace. This is a simplified scenario &mdash; a real migration would involve federation decisions, external tables, and view dependencies &mdash; but it demonstrates the multi-surface orchestration that lakecode handles.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">We tested against a small, self-contained demo set: five tables in <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">hive_metastore.legacy_sales</code> with 16,320 total rows, grants applied to <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">account users</code>, and a job with saved SQL referencing the old namespace. This is a simplified scenario &mdash; a real migration would involve federation decisions, external tables, and view dependencies &mdash; but it demonstrates the multi-surface orchestration that lakecode handles.</p>
 
-        <pre><code>&gt; do a complete migration of hive_metastore.legacy_sales to
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>&gt; do a complete migration of hive_metastore.legacy_sales to
   lakecode_test.sales — create the target schema, CTAS all tables, validate
   row counts match, copy all grants, find all jobs that reference the old
   namespace, and give me a migration report with status per table</code></pre>
 
-        <p>Lakecode executed five phases: schema creation, parallel CTAS for all tables, cross-catalog row count validation, grant migration with hive-to-UC translation, and a workspace-wide job scan.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode executed five phases: schema creation, parallel CTAS for all tables, cross-catalog row count validation, grant migration with hive-to-UC translation, and a workspace-wide job scan.</p>
 
-        <p><strong>Row Count Validation</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Row Count Validation</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Table</th><th>Source</th><th>Target</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>customers</td><td>1,000</td><td>1,000</td><td>Match</td></tr>
-            <tr><td>orders</td><td>5,000</td><td>5,000</td><td>Match</td></tr>
-            <tr><td>products</td><td>200</td><td>200</td><td>Match</td></tr>
-            <tr><td>order_items</td><td>10,000</td><td>10,000</td><td>Match</td></tr>
-            <tr><td>daily_revenue</td><td>120</td><td>120</td><td>Match</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Table</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Source</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Target</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">customers</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">1,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">1,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Match</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">orders</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">5,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">5,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Match</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">products</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">200</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">200</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Match</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">order_items</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">10,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">10,000</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Match</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">daily_revenue</td>
+            <td class="px-3 py-2 text-zinc-400">120</td>
+            <td class="px-3 py-2 text-zinc-400">120</td>
+            <td class="px-3 py-2 text-zinc-400">Match</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p>Grant copying handled the translation nuances automatically &mdash; <code>USAGE</code> on <code>hive_metastore</code> maps to <code>USE SCHEMA</code> in Unity Catalog, and ownership is implicit in UC (set at creation time, no grant to copy).</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Grant copying handled the translation nuances automatically &mdash; <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">USAGE</code> on <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">hive_metastore</code> maps to <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">USE SCHEMA</code> in Unity Catalog, and ownership is implicit in UC (set at creation time, no grant to copy).</p>
 
-        <p>The job impact analysis fetched the saved SQL query behind the job task, identified all three <code>hive_metastore</code> table references in the actual SQL, and generated corrected SQL with the new namespace ready to apply. It also flagged seven notebook-based jobs whose table references live inside notebook code and can't be statically scanned from job metadata alone &mdash; and offered to read the notebooks directly.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The job impact analysis fetched the saved SQL query behind the job task, identified all three <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">hive_metastore</code> table references in the actual SQL, and generated corrected SQL with the new namespace ready to apply. It also flagged seven notebook-based jobs whose table references live inside notebook code and can't be statically scanned from job metadata alone &mdash; and offered to read the notebooks directly.</p>
 
-        <p>The final migration report covered schema status, table-by-table validation, grant before/after comparison, job reference scan, and a cutover checklist showing what's done, what's pending, and what's blocked.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The final migration report covered schema status, table-by-table validation, grant before/after comparison, job reference scan, and a cutover checklist showing what's done, what's pending, and what's blocked.</p>
 
-        <div class="blog-timing">
-          <p><strong>Time in the browser:</strong> Hours to days with a tracking spreadsheet</p>
-          <p><strong>Time in lakecode:</strong> One conversation, about five minutes</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 my-5">
+      <p class="text-base text-zinc-400 mb-1"><strong class="text-white font-medium">Time in the browser:</strong> Hours to days with a tracking spreadsheet</p>
+      <p class="text-base text-zinc-400"><strong class="text-white font-medium">Time in lakecode:</strong> One conversation, about five minutes</p>
+    </div>
 
-        <hr>
+    <hr class="border-none border-t border-white/[0.06] my-12">
 
-        <h2>3. Security Audit &amp; Least-Privilege Remediation</h2>
+    <h2 class="text-2xl font-bold text-white mt-12 mb-4">3. Security Audit &amp; Least-Privilege Remediation</h2>
 
-        <h3>The browser experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The browser experience</h3>
 
-        <p>You query <code>INFORMATION_SCHEMA.TABLE_PRIVILEGES</code> to find overly broad grants, cross-reference with audit logs and query history to see who actually accessed what, identify tables with <code>ALL PRIVILEGES</code> granted to large groups, then carefully construct REVOKE and GRANT statements &mdash; terrified of getting the order wrong and locking everyone out. For PII tables, you need extra scrutiny: column masks, row filters, access justification. In the browser, this means dozens of SQL queries, manual cross-referencing, and a lot of anxiety.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">You query <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">INFORMATION_SCHEMA.TABLE_PRIVILEGES</code> to find overly broad grants, cross-reference with audit logs and query history to see who actually accessed what, identify tables with <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">ALL PRIVILEGES</code> granted to large groups, then carefully construct REVOKE and GRANT statements &mdash; terrified of getting the order wrong and locking everyone out. For PII tables, you need extra scrutiny: column masks, row filters, access justification. In the browser, this means dozens of SQL queries, manual cross-referencing, and a lot of anxiety.</p>
 
-        <h3>The lakecode experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The lakecode experience</h3>
 
-        <p>We set up three tables &mdash; including one called <code>user_pii</code> with columns like <code>ssn_last4</code>, <code>email</code>, and <code>phone</code> &mdash; and granted <code>ALL PRIVILEGES</code> on all three to <code>account users</code>. We queried two of the tables but deliberately left <code>user_pii</code> untouched, creating a realistic pattern: broad grants with uneven actual usage.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">We set up three tables &mdash; including one called <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">user_pii</code> with columns like <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">ssn_last4</code>, <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">email</code>, and <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">phone</code> &mdash; and granted <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">ALL PRIVILEGES</code> on all three to <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">account users</code>. We queried two of the tables but deliberately left <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">user_pii</code> untouched, creating a realistic pattern: broad grants with uneven actual usage.</p>
 
-        <pre><code>&gt; audit grants in lakecode_test.analytics, cross-reference with observed
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>&gt; audit grants in lakecode_test.analytics, cross-reference with observed
   access from query history, generate a least-privilege remediation plan
   that downgrades ALL PRIVILEGES to minimum required access, flag any PII
   tables that need extra scrutiny, and show me the exact GRANT/REVOKE
   statements you'd execute</code></pre>
 
-        <p>Lakecode identified the PII table without being told which one was sensitive &mdash; it recognized <code>ssn_last4</code> and <code>phone</code> as PII columns from the schema alone. It then cross-referenced grants against observed SQL access in query history:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode identified the PII table without being told which one was sensitive &mdash; it recognized <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">ssn_last4</code> and <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">phone</code> as PII columns from the schema alone. It then cross-referenced grants against observed SQL access in query history:</p>
 
-        <table>
-          <thead>
-            <tr><th>Table</th><th>Granted</th><th>Observed Usage</th><th>Actually Needed</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>user_events</td><td>ALL PRIVILEGES</td><td>SELECT only</td><td>SELECT</td><td>Downscope</td></tr>
-            <tr><td>revenue_daily</td><td>ALL PRIVILEGES</td><td>SELECT only</td><td>SELECT</td><td>Downscope</td></tr>
-            <tr><td>user_pii</td><td>ALL PRIVILEGES</td><td><strong>None</strong></td><td><strong>Unknown</strong></td><td><strong>Revoke entirely</strong></td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Table</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Granted</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Observed Usage</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Actually Needed</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">user_events</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">ALL PRIVILEGES</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">SELECT only</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">SELECT</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Downscope</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">revenue_daily</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">ALL PRIVILEGES</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">SELECT only</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">SELECT</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Downscope</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">user_pii</td>
+            <td class="px-3 py-2 text-zinc-400">ALL PRIVILEGES</td>
+            <td class="px-3 py-2 text-zinc-400"><strong class="text-white font-medium">None</strong></td>
+            <td class="px-3 py-2 text-zinc-400"><strong class="text-white font-medium">Unknown</strong></td>
+            <td class="px-3 py-2 text-zinc-400"><strong class="text-white font-medium">Revoke entirely</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p>The remediation SQL was generated in the correct order &mdash; REVOKE first, then GRANT &mdash; with the PII table getting the most conservative treatment: full revocation with a recommendation to create a named access group and apply column masks before re-granting.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The remediation SQL was generated in the correct order &mdash; REVOKE first, then GRANT &mdash; with the PII table getting the most conservative treatment: full revocation with a recommendation to create a named access group and apply column masks before re-granting.</p>
 
-        <p>The zero-access finding on <code>user_pii</code> is the kind of signal that matters most in a security audit: broad privileges granted, no observed usage, sensitive data exposed. Lakecode surfaced it automatically.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The zero-access finding on <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">user_pii</code> is the kind of signal that matters most in a security audit: broad privileges granted, no observed usage, sensitive data exposed. Lakecode surfaced it automatically.</p>
 
-        <p>One caveat: <code>system.query.history</code> covers queries from SQL warehouses and serverless compute for notebooks and jobs, so "observed access" reflects that scope rather than all possible access paths. Lakecode noted this distinction in its output.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">One caveat: <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">system.query.history</code> covers queries from SQL warehouses and serverless compute for notebooks and jobs, so "observed access" reflects that scope rather than all possible access paths. Lakecode noted this distinction in its output.</p>
 
-        <div class="blog-timing">
-          <p><strong>Time in the browser:</strong> Hours of manual cross-referencing across system tables</p>
-          <p><strong>Time in lakecode:</strong> One prompt, remediation SQL ready to review and apply</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 my-5">
+      <p class="text-base text-zinc-400 mb-1"><strong class="text-white font-medium">Time in the browser:</strong> Hours of manual cross-referencing across system tables</p>
+      <p class="text-base text-zinc-400"><strong class="text-white font-medium">Time in lakecode:</strong> One prompt, remediation SQL ready to review and apply</p>
+    </div>
 
-        <hr>
+    <hr class="border-none border-t border-white/[0.06] my-12">
 
-        <h2>4. New Team Workspace Bootstrap</h2>
+    <h2 class="text-2xl font-bold text-white mt-12 mb-4">4. New Team Workspace Bootstrap</h2>
 
-        <h3>The browser experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The browser experience</h3>
 
-        <p>Onboarding a new team to Databricks means creating catalogs and schemas, setting up grant hierarchies with correct inheritance, creating compute policies so the team can't spin up massive instances, setting up secret scopes for credentials, and often creating starter job templates. Each of these lives in a different admin surface &mdash; the Unity Catalog UI, Compute configuration, Secrets management, and the Admin Console.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Onboarding a new team to Databricks means creating catalogs and schemas, setting up grant hierarchies with correct inheritance, creating compute policies so the team can't spin up massive instances, setting up secret scopes for credentials, and often creating starter job templates. Each of these lives in a different admin surface &mdash; the Unity Catalog UI, Compute configuration, Secrets management, and the Admin Console.</p>
 
-        <h3>The lakecode experience</h3>
+    <h3 class="text-xl font-semibold text-white mt-7 mb-4">The lakecode experience</h3>
 
-        <pre><code>&gt; bootstrap a workspace for a fraud detection team — create catalog
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>&gt; bootstrap a workspace for a fraud detection team — create catalog
   lakecode_test_fraud2 with schemas raw, curated, and analytics. Grant
   account users full read access with proper inheritance. Create a compute
   policy called fraud-team-policy that limits workers to max 4, restricts
@@ -284,112 +308,139 @@
   auto-termination, and blocks spot instances. Create a secret scope called
   fraud-team-creds. Give me a summary of everything that was created.</code></pre>
 
-        <p>Lakecode fired three APIs in parallel &mdash; Unity Catalog SQL for the catalog and grants, the Compute Policies REST API for governance, and the Secrets REST API for credential management:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode fired three APIs in parallel &mdash; Unity Catalog SQL for the catalog and grants, the Compute Policies REST API for governance, and the Secrets REST API for credential management:</p>
 
-        <p><strong>Catalog &amp; Schemas</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Catalog &amp; Schemas</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Object</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>lakecode_test_fraud2</td><td>Created</td></tr>
-            <tr><td>lakecode_test_fraud2.raw</td><td>Created</td></tr>
-            <tr><td>lakecode_test_fraud2.curated</td><td>Created</td></tr>
-            <tr><td>lakecode_test_fraud2.analytics</td><td>Created</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Object</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">lakecode_test_fraud2</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Created</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">lakecode_test_fraud2.raw</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Created</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">lakecode_test_fraud2.curated</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Created</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">lakecode_test_fraud2.analytics</td>
+            <td class="px-3 py-2 text-zinc-400">Created</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p><strong>Grant Hierarchy</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Grant Hierarchy</strong></p>
 
-        <pre><code>lakecode_test_fraud2  (CATALOG)
+    <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode_test_fraud2  (CATALOG)
 &boxur;&boxh; account users: USE CATALOG
     &boxvr;&boxh; raw       &rarr; account users: USE SCHEMA
     &boxvr;&boxh; curated   &rarr; account users: USE SCHEMA
     &boxur;&boxh; analytics &rarr; account users: USE SCHEMA</code></pre>
 
-        <p><strong>Compute Policy &mdash; fraud-team-policy</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Compute Policy &mdash; fraud-team-policy</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Constraint</th><th>Value</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Max workers</td><td>4</td></tr>
-            <tr><td>Allowed instance types</td><td>i3.xlarge, m5.xlarge</td></tr>
-            <tr><td>Auto-termination</td><td>60 minutes (fixed, immutable)</td></tr>
-            <tr><td>Spot instances</td><td>Blocked &mdash; ON_DEMAND only</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Constraint</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Max workers</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">4</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Allowed instance types</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">i3.xlarge, m5.xlarge</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Auto-termination</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">60 minutes (fixed, immutable)</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">Spot instances</td>
+            <td class="px-3 py-2 text-zinc-400">Blocked &mdash; ON_DEMAND only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p><strong>Secret Scope &mdash; fraud-team-creds</strong></p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><strong class="text-white font-medium">Secret Scope &mdash; fraud-team-creds</strong></p>
 
-        <table>
-          <thead>
-            <tr><th>Property</th><th>Value</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Backend</td><td>Databricks managed</td></tr>
-            <tr><td>Status</td><td>Empty &mdash; ready for credentials</td></tr>
-          </tbody>
-        </table>
+    <div class="overflow-x-auto mb-5">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Property</th>
+            <th class="text-left text-[11px] uppercase tracking-wider text-zinc-600 px-3 py-2 border-b border-white/[0.06] whitespace-nowrap">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Backend</td>
+            <td class="px-3 py-2 border-b border-white/[0.04] text-zinc-400">Databricks managed</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2 text-zinc-400">Status</td>
+            <td class="px-3 py-2 text-zinc-400">Empty &mdash; ready for credentials</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <p>One detail worth noting: when asked to grant SELECT on "all future tables," lakecode correctly explained that Unity Catalog handles future-table access through inherited catalog and schema grants rather than Snowflake-style <code>ON FUTURE TABLES</code> syntax. It recommended granting at the schema level for automatic inheritance to child objects. Platform intelligence that prevents silent misconfigurations.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">One detail worth noting: when asked to grant SELECT on "all future tables," lakecode correctly explained that Unity Catalog handles future-table access through inherited catalog and schema grants rather than Snowflake-style <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">ON FUTURE TABLES</code> syntax. It recommended granting at the schema level for automatic inheritance to child objects. Platform intelligence that prevents silent misconfigurations.</p>
 
-        <div class="blog-timing">
-          <p><strong>Time in the browser:</strong> A full day across 4+ admin surfaces</p>
-          <p><strong>Time in lakecode:</strong> One prompt, about 15 seconds</p>
-        </div>
+    <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 my-5">
+      <p class="text-base text-zinc-400 mb-1"><strong class="text-white font-medium">Time in the browser:</strong> A full day across 4+ admin surfaces</p>
+      <p class="text-base text-zinc-400"><strong class="text-white font-medium">Time in lakecode:</strong> One prompt, about 15 seconds</p>
+    </div>
 
-        <hr>
+    <hr class="border-none border-t border-white/[0.06] my-12">
 
-        <h2>The Pattern</h2>
+    <h2 class="text-2xl font-bold text-white mt-12 mb-4">The Pattern</h2>
 
-        <p>These four workflows span different roles &mdash; the on-call engineer debugging at 2am, the data engineer running a migration, the security lead preparing for an audit, the platform admin onboarding a team. What they share is the same structural problem: the work isn't intellectually hard, it's operationally scattered. The information and actions live across a dozen UI surfaces, and the human is the integration layer holding it all together.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">These four workflows span different roles &mdash; the on-call engineer debugging at 2am, the data engineer running a migration, the security lead preparing for an audit, the platform admin onboarding a team. What they share is the same structural problem: the work isn't intellectually hard, it's operationally scattered. The information and actions live across a dozen UI surfaces, and the human is the integration layer holding it all together.</p>
 
-        <p>Lakecode replaces the integration layer. You describe the outcome. It orchestrates the right API calls, in the right order, with the right parameters &mdash; stitching results across Databricks surfaces and producing structured output you can actually use.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode replaces the integration layer. You describe the outcome. It orchestrates the right API calls, in the right order, with the right parameters &mdash; stitching results across Databricks surfaces and producing structured output you can actually use.</p>
 
-        <p>Hours to minutes. Eight tabs to one prompt.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Hours to minutes. Eight tabs to one prompt.</p>
 
-        <div style="margin-top: 32px;">
-          <a href="/signin" class="btn btn-primary">Get started &rarr;</a>
-        </div>
+    <div class="mt-8">
+      <a href="/signin.html" class="inline-block text-sm text-white border border-white/20 rounded-md px-5 py-2.5 hover:bg-white/10 transition">Get started &rarr;</a>
+    </div>
 
+  </div>
+
+  <footer class="border-t border-white/[0.06] px-6 pt-12 pb-8">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between gap-10 mb-10">
+      <div class="max-w-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-semibold text-[15px] font-mono"><img src="/logo-dark.png" alt="Lakecode" class="h-4 w-5"> lakecode</a>
+        <p class="mt-3 text-[13px] text-zinc-500 leading-relaxed">Governed AI for Databricks &amp; Snowflake with persistent memory that compounds over time.</p>
+      </div>
+      <div class="flex gap-12 flex-wrap">
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Product</h4><a href="/product.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">How it works</a><a href="/pricing.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Pricing</a><a href="/docs.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Docs</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Docs</h4><a href="/docs/getting-started.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Getting started</a><a href="/docs/commands.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Commands</a><a href="/docs/architecture.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Architecture</a><a href="/docs/configuration.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Configuration</a><a href="/docs/security.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Safety</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Company</h4><a href="/about.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">About</a><a href="/blog/" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Blog</a><a href="mailto:hello@lakecode.ai" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Contact</a></div>
+        <div class="flex flex-col gap-2"><h4 class="text-[13px] font-medium text-zinc-400 mb-1">Account</h4><a href="/signin.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Sign in</a><a href="/dashboard.html" class="text-[13px] text-zinc-500 hover:text-zinc-400 transition">Dashboard</a></div>
       </div>
     </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native data platform agent.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="/product">How it works</a>
-          <a href="/pricing">Pricing</a>
-        
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:hello@lakecode.ai">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
-        </div>
-      </div>
-    </div>
-    <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
-    </div>
+    <div class="max-w-5xl mx-auto pt-5 border-t border-white/[0.06]"><p class="text-[13px] text-zinc-600">&copy; 2026 Lakecode. All rights reserved.</p></div>
   </footer>
 
-  <script src="../script.js"></script>
 </body>
 </html>
