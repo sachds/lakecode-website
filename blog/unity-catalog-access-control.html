@@ -42,7 +42,7 @@
 
     <p class="text-base text-zinc-400 leading-relaxed mb-4">Unity Catalog permissions are powerful but hard to reason about. Grants cascade through catalogs, schemas, and tables. Groups inherit from other groups. And when something goes wrong &mdash; "why can't this service principal read this table?" &mdash; the debugging process usually involves clicking through multiple Databricks UI screens.</p>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode's <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc</code> commands bring this entire workflow to the terminal.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Lakecode's <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/uc</code> commands bring this entire workflow to the terminal.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Tracing access: /uc explain-access</h3>
 
@@ -65,7 +65,7 @@
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Diffing grants: /uc diff-grants</h3>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">For teams managing permissions as code, you often have a desired-state YAML that describes who should have access to what. The <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc diff-grants</code> command compares reality against that desired state:</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">For teams managing permissions as code, you often have a desired-state YAML that describes who should have access to what. The <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/uc diff-grants</code> command compares reality against that desired state:</p>
 
     <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /uc diff-grants analytics.prod --to grants.yml</code></pre>
 
@@ -76,7 +76,7 @@
       <li class="text-base text-zinc-400"><strong class="text-white font-medium">No change</strong> &mdash; grants that already match</li>
     </ul>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">Think of it like <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">terraform plan</code> for Unity Catalog permissions. You review the diff before applying anything.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Think of it like <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">terraform plan</code> for Unity Catalog permissions. You review the diff before applying anything.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Applying changes: /uc apply-grants</h3>
 
@@ -98,10 +98,10 @@
 
     <ol class="text-base text-zinc-400 leading-relaxed mb-4 list-decimal pl-6 space-y-2">
       <li class="text-base text-zinc-400">A new team member needs access to the analytics catalog</li>
-      <li class="text-base text-zinc-400">Update your <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">grants.yml</code> to add their group</li>
-      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc diff-grants</code> to see what will change</li>
+      <li class="text-base text-zinc-400">Update your <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">grants.yml</code> to add their group</li>
+      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/uc diff-grants</code> to see what will change</li>
       <li class="text-base text-zinc-400">Review the plan in your terminal</li>
-      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/uc apply-grants</code> to execute</li>
+      <li class="text-base text-zinc-400">Run <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/uc apply-grants</code> to execute</li>
       <li class="text-base text-zinc-400">The audit report is saved for compliance</li>
     </ol>
 

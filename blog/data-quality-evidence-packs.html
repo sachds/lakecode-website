@@ -40,7 +40,7 @@
 
   <div class="max-w-3xl mx-auto px-6 py-12">
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">"Is this table healthy?" is a question data engineers answer dozens of times a week. Usually it involves writing ad-hoc SQL: count the rows, check for nulls, look at the latest timestamp, spot duplicates. The <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/prove</code> command automates all of this into a single evidence pack.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">"Is this table healthy?" is a question data engineers answer dozens of times a week. Usually it involves writing ad-hoc SQL: count the rows, check for nulls, look at the latest timestamp, spot duplicates. The <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/prove</code> command automates all of this into a single evidence pack.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Running /prove</h3>
 
@@ -57,7 +57,7 @@
 
     <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
       <strong class="block text-white font-medium mb-2">Row count &amp; freshness</strong>
-      <p class="text-base text-zinc-400 leading-relaxed">Total row count plus the most recent value of any timestamp column (e.g., <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">updated_at</code>, <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">_loaded_at</code>). If the freshest record is older than expected, you'll see a warning.</p>
+      <p class="text-base text-zinc-400 leading-relaxed">Total row count plus the most recent value of any timestamp column (e.g., <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">updated_at</code>, <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">_loaded_at</code>). If the freshest record is older than expected, you'll see a warning.</p>
     </div>
 
     <div class="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-6 mb-3">
@@ -87,14 +87,14 @@
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Output format</h3>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">Results are saved to the <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">./evidence/</code> directory as a structured report. The AI also provides a conversational summary in the terminal. You can reference the evidence pack in code reviews, incident reports, or compliance documentation.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">Results are saved to the <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">./evidence/</code> directory as a structured report. The AI also provides a conversational summary in the terminal. You can reference the evidence pack in code reviews, incident reports, or compliance documentation.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Common use cases</h3>
 
     <ul class="text-base text-zinc-400 leading-relaxed mb-4 list-disc pl-6 space-y-2">
-      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Post-deployment validation</strong> &mdash; Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/prove</code> on key tables after a pipeline deployment to verify data integrity.</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Post-deployment validation</strong> &mdash; Run <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/prove</code> on key tables after a pipeline deployment to verify data integrity.</li>
       <li class="text-base text-zinc-400"><strong class="text-white font-medium">Incident investigation</strong> &mdash; When a downstream dashboard looks wrong, prove the source table to find where the data quality broke down.</li>
-      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Periodic health checks</strong> &mdash; Run <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/prove</code> on critical tables daily or weekly as part of your data observability practice.</li>
+      <li class="text-base text-zinc-400"><strong class="text-white font-medium">Periodic health checks</strong> &mdash; Run <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/prove</code> on critical tables daily or weekly as part of your data observability practice.</li>
       <li class="text-base text-zinc-400"><strong class="text-white font-medium">Onboarding</strong> &mdash; New team members can quickly understand a table's shape, quality, and freshness without writing any SQL.</li>
     </ul>
 

@@ -42,7 +42,7 @@
 
     <p class="text-base text-zinc-400 leading-relaxed mb-4">A Databricks job fails at 3 AM. By the time you see the alert, you need to figure out: what task failed, what error was thrown, what queries ran, whether the cluster had issues, and whether this is a data problem or a code problem. That usually means opening 4-5 different tabs and cross-referencing information manually.</p>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">The <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/debug job</code> command does all of this in one shot.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">The <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug job</code> command does all of this in one shot.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">What happens when you run /debug job</h3>
 
@@ -93,13 +93,13 @@
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">When to use /debug vs other commands</h3>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">If you already know the run ID and just want logs, use <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/logs &lt;run-id&gt;</code> &mdash; it's faster and cheaper. If you want to check a job's schedule and recent run history without deep analysis, use <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/status job &lt;id&gt;</code>.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">If you already know the run ID and just want logs, use <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/logs &lt;run-id&gt;</code> &mdash; it's faster and cheaper. If you want to check a job's schedule and recent run history without deep analysis, use <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/status job &lt;id&gt;</code>.</p>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4"><code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/debug job</code> is for when something is broken and you don't know why. It collects everything and connects the dots.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4"><code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug job</code> is for when something is broken and you don't know why. It collects everything and connects the dots.</p>
 
     <h3 class="text-xl font-semibold text-white mt-10 mb-4">Snowflake equivalent</h3>
 
-    <p class="text-base text-zinc-400 leading-relaxed mb-4">On Snowflake, the equivalent command is <code class="font-mono text-sm text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded">/debug task &lt;name&gt;</code>. It follows the same pattern: fetch the task definition, pull run history, extract errors, and produce a diagnosis &mdash; adapted for Snowflake's task execution model.</p>
+    <p class="text-base text-zinc-400 leading-relaxed mb-4">On Snowflake, the equivalent command is <code class="font-mono text-sm text-blue-500 bg-blue-500/[0.08] border border-blue-500/[0.12] px-1.5 py-0.5 rounded">/debug task &lt;name&gt;</code>. It follows the same pattern: fetch the task definition, pull run history, extract errors, and produce a diagnosis &mdash; adapted for Snowflake's task execution model.</p>
 
     <pre class="block bg-[#0a0a0a] border border-white/[0.06] rounded-lg p-4 font-mono text-sm text-zinc-300 mb-5 overflow-x-auto"><code>lakecode /debug task DAILY_REFRESH</code></pre>
 
