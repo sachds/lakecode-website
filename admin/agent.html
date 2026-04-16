@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent — Lakecode Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Auth gate -->
+  <div id="auth-gate" class="auth-gate">
+    <div class="auth-gate-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h2>Admin access required</h2>
+      <p>Sign in with your lakecode account to manage agents.</p>
+      <div class="auth-gate-error"></div>
+      <div class="auth-gate-actions">
+        <a href="/signin" class="btn btn-primary">Sign in</a>
+        <a href="/" class="btn">Back to site</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-content" style="display:none;">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/admin" class="topbar-logo">lakecode<span>/admin</span></a>
+      <nav class="topbar-nav">
+        <a href="/admin">Agents</a>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <a href="/" class="btn btn-sm">Back to site</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">
+          <a href="/admin" style="color:var(--text-dim);">Agents</a> / <span id="agent-name-crumb">...</span>
+        </div>
+        <h1 id="agent-title">Loading...</h1>
+        <p id="agent-subtitle"></p>
+      </div>
+      <div id="agent-status"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="connectors">Connectors</button>
+      <button class="tab" data-tab="knowledge">Knowledge</button>
+      <button class="tab" data-tab="access">Access</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- ═══ Overview Tab ═══ -->
+    <div class="tab-panel active" id="tab-overview">
+      <div class="stats-grid" id="overview-stats">
+        <div class="stat-card"><div class="stat-label">Status</div><div class="stat-value" id="stat-status">—</div></div>
+        <div class="stat-card"><div class="stat-label">Entities</div><div class="stat-value" id="stat-entities">—</div></div>
+        <div class="stat-card"><div class="stat-label">Claims</div><div class="stat-value" id="stat-claims">—</div></div>
+        <div class="stat-card"><div class="stat-label">Connectors</div><div class="stat-value" id="stat-connectors">—</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-header"><h3>Details</h3></div>
+          <table style="width:100%;font-size:13px;">
+            <tr><td class="text-dim" style="padding:6px 0;width:140px;">Workspace</td><td id="detail-workspace">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">App URL</td><td id="detail-app-url">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Warehouse</td><td id="detail-warehouse">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Catalog / Schema</td><td id="detail-catalog">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Lakebase</td><td id="detail-lakebase">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Region</td><td id="detail-region">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Created</td><td id="detail-created">—</td></tr>
+            <tr><td class="text-dim" style="padding:6px 0;">Last health check</td><td id="detail-health">—</td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Deployment log</h3></div>
+          <div id="overview-deploy-steps">
+            <div class="text-dim" style="font-size:13px;">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Connectors Tab ═══ -->
+    <div class="tab-panel" id="tab-connectors">
+      <div class="card-header">
+        <h3>Connectors</h3>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-connector-modal')">+ Add Connector</button>
+      </div>
+
+      <div id="connectors-list" class="connector-grid mt-16">
+        <div class="text-dim">Loading connectors...</div>
+      </div>
+
+      <!-- Ingestion monitor -->
+      <div id="ingestion-monitor" style="display:none;" class="card mt-24">
+        <div class="card-header"><h3>Ingestion in progress</h3></div>
+        <div class="ingestion-bar"><div class="ingestion-fill" id="ingestion-fill" style="width:0%"></div></div>
+        <div class="ingestion-stats" id="ingestion-stats"></div>
+      </div>
+    </div>
+
+    <!-- ═══ Knowledge Tab ═══ -->
+    <div class="tab-panel" id="tab-knowledge">
+      <div class="filter-bar">
+        <input type="text" id="entity-search" placeholder="Search entities..." oninput="filterEntities()">
+        <select id="entity-type-filter" onchange="filterEntities()">
+          <option value="">All types</option>
+        </select>
+      </div>
+
+      <div id="entity-list" class="entity-list">
+        <div class="text-dim">Loading entities...</div>
+      </div>
+
+      <div id="claims-panel" class="claims-panel" style="display:none;">
+        <div class="flex items-center justify-between">
+          <h4 id="claims-entity-name">Claims</h4>
+          <button class="btn btn-sm" onclick="closeClaims()">Close</button>
+        </div>
+        <div id="claims-list" class="mt-16"></div>
+      </div>
+    </div>
+
+    <!-- ═══ Access Tab ═══ -->
+    <div class="tab-panel" id="tab-access">
+      <div class="card">
+        <div class="card-header">
+          <h3>Permissions</h3>
+        </div>
+        <div id="access-content">
+          <table class="access-table">
+            <thead><tr><th>User / Group</th><th>Permission</th><th>Type</th></tr></thead>
+            <tbody id="access-rows">
+              <tr><td colspan="3" class="text-dim">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Settings Tab ═══ -->
+    <div class="tab-panel" id="tab-settings">
+      <div class="card mb-16">
+        <div class="card-header"><h3>Agent configuration</h3></div>
+        <table style="width:100%;font-size:13px;">
+          <tr><td class="text-dim" style="padding:6px 0;width:140px;">Name</td><td id="settings-name">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Tenant</td><td id="settings-tenant">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Mode</td><td id="settings-mode">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Bundle</td><td id="settings-bundle">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">App version</td><td id="settings-version">—</td></tr>
+        </table>
+      </div>
+
+      <div class="card mb-16">
+        <div class="card-header"><h3>Actions</h3></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" id="btn-health-check" onclick="runHealthCheck()">Run Health Check</button>
+          <button class="btn" id="btn-retry" onclick="retryDeploy()" style="display:none;">Retry Deployment</button>
+          <button class="btn btn-danger" id="btn-destroy" onclick="destroyAgent()">Delete Agent</button>
+        </div>
+        <div id="action-result" class="mt-16" style="display:none;font-size:13px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Connector Modal -->
+  <div class="modal-overlay" id="add-connector-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Connector</h2>
+        <button class="modal-close" onclick="closeModal('add-connector-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="connector-type">Connector type</label>
+          <select id="connector-type" onchange="showConnectorFields()">
+            <option value="github">GitHub</option>
+            <option value="slack">Slack</option>
+            <option value="jira">Jira</option>
+          </select>
+        </div>
+        <!-- GitHub fields -->
+        <div id="fields-github">
+          <div class="form-group">
+            <label for="gh-owner">Repository owner</label>
+            <input type="text" id="gh-owner" placeholder="e.g., acme-corp">
+          </div>
+          <div class="form-group">
+            <label for="gh-repo">Repository name</label>
+            <input type="text" id="gh-repo" placeholder="e.g., data-pipelines">
+          </div>
+          <div class="form-group">
+            <label for="gh-token">GitHub token (optional for public repos)</label>
+            <input type="password" id="gh-token" placeholder="ghp_...">
+          </div>
+        </div>
+        <!-- Slack fields -->
+        <div id="fields-slack" style="display:none;">
+          <div class="form-group">
+            <label for="slack-channel">Slack channel</label>
+            <input type="text" id="slack-channel" placeholder="e.g., #data-ops">
+          </div>
+        </div>
+        <!-- Jira fields -->
+        <div id="fields-jira" style="display:none;">
+          <div class="form-group">
+            <label for="jira-project">Project key</label>
+            <input type="text" id="jira-project" placeholder="e.g., DATA">
+          </div>
+          <div class="form-group">
+            <label for="jira-token">API token</label>
+            <input type="password" id="jira-token" placeholder="Jira API token">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('add-connector-modal')">Cancel</button>
+        <button class="btn btn-primary" id="add-connector-btn" onclick="addConnector()">Add Connector</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /admin-content -->
+
+  <script src="app.js"></script>
+  <script>
+    var agentId = getParam('id');
+    var deployment = null;
+    var appUrl = null;
+
+    if (!agentId) { window.location.href = '/admin'; }
+
+    // ── Load deployment ──
+    function loadAgent() {
+      return provApi('GET', '/deployments/' + agentId).then(function(data) {
+        deployment = data.deployment;
+        appUrl = deployment.resources ? deployment.resources.appUrl : null;
+        renderHeader();
+        renderOverview();
+        renderSettings();
+        return deployment;
+      });
+    }
+
+    function renderHeader() {
+      var d = deployment;
+      var name = d.config ? d.config.name : d.id;
+      document.title = name + ' — Lakecode Admin';
+      $('#agent-name-crumb').textContent = name;
+      $('#agent-title').textContent = name;
+      $('#agent-subtitle').textContent = (d.config ? d.config.tenantId : '') + ' · ' + (d.config ? d.config.region : '');
+      $('#agent-status').innerHTML = statusBadge(d.status);
+    }
+
+    function renderOverview() {
+      var d = deployment;
+      var r = d.resources || {};
+
+      // Status stat
+      $('#stat-status').innerHTML = statusBadge(d.status);
+
+      // Details table
+      $('#detail-workspace').innerHTML = r.workspaceUrl
+        ? '<a href="' + r.workspaceUrl + '" target="_blank" class="mono" style="font-size:12px;">' + r.workspaceUrl + '</a>'
+        : '—';
+      $('#detail-app-url').innerHTML = r.appUrl
+        ? '<a href="' + r.appUrl + '" target="_blank" class="mono" style="font-size:12px;">' + r.appUrl + '</a>'
+        : '—';
+      $('#detail-warehouse').textContent = r.warehouseId || '—';
+      $('#detail-catalog').textContent = (r.catalog && r.schema) ? r.catalog + '.' + r.schema : '—';
+      $('#detail-lakebase').textContent = r.lakebaseProjectId || '—';
+      $('#detail-region').textContent = d.config ? d.config.region : '—';
+      $('#detail-created').textContent = d.createdAt ? new Date(d.createdAt).toLocaleString() : '—';
+      $('#detail-health').textContent = d.lastHealthCheck ? timeAgo(d.lastHealthCheck) : '—';
+
+      // Load deploy logs
+      provApi('GET', '/deployments/' + agentId + '/logs').then(function(data) {
+        $('#overview-deploy-steps').innerHTML = renderDeploySteps(data.logs || []);
+      });
+
+      // Load knowledge stats if app is up
+      if (appUrl) {
+        agentApi(appUrl, 'GET', '/knowledge/stats').then(function(data) {
+          var e = data.entities || {};
+          var c = data.claims || {};
+          $('#stat-entities').textContent = e.total || 0;
+          $('#stat-claims').textContent = c.total || 0;
+          var connCount = (data.connectors || []).length;
+          $('#stat-connectors').textContent = connCount;
+        }).catch(function() {
+          $('#stat-entities').textContent = '—';
+          $('#stat-claims').textContent = '—';
+          $('#stat-connectors').textContent = '—';
+        });
+      }
+    }
+
+    function renderSettings() {
+      var d = deployment;
+      $('#settings-name').textContent = d.config ? d.config.name : '—';
+      $('#settings-tenant').textContent = d.config ? d.config.tenantId : '—';
+      $('#settings-mode').textContent = d.config ? d.config.mode : '—';
+      $('#settings-bundle').textContent = d.config ? d.config.assistantSpecId : '—';
+      $('#settings-version').textContent = d.appVersion || '—';
+
+      // Show retry button if failed
+      if (d.status === 'failed') {
+        $('#btn-retry').style.display = '';
+      }
+    }
+
+    // ── Connectors tab ──
+    function loadConnectors() {
+      if (!appUrl) {
+        $('#connectors-list').innerHTML = '<div class="text-dim">Agent not yet deployed — connectors available after deployment.</div>';
+        return;
+      }
+
+      agentApi(appUrl, 'GET', '/knowledge/connectors').then(function(data) {
+        var connectors = data.connectors || [];
+        if (!connectors.length) {
+          $('#connectors-list').innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1;">' +
+              '<h3>No connectors</h3>' +
+              '<p>Add a connector to start building the knowledge graph.</p>' +
+            '</div>';
+          return;
+        }
+
+        var html = '';
+        connectors.forEach(function(c) {
+          var statusClass = c.status === 'active' ? 'ok' : (c.status === 'error' ? 'error' : 'pending');
+          html += '<div class="connector-card">' +
+            '<div class="connector-header">' +
+              '<span class="connector-name">' + c.connector_type + '</span>' +
+              '<span class="connector-status ' + statusClass + '">' + c.status + '</span>' +
+            '</div>' +
+            '<div class="connector-meta">Config: ' + JSON.stringify(c.config || {}).substring(0, 60) + '</div>' +
+            '<div class="connector-meta">Created: ' + timeAgo(c.created_at) + '</div>' +
+          '</div>';
+        });
+        $('#connectors-list').innerHTML = html;
+      }).catch(function(err) {
+        $('#connectors-list').innerHTML = '<div class="text-dim">Failed to load connectors.</div>';
+      });
+    }
+
+    // ── Add connector ──
+    function showConnectorFields() {
+      var type = $('#connector-type').value;
+      $('#fields-github').style.display = type === 'github' ? '' : 'none';
+      $('#fields-slack').style.display = type === 'slack' ? '' : 'none';
+      $('#fields-jira').style.display = type === 'jira' ? '' : 'none';
+    }
+
+    function addConnector() {
+      if (!appUrl) return alert('Agent not deployed yet.');
+      var type = $('#connector-type').value;
+      var body, path;
+
+      if (type === 'github') {
+        body = {
+          owner: $('#gh-owner').value.trim(),
+          repo: $('#gh-repo').value.trim(),
+          token: $('#gh-token').value.trim() || undefined
+        };
+        path = '/knowledge/connectors/github';
+        if (!body.owner || !body.repo) return alert('Owner and repo are required.');
+      } else if (type === 'slack') {
+        body = { channel: $('#slack-channel').value.trim() };
+        path = '/knowledge/connectors/slack';
+        if (!body.channel) return alert('Channel is required.');
+      } else if (type === 'jira') {
+        body = {
+          project: $('#jira-project').value.trim(),
+          token: $('#jira-token').value.trim()
+        };
+        path = '/knowledge/connectors/jira';
+        if (!body.project) return alert('Project key is required.');
+      }
+
+      $('#add-connector-btn').disabled = true;
+      $('#add-connector-btn').textContent = 'Adding...';
+
+      agentApi(appUrl, 'POST', path, body).then(function(data) {
+        closeModal('add-connector-modal');
+        $('#add-connector-btn').disabled = false;
+        $('#add-connector-btn').textContent = 'Add Connector';
+
+        // Show ingestion monitor
+        if (data.result) {
+          showIngestionResult(data.result);
+        }
+
+        loadConnectors();
+        // Refresh knowledge stats
+        loadAgent();
+      }).catch(function(err) {
+        alert('Failed: ' + (err.message || err.error || JSON.stringify(err)));
+        $('#add-connector-btn').disabled = false;
+        $('#add-connector-btn').textContent = 'Add Connector';
+      });
+    }
+
+    function showIngestionResult(result) {
+      var monitor = $('#ingestion-monitor');
+      monitor.style.display = '';
+      $('#ingestion-fill').style.width = '100%';
+      $('#ingestion-stats').innerHTML =
+        '<span><strong>' + (result.entities || 0) + '</strong> entities</span>' +
+        '<span><strong>' + (result.claims || 0) + '</strong> claims</span>' +
+        '<span><strong>' + (result.errors || 0) + '</strong> errors</span>' +
+        '<span>' + (result.sources || []).length + ' sources</span>';
+    }
+
+    // ── Knowledge tab ──
+    var _allEntities = [];
+
+    function loadEntities() {
+      if (!appUrl) {
+        $('#entity-list').innerHTML = '<div class="text-dim">Agent not yet deployed.</div>';
+        return;
+      }
+
+      agentApi(appUrl, 'GET', '/knowledge/entities?limit=200').then(function(data) {
+        _allEntities = data.entities || [];
+        renderEntities(_allEntities);
+
+        // Populate type filter
+        var types = {};
+        _allEntities.forEach(function(e) { types[e.entity_type] = true; });
+        var sel = $('#entity-type-filter');
+        sel.innerHTML = '<option value="">All types</option>';
+        Object.keys(types).sort().forEach(function(t) {
+          sel.innerHTML += '<option value="' + t + '">' + t + '</option>';
+        });
+      }).catch(function() {
+        $('#entity-list').innerHTML = '<div class="text-dim">Failed to load entities.</div>';
+      });
+    }
+
+    function renderEntities(entities) {
+      if (!entities.length) {
+        $('#entity-list').innerHTML = '<div class="empty-state"><p>No entities in knowledge graph yet. Add a connector to start ingesting.</p></div>';
+        return;
+      }
+
+      var html = '';
+      entities.forEach(function(e) {
+        html += '<div class="entity-row" onclick="loadClaims(\'' + e.id + '\', \'' + (e.canonical_name || '').replace(/'/g, "\\'") + '\')">' +
+          '<span class="entity-type">' + e.entity_type + '</span>' +
+          '<span class="entity-name">' + (e.canonical_name || e.id) + '</span>' +
+          '<span class="entity-desc">' + (e.description || '') + '</span>' +
+          '<span class="entity-confidence mono">' + ((e.confidence || 0) * 100).toFixed(0) + '%</span>' +
+        '</div>';
+      });
+      $('#entity-list').innerHTML = html;
+    }
+
+    function filterEntities() {
+      var q = ($('#entity-search').value || '').toLowerCase();
+      var type = $('#entity-type-filter').value;
+      var filtered = _allEntities.filter(function(e) {
+        var matchType = !type || e.entity_type === type;
+        var matchQ = !q || (e.canonical_name || '').toLowerCase().indexOf(q) !== -1 ||
+          (e.description || '').toLowerCase().indexOf(q) !== -1;
+        return matchType && matchQ;
+      });
+      renderEntities(filtered);
+    }
+
+    function loadClaims(entityId, entityName) {
+      var panel = $('#claims-panel');
+      panel.style.display = '';
+      $('#claims-entity-name').textContent = 'Claims — ' + entityName;
+      $('#claims-list').innerHTML = '<div class="text-dim">Loading...</div>';
+
+      agentApi(appUrl, 'GET', '/knowledge/entities/' + entityId + '/claims').then(function(data) {
+        var claims = data.claims || [];
+        if (!claims.length) {
+          $('#claims-list').innerHTML = '<div class="text-dim">No claims for this entity.</div>';
+          return;
+        }
+
+        var html = '';
+        claims.forEach(function(c) {
+          html += '<div class="claim-row">' +
+            '<span class="claim-predicate">' + c.predicate + '</span>' +
+            '<span class="claim-object">' + (c.object_literal || c.object_name || '—') + '</span>' +
+            '<span class="claim-state ' + c.lifecycle_state + '">' + c.lifecycle_state + '</span>' +
+          '</div>';
+        });
+        $('#claims-list').innerHTML = html;
+      });
+    }
+
+    function closeClaims() {
+      $('#claims-panel').style.display = 'none';
+    }
+
+    // ── Access tab ──
+    function loadAccess() {
+      var d = deployment;
+      if (!d || !d.config) return;
+
+      var rows = '';
+      (d.config.admins || []).forEach(function(a) {
+        var type = a.indexOf('@') !== -1 ? 'User' : 'Group';
+        rows += '<tr><td>' + a + '</td><td><span class="permission-badge manage">CAN_MANAGE</span></td><td>' + type + '</td></tr>';
+      });
+      (d.config.users || []).forEach(function(u) {
+        if ((d.config.admins || []).indexOf(u) !== -1) return; // skip dupes
+        var type = u.indexOf('@') !== -1 ? 'User' : 'Group';
+        rows += '<tr><td>' + u + '</td><td><span class="permission-badge use">CAN_USE</span></td><td>' + type + '</td></tr>';
+      });
+
+      if (!rows) rows = '<tr><td colspan="3" class="text-dim">No permissions configured.</td></tr>';
+      $('#access-rows').innerHTML = rows;
+    }
+
+    // ── Settings actions ──
+    function runHealthCheck() {
+      $('#btn-health-check').disabled = true;
+      $('#btn-health-check').textContent = 'Checking...';
+      $('#action-result').style.display = 'none';
+
+      provApi('GET', '/deployments/' + agentId + '/health').then(function(data) {
+        var h = data.health || {};
+        var checksHtml = (h.checks || []).map(function(c) {
+          var color = c.status === 'ok' ? 'var(--green)' : (c.status === 'warn' ? 'var(--yellow)' : 'var(--red)');
+          return '<div style="display:flex;gap:8px;padding:4px 0;font-size:13px;">' +
+            '<span style="color:' + color + ';">' + (c.status === 'ok' ? '&#10003;' : '&#10007;') + '</span>' +
+            '<span>' + c.name + '</span>' +
+            '<span class="text-dim">' + (c.detail || '') + '</span>' +
+          '</div>';
+        }).join('');
+        $('#action-result').innerHTML = '<div class="card" style="background:var(--bg);"><strong>Health: ' + (h.status || 'unknown') + '</strong>' + checksHtml + '</div>';
+        $('#action-result').style.display = '';
+        loadAgent();
+      }).catch(function(err) {
+        $('#action-result').innerHTML = '<span class="text-red">Health check failed: ' + (err.message || err.error || 'Unknown') + '</span>';
+        $('#action-result').style.display = '';
+      }).finally(function() {
+        $('#btn-health-check').disabled = false;
+        $('#btn-health-check').textContent = 'Run Health Check';
+      });
+    }
+
+    function retryDeploy() {
+      if (!confirm('Retry deployment for this agent?')) return;
+      $('#btn-retry').disabled = true;
+      provApi('POST', '/deployments/' + agentId + '/retry').then(function() {
+        loadAgent();
+      }).catch(function(err) {
+        alert('Retry failed: ' + (err.message || err.error || 'Unknown'));
+      }).finally(function() {
+        $('#btn-retry').disabled = false;
+      });
+    }
+
+    function destroyAgent() {
+      if (!confirm('Are you sure you want to delete this agent? This cannot be undone.')) return;
+      $('#btn-destroy').disabled = true;
+      $('#btn-destroy').textContent = 'Deleting...';
+      provApi('POST', '/deployments/' + agentId + '/destroy').then(function() {
+        window.location.href = '/admin';
+      }).catch(function(err) {
+        alert('Delete failed: ' + (err.message || err.error || 'Unknown'));
+        $('#btn-destroy').disabled = false;
+        $('#btn-destroy').textContent = 'Delete Agent';
+      });
+    }
+
+    // ── Tab change handler ──
+    window.onTabChange = function(tab) {
+      if (tab === 'connectors') loadConnectors();
+      if (tab === 'knowledge') loadEntities();
+      if (tab === 'access') loadAccess();
+    };
+
+    // ── Init ──
+    initTabs();
+    requireAuth().then(function(ok) {
+      if (!ok) return;
+      loadAgent().then(function() {
+        if (isTransitioning(deployment.status)) {
+          startPolling(function() { loadAgent(); }, 3000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agents — Lakecode Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Auth gate (shown when not signed in) -->
+  <div id="auth-gate" class="auth-gate">
+    <div class="auth-gate-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h2>Admin access required</h2>
+      <p>Sign in with your lakecode account to manage agents.</p>
+      <div class="auth-gate-error"></div>
+      <div class="auth-gate-actions">
+        <a href="/signin" class="btn btn-primary">Sign in</a>
+        <a href="/" class="btn">Back to site</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin content (hidden until auth verified) -->
+  <div id="admin-content" style="display:none;">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/admin" class="topbar-logo">lakecode<span>/admin</span></a>
+      <nav class="topbar-nav">
+        <a href="/admin" class="active">Agents</a>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <a href="/" class="btn btn-sm">Back to site</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>Agents</h1>
+        <p>Manage deployed lakecode agents across workspaces</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('create-modal')">+ Create Agent</button>
+    </div>
+
+    <!-- Agents list -->
+    <div class="card" id="agents-card">
+      <div id="agents-content">
+        <div class="empty-state">
+          <p>Loading agents...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Agent Modal -->
+  <div class="modal-overlay" id="create-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create Agent</h2>
+        <button class="modal-close" onclick="closeModal('create-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="create-form-view">
+        <div class="form-group">
+          <label for="agent-name">Agent name</label>
+          <input type="text" id="agent-name" placeholder="e.g., acme-platform-ops">
+          <div class="form-hint">Lowercase letters, numbers, and hyphens only</div>
+        </div>
+        <div class="form-group">
+          <label for="workspace-url">Databricks workspace URL</label>
+          <input type="text" id="workspace-url" placeholder="https://xxx.cloud.databricks.com">
+        </div>
+        <div class="form-group">
+          <label for="admin-email">Admin email</label>
+          <input type="email" id="admin-email" placeholder="admin@company.com">
+        </div>
+        <div class="form-group">
+          <label for="team-name">Team name</label>
+          <input type="text" id="team-name" placeholder="e.g., acme-corp">
+          <div class="form-hint">Used as tenant identifier</div>
+        </div>
+        <div class="form-group">
+          <label for="region">Region</label>
+          <select id="region">
+            <option value="us-east-1">US East (us-east-1)</option>
+            <option value="us-west-2">US West (us-west-2)</option>
+            <option value="eu-west-1">EU West (eu-west-1)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bundle">Bundle</label>
+          <select id="bundle">
+            <option value="">Loading bundles...</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-body" id="create-progress-view" style="display:none;">
+        <div style="margin-bottom:16px;">
+          <div class="flex items-center justify-between mb-16">
+            <strong id="deploy-status-text">Creating deployment...</strong>
+            <span id="deploy-status-badge"></span>
+          </div>
+          <div id="deploy-steps"></div>
+        </div>
+        <div id="deploy-result" style="display:none;" class="mt-16">
+          <div class="card" style="background:var(--bg);">
+            <div style="margin-bottom:8px;font-weight:600;">Agent deployed</div>
+            <div style="font-size:13px;color:var(--text-secondary);">
+              App URL: <a id="deploy-app-url" href="#" target="_blank" class="mono"></a>
+            </div>
+          </div>
+        </div>
+        <div id="deploy-error" style="display:none;" class="mt-16">
+          <div class="card" style="background:var(--bg);border-color:var(--red);">
+            <div style="margin-bottom:4px;font-weight:600;color:var(--red);">Deployment failed</div>
+            <div id="deploy-error-text" style="font-size:13px;color:var(--text-secondary);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="create-form-footer">
+        <button class="btn" onclick="closeModal('create-modal')">Cancel</button>
+        <button class="btn btn-primary" id="create-btn" onclick="createAgent()">Create Agent</button>
+      </div>
+      <div class="modal-footer" id="create-progress-footer" style="display:none;">
+        <button class="btn" onclick="closeCreateModal()">Close</button>
+        <a class="btn btn-primary" id="view-agent-btn" href="#" style="display:none;">View Agent</a>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /admin-content -->
+
+  <script src="app.js"></script>
+  <script>
+    // ── Auth check ──
+    requireAuth().then(function(ok) { if (ok) { loadAgents(); loadBundles(); } });
+
+    // ── Load agents ──
+    function loadAgents() {
+      provApi('GET', '/deployments').then(function(data) {
+        renderAgents(data.deployments || []);
+      }).catch(function(err) {
+        $('#agents-content').innerHTML = '<div class="empty-state"><p class="text-red">Failed to load agents: ' + (err.message || err.error || 'Unknown error') + '</p></div>';
+      });
+    }
+
+    function renderAgents(agents) {
+      if (!agents.length) {
+        $('#agents-content').innerHTML =
+          '<div class="empty-state">' +
+            '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>' +
+            '<h3>No agents yet</h3>' +
+            '<p>Create your first agent to deploy lakecode on a Databricks workspace.</p>' +
+            '<button class="btn btn-primary" onclick="openModal(\'create-modal\')">+ Create Agent</button>' +
+          '</div>';
+        return;
+      }
+
+      var html = '<table class="agents-table"><thead><tr>' +
+        '<th>Agent</th><th>Status</th><th>Workspace</th><th>App URL</th><th>Last Check</th><th></th>' +
+        '</tr></thead><tbody>';
+
+      agents.forEach(function(a) {
+        var name = a.config ? a.config.name : a.id;
+        var wsUrl = a.resources ? a.resources.workspaceUrl : null;
+        var appUrl = a.resources ? a.resources.appUrl : null;
+        html += '<tr>' +
+          '<td><div class="agent-name"><a href="agent.html?id=' + a.id + '">' + name + '</a></div>' +
+            '<div class="agent-meta">' + (a.config ? a.config.tenantId : '') + ' &middot; ' + (a.config ? a.config.region : '') + '</div></td>' +
+          '<td>' + statusBadge(a.status) + '</td>' +
+          '<td>' + (wsUrl ? '<a href="' + wsUrl + '" target="_blank" class="mono" style="font-size:12px;">' + wsUrl.replace('https://', '').split('.')[0] + '</a>' : '<span class="text-dim">—</span>') + '</td>' +
+          '<td>' + (appUrl ? '<a href="' + appUrl + '" target="_blank" class="mono" style="font-size:12px;">Open</a>' : '<span class="text-dim">—</span>') + '</td>' +
+          '<td style="font-size:12px;color:var(--text-dim);">' + timeAgo(a.lastHealthCheck) + '</td>' +
+          '<td><a href="agent.html?id=' + a.id + '" class="btn btn-sm">Details</a></td>' +
+          '</tr>';
+      });
+
+      html += '</tbody></table>';
+      $('#agents-content').innerHTML = html;
+    }
+
+    // ── Load bundles ──
+    function loadBundles() {
+      provApi('GET', '/bundles').then(function(data) {
+        var sel = $('#bundle');
+        sel.innerHTML = '';
+        (data.bundles || []).forEach(function(b) {
+          var opt = document.createElement('option');
+          opt.value = b.id;
+          opt.textContent = b.name + ' (' + b.workflowCount + ' workflows)';
+          sel.appendChild(opt);
+        });
+      }).catch(function() {
+        $('#bundle').innerHTML = '<option value="platform_ops">Platform Ops (default)</option>';
+      });
+    }
+
+    // ── Create agent ──
+    var _deployId = null;
+
+    function createAgent() {
+      var name = $('#agent-name').value.trim();
+      var wsUrl = $('#workspace-url').value.trim();
+      var email = $('#admin-email').value.trim();
+      var team = $('#team-name').value.trim();
+      var region = $('#region').value;
+      var bundle = $('#bundle').value || 'platform_ops';
+
+      if (!name || !email || !team) {
+        alert('Please fill in agent name, admin email, and team name.');
+        return;
+      }
+
+      $('#create-btn').disabled = true;
+      $('#create-btn').textContent = 'Creating...';
+
+      provApi('POST', '/deployments', {
+        tenantId: team,
+        name: name,
+        mode: wsUrl ? 'enterprise' : 'hosted',
+        region: region,
+        assistantSpecId: bundle,
+        admins: [email],
+        users: [email]
+      }).then(function(data) {
+        _deployId = data.deployment.id;
+        // Switch to progress view
+        $('#create-form-view').style.display = 'none';
+        $('#create-form-footer').style.display = 'none';
+        $('#create-progress-view').style.display = '';
+        $('#create-progress-footer').style.display = '';
+        // Start polling
+        startPolling(pollDeploy, 3000);
+      }).catch(function(err) {
+        alert('Failed to create: ' + (err.message || err.error || JSON.stringify(err)));
+        $('#create-btn').disabled = false;
+        $('#create-btn').textContent = 'Create Agent';
+      });
+    }
+
+    function pollDeploy() {
+      if (!_deployId) return;
+
+      Promise.all([
+        provApi('GET', '/deployments/' + _deployId),
+        provApi('GET', '/deployments/' + _deployId + '/logs')
+      ]).then(function(results) {
+        var dep = results[0].deployment;
+        var logs = results[1].logs || [];
+
+        $('#deploy-status-text').textContent = STATUS_LABELS[dep.status] || dep.status;
+        $('#deploy-status-badge').innerHTML = statusBadge(dep.status);
+        $('#deploy-steps').innerHTML = renderDeploySteps(logs);
+
+        if (dep.status === 'healthy' || dep.status === 'degraded') {
+          stopPolling();
+          var appUrl = dep.resources ? dep.resources.appUrl : '';
+          if (appUrl) {
+            $('#deploy-result').style.display = '';
+            $('#deploy-app-url').href = appUrl;
+            $('#deploy-app-url').textContent = appUrl;
+          }
+          $('#view-agent-btn').href = 'agent.html?id=' + dep.id;
+          $('#view-agent-btn').style.display = '';
+        }
+
+        if (dep.status === 'failed') {
+          stopPolling();
+          $('#deploy-error').style.display = '';
+          $('#deploy-error-text').textContent = dep.lastError || 'Unknown error';
+        }
+      });
+    }
+
+    function closeCreateModal() {
+      stopPolling();
+      closeModal('create-modal');
+      // Reset form
+      $('#create-form-view').style.display = '';
+      $('#create-form-footer').style.display = '';
+      $('#create-progress-view').style.display = 'none';
+      $('#create-progress-footer').style.display = 'none';
+      $('#create-btn').disabled = false;
+      $('#create-btn').textContent = 'Create Agent';
+      $('#deploy-result').style.display = 'none';
+      $('#deploy-error').style.display = 'none';
+      $('#view-agent-btn').style.display = 'none';
+      _deployId = null;
+      // Reload list
+      loadAgents();
+    }
+
+  </script>
+</body>
+</html>
