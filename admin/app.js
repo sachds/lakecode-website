@@ -9,14 +9,18 @@ function requireAuth() {
   var key = localStorage.getItem('lk_key');
   if (!key) {
     showAuthGate();
-    return false;
+    return Promise.resolve(false);
   }
-  // Verify key is valid and user has admin access
+  // Verify key is valid and user has enterprise plan
   return fetch(API_URL + '/account', { headers: { 'x-api-key': key } })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (!data.email) {
         showAuthGate('Invalid session. Please sign in again.');
+        return false;
+      }
+      if (data.plan !== 'enterprise') {
+        showAuthGate('Enterprise plan required. The admin panel is available to enterprise customers only.');
         return false;
       }
       // Show admin content
