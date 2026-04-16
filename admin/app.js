@@ -1,7 +1,7 @@
 // ── Lakecode Admin — Shared JS ──
 
 var API_URL = 'https://api.lakecode.ai';
-var PROVISIONING_URL = 'https://provisioning.lakecode.ai';
+var PROVISIONING_URL = 'https://admin.lakecode.ai';
 
 // ── Auth gate ──
 
