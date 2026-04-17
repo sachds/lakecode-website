@@ -322,14 +322,21 @@
         $('#overview-deploy-steps').innerHTML = renderDeploySteps(data.logs || []);
       });
 
-      // Load knowledge stats
-      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
-        var e = data.entities || {};
-        var c = data.claims || {};
-        $('#stat-entities').textContent = e.total || 0;
-        $('#stat-claims').textContent = c.total || 0;
-        var connCount = (data.connectors || []).length;
-        $('#stat-connectors').textContent = connCount;
+      // Load knowledge stats from connector results in D1
+      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
+        var conns = data.connectors || [];
+        var totalEntities = 0, totalClaims = 0;
+        conns.forEach(function(c) {
+          var result = c.lastResult || c.last_result_json;
+          if (typeof result === 'string') try { result = JSON.parse(result); } catch {}
+          if (result) {
+            totalEntities += result.entities || result.totalEntities || 0;
+            totalClaims += result.claims || result.totalClaims || 0;
+          }
+        });
+        $('#stat-entities').textContent = totalEntities || '—';
+        $('#stat-claims').textContent = totalClaims || '—';
+        $('#stat-connectors').textContent = conns.length;
       }).catch(function() {
         $('#stat-entities').textContent = '—';
         $('#stat-claims').textContent = '—';
@@ -529,12 +536,19 @@
       $('#kg-endpoint').textContent = r.lakebaseEndpointHost || '—';
       $('#kg-database').textContent = r.lakebaseEndpointHost ? 'databricks_postgres' : '—';
 
-      // Get entity/claim counts
-      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
-        var e = data.entities || {};
-        var c = data.claims || {};
-        $('#kg-entities').textContent = (e.total || 0) + (e.byType ? ' (' + Object.entries(e.byType).map(function(kv) { return kv[1] + ' ' + kv[0]; }).join(', ') + ')' : '');
-        $('#kg-claims').textContent = (c.total || 0) + (c.accepted ? ' (' + c.accepted + ' accepted, ' + (c.proposed || 0) + ' proposed)' : '');
+      // Get entity/claim counts from connector results in D1
+      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
+        var totalEntities = 0, totalClaims = 0;
+        (data.connectors || []).forEach(function(c) {
+          var result = c.lastResult || c.last_result_json;
+          if (typeof result === 'string') try { result = JSON.parse(result); } catch {}
+          if (result) {
+            totalEntities += result.entities || result.totalEntities || 0;
+            totalClaims += result.claims || result.totalClaims || 0;
+          }
+        });
+        $('#kg-entities').textContent = totalEntities || '—';
+        $('#kg-claims').textContent = totalClaims || '—';
       }).catch(function() {
         $('#kg-entities').textContent = '—';
         $('#kg-claims').textContent = '—';
