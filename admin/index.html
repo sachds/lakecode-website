@@ -112,6 +112,11 @@
           <div id="dbx-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red);"></div>
         </div>
         <div class="form-group">
+          <label for="catalog">Unity Catalog <span class="text-dim" style="font-weight:400;">(existing catalog to use)</span></label>
+          <input type="text" id="catalog" placeholder="e.g., lakecode" value="lakecode">
+          <div class="form-hint">Must already exist. We'll create a <code style="font-size:11px;background:var(--bg);padding:1px 4px;border-radius:3px;">lakecode_ops</code> schema inside it.</div>
+        </div>
+        <div class="form-group">
           <label for="region">Region</label>
           <select id="region">
             <option value="us-east-1">US East (us-east-1)</option>
@@ -256,6 +261,7 @@
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
         databricksToken: _spCredentials ? _spCredentials.spToken : undefined,
+        catalog: $('#catalog').value.trim() || 'lakecode',
         region: region,
         assistantSpecId: bundle,
         admins: [email],
