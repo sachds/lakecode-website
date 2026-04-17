@@ -88,6 +88,11 @@
           <div class="form-hint">Used as tenant identifier</div>
         </div>
         <div class="form-group">
+          <label for="dbx-token">Databricks access token</label>
+          <input type="password" id="dbx-token" placeholder="dapi...">
+          <div class="form-hint">Workspace PAT or account-level token with admin access to the target workspace</div>
+        </div>
+        <div class="form-group">
           <label for="region">Region</label>
           <select id="region">
             <option value="us-east-1">US East (us-east-1)</option>
@@ -209,6 +214,7 @@
     function createAgent() {
       var name = $('#agent-name').value.trim();
       var wsUrl = $('#workspace-url').value.trim();
+      var dbxToken = $('#dbx-token').value.trim();
       var email = $('#admin-email').value.trim();
       var team = $('#team-name').value.trim();
       var region = $('#region').value;
@@ -216,6 +222,10 @@
 
       if (!name || !email || !team) {
         alert('Please fill in agent name, admin email, and team name.');
+        return;
+      }
+      if (!dbxToken) {
+        alert('Databricks access token is required for provisioning.');
         return;
       }
 
@@ -227,6 +237,7 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
+        databricksToken: dbxToken,
         region: region,
         assistantSpecId: bundle,
         admins: [email],
