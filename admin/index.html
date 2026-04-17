@@ -255,8 +255,7 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
-        databricksClientId: _spCredentials ? _spCredentials.clientId : undefined,
-        databricksClientSecret: _spCredentials ? _spCredentials.clientSecret : undefined,
+        databricksToken: _spCredentials ? _spCredentials.spToken : undefined,
         region: region,
         assistantSpecId: bundle,
         admins: [email],
@@ -360,8 +359,7 @@
         tempToken: tempToken
       }).then(function(data) {
         _spCredentials = {
-          clientId: data.clientId,
-          clientSecret: data.clientSecret
+          spToken: data.spToken
         };
         // Auto-fill workspace URL
         if (!$('#workspace-url').value.trim()) {
