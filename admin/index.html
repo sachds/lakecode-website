@@ -88,12 +88,27 @@
           <div class="form-hint">Used as tenant identifier</div>
         </div>
         <div class="form-group">
-          <label>Databricks service principal</label>
-          <div class="form-hint" style="margin-bottom:10px;">
-            Create a <a href="https://docs.databricks.com/en/admin/users-groups/service-principals.html" target="_blank" style="color:var(--accent);">service principal</a> in your Databricks Account Console, assign it to the workspace as admin, then generate an OAuth secret.
+          <label>Connect to Databricks</label>
+          <div id="dbx-not-connected">
+            <div class="form-hint" style="margin-bottom:10px;">
+              Paste a temporary admin token. We'll auto-create a service principal and discard the token.
+            </div>
+            <div style="display:flex;gap:8px;">
+              <input type="password" id="dbx-temp-token" placeholder="dapi..." style="flex:1;">
+              <button type="button" class="btn btn-primary" onclick="bootstrapConnection()" id="dbx-bootstrap-btn">Connect</button>
+            </div>
+            <div class="form-hint" style="margin-top:6px;">
+              <a href="#" onclick="openTokenPage(); return false;" style="color:var(--accent);">Generate a token in your workspace &rarr;</a> (can be deleted after connecting)
+            </div>
           </div>
-          <input type="text" id="dbx-client-id" placeholder="Client ID (service principal application ID)" style="margin-bottom:8px;">
-          <input type="password" id="dbx-client-secret" placeholder="Client secret">
+          <div id="dbx-connected" style="display:none;">
+            <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.2);border-radius:6px;">
+              <span style="color:var(--green);">&#10003;</span>
+              <span style="font-size:13px;">Connected &mdash; service principal <strong id="dbx-sp-name"></strong> created</span>
+              <button type="button" class="btn btn-sm" onclick="disconnectDbx()" style="margin-left:auto;">Disconnect</button>
+            </div>
+          </div>
+          <div id="dbx-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red);"></div>
         </div>
         <div class="form-group">
           <label for="region">Region</label>
@@ -217,8 +232,6 @@
     function createAgent() {
       var name = $('#agent-name').value.trim();
       var wsUrl = $('#workspace-url').value.trim();
-      var clientId = $('#dbx-client-id').value.trim();
-      var clientSecret = $('#dbx-client-secret').value.trim();
       var email = $('#admin-email').value.trim();
       var team = $('#team-name').value.trim();
       var region = $('#region').value;
@@ -228,8 +241,8 @@
         alert('Please fill in agent name, admin email, and team name.');
         return;
       }
-      if (!wsUrl || !clientId || !clientSecret) {
-        alert('Workspace URL, Client ID, and Client Secret are all required.');
+      if (!_spCredentials) {
+        alert('Please connect to Databricks first.');
         return;
       }
 
@@ -241,8 +254,8 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
-        databricksClientId: clientId,
-        databricksClientSecret: clientSecret,
+        databricksClientId: _spCredentials.clientId,
+        databricksClientSecret: _spCredentials.clientSecret,
         region: region,
         assistantSpecId: bundle,
         admins: [email],
@@ -315,6 +328,58 @@
       loadAgents();
     }
 
+    // ── Databricks bootstrap connection ──
+    var _spCredentials = null;
+
+    function openTokenPage() {
+      var wsUrl = ($('#workspace-url').value || '').trim().replace(/\/$/, '');
+      if (!wsUrl) { alert('Enter workspace URL first.'); return; }
+      window.open(wsUrl + '#setting/account/token', '_blank');
+    }
+
+    function bootstrapConnection() {
+      var wsUrl = $('#workspace-url').value.trim().replace(/\/$/, '');
+      var tempToken = $('#dbx-temp-token').value.trim();
+
+      if (!wsUrl) { alert('Enter workspace URL first.'); return; }
+      if (!tempToken) { alert('Paste a temporary admin token.'); return; }
+
+      $('#dbx-bootstrap-btn').disabled = true;
+      $('#dbx-bootstrap-btn').textContent = 'Connecting...';
+      $('#dbx-error').style.display = 'none';
+
+      agentsApi('POST', '/bootstrap', {
+        workspaceUrl: wsUrl,
+        tempToken: tempToken
+      }).then(function(data) {
+        _spCredentials = {
+          clientId: data.clientId,
+          clientSecret: data.clientSecret
+        };
+        // Auto-fill workspace URL
+        if (!$('#workspace-url').value.trim()) {
+          $('#workspace-url').value = wsUrl;
+        }
+        // Show connected state
+        $('#dbx-not-connected').style.display = 'none';
+        $('#dbx-connected').style.display = '';
+        $('#dbx-sp-name').textContent = data.spName || data.clientId;
+      }).catch(function(err) {
+        $('#dbx-error').textContent = 'Failed: ' + (err.message || err.error || err.detail || 'Unknown error');
+        $('#dbx-error').style.display = '';
+        $('#dbx-bootstrap-btn').disabled = false;
+        $('#dbx-bootstrap-btn').textContent = 'Connect';
+      });
+    }
+
+    function disconnectDbx() {
+      _spCredentials = null;
+      $('#dbx-not-connected').style.display = '';
+      $('#dbx-connected').style.display = 'none';
+      $('#dbx-bootstrap-btn').disabled = false;
+      $('#dbx-bootstrap-btn').textContent = 'Connect';
+      $('#dbx-temp-token').value = '';
+    }
 
   </script>
 </body>
