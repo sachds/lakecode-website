@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Connecting to Databricks...</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .msg { text-align: center; font-size: 14px; color: #8b949e; }
+    .msg h3 { color: #e6edf3; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="msg">
+    <h3>Connecting...</h3>
+    <p id="status">Sending credentials to Lakecode...</p>
+  </div>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var state = params.get('state');
+      var error = params.get('error');
+
+      if (error) {
+        document.getElementById('status').textContent = 'Error: ' + (params.get('error_description') || error);
+        return;
+      }
+
+      if (code && window.opener) {
+        window.opener.postMessage({
+          type: 'databricks-oauth-callback',
+          code: code,
+          state: state
+        }, window.location.origin);
+        document.getElementById('status').textContent = 'Connected! This window will close.';
+        setTimeout(function() { window.close(); }, 1500);
+      } else {
+        document.getElementById('status').textContent = 'No authorization code received.';
+      }
+    })();
+  </script>
+</body>
+</html>
