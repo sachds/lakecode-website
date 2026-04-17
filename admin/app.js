@@ -53,7 +53,7 @@ function showAuthGate(msg) {
 function apiHeaders() {
   var key = localStorage.getItem('lk_key');
   var h = { 'Content-Type': 'application/json' };
-  if (key) h['Authorization'] = 'Bearer ' + key;
+  if (key) h['x-api-key'] = key;
   return h;
 }
 
