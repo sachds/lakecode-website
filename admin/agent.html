@@ -356,13 +356,30 @@
         var html = '';
         connectors.forEach(function(c) {
           var statusClass = c.status === 'active' ? 'ok' : (c.status === 'error' ? 'error' : 'pending');
+          var configSummary = '';
+          if (c.config) {
+            if (c.config.owner && c.config.repo) configSummary = c.config.owner + '/' + c.config.repo;
+            else if (c.config.channel) configSummary = c.config.channel;
+            else if (c.config.project) configSummary = c.config.project;
+            else configSummary = JSON.stringify(c.config).substring(0, 50);
+          }
+          var lastResult = c.lastResult || c.last_result_json;
+          if (typeof lastResult === 'string') try { lastResult = JSON.parse(lastResult); } catch {}
+
           html += '<div class="connector-card">' +
             '<div class="connector-header">' +
               '<span class="connector-name">' + c.connector_type + '</span>' +
               '<span class="connector-status ' + statusClass + '">' + c.status + '</span>' +
             '</div>' +
-            '<div class="connector-meta">Config: ' + JSON.stringify(c.config || {}).substring(0, 60) + '</div>' +
-            '<div class="connector-meta">Created: ' + timeAgo(c.created_at) + '</div>' +
+            '<div class="connector-meta">' + configSummary + '</div>' +
+            (c.last_sync ? '<div class="connector-meta">Last sync: ' + timeAgo(c.last_sync) + '</div>' : '') +
+            (lastResult ? '<div class="connector-meta">' +
+              (lastResult.totalEntities || lastResult.entities || 0) + ' entities, ' +
+              (lastResult.totalClaims || lastResult.claims || 0) + ' claims' +
+            '</div>' : '') +
+            '<div style="margin-top:8px;">' +
+              '<button class="btn btn-sm" onclick="triggerIngestion(\'' + c.id + '\')">Run Ingestion</button>' +
+            '</div>' +
           '</div>';
         });
         $('#connectors-list').innerHTML = html;
@@ -404,23 +421,43 @@
       $('#add-connector-btn').disabled = true;
       $('#add-connector-btn').textContent = 'Adding...';
 
+      // Step 1: Save connector config to control plane
       agentsApi('POST', '/' + agentId + '/connectors/' + type, body).then(function(data) {
+        var connector = data.connector || data;
         closeModal('add-connector-modal');
         $('#add-connector-btn').disabled = false;
         $('#add-connector-btn').textContent = 'Add Connector';
-
-        // Show ingestion monitor
-        if (data.result) {
-          showIngestionResult(data.result);
-        }
-
         loadConnectors();
-        // Refresh knowledge stats
-        loadAgent();
+
+        // Step 2: Trigger ingestion
+        if (connector.id) {
+          triggerIngestion(connector.id);
+        }
       }).catch(function(err) {
         alert('Failed: ' + (err.message || err.error || JSON.stringify(err)));
         $('#add-connector-btn').disabled = false;
         $('#add-connector-btn').textContent = 'Add Connector';
+      });
+    }
+
+    function triggerIngestion(connectorId) {
+      var monitor = $('#ingestion-monitor');
+      monitor.style.display = '';
+      $('#ingestion-fill').style.width = '30%';
+      $('#ingestion-stats').innerHTML = '<span>Running ingestion...</span>';
+
+      agentsApi('POST', '/' + agentId + '/connectors/' + connectorId + '/ingest').then(function(data) {
+        if (data.result) {
+          showIngestionResult(data.result);
+        } else {
+          $('#ingestion-fill').style.width = '100%';
+          $('#ingestion-stats').innerHTML = '<span>Ingestion complete</span>';
+        }
+        loadConnectors();
+        loadAgent();
+      }).catch(function(err) {
+        $('#ingestion-fill').style.width = '0%';
+        $('#ingestion-stats').innerHTML = '<span class="text-red">Failed: ' + (err.message || err.error || 'Unknown') + '</span>';
       });
     }
 
