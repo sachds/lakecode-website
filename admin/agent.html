@@ -440,25 +440,61 @@
       });
     }
 
+    var _ingestPollTimer = null;
+
     function triggerIngestion(connectorId) {
       var monitor = $('#ingestion-monitor');
       monitor.style.display = '';
-      $('#ingestion-fill').style.width = '30%';
-      $('#ingestion-stats').innerHTML = '<span>Running ingestion...</span>';
+      $('#ingestion-fill').style.width = '15%';
+      $('#ingestion-stats').innerHTML = '<span>Submitting ingestion job...</span>';
 
       agentsApi('POST', '/' + agentId + '/connectors/' + connectorId + '/ingest').then(function(data) {
         if (data.result) {
+          // Immediate result (app endpoint fallback)
           showIngestionResult(data.result);
+          loadConnectors();
+          loadAgent();
+        } else if (data.runId || data.status === 'submitted') {
+          // Job submitted — poll for status
+          $('#ingestion-fill').style.width = '30%';
+          $('#ingestion-stats').innerHTML = '<span>Job submitted — running ingestion in Databricks...</span>';
+          pollIngestionStatus(connectorId);
         } else {
           $('#ingestion-fill').style.width = '100%';
-          $('#ingestion-stats').innerHTML = '<span>Ingestion complete</span>';
+          $('#ingestion-stats').innerHTML = '<span>Ingestion triggered</span>';
+          loadConnectors();
         }
-        loadConnectors();
-        loadAgent();
       }).catch(function(err) {
         $('#ingestion-fill').style.width = '0%';
         $('#ingestion-stats').innerHTML = '<span class="text-red">Failed: ' + (err.message || err.error || 'Unknown') + '</span>';
       });
+    }
+
+    function pollIngestionStatus(connectorId) {
+      if (_ingestPollTimer) clearInterval(_ingestPollTimer);
+      _ingestPollTimer = setInterval(function() {
+        agentsApi('GET', '/' + agentId + '/connectors/' + connectorId + '/status').then(function(data) {
+          if (data.status === 'active') {
+            clearInterval(_ingestPollTimer);
+            _ingestPollTimer = null;
+            $('#ingestion-fill').style.width = '100%';
+            $('#ingestion-stats').innerHTML = '<span style="color:var(--green);">&#10003; Ingestion complete</span>';
+            loadConnectors();
+            loadAgent();
+          } else if (data.status === 'error') {
+            clearInterval(_ingestPollTimer);
+            _ingestPollTimer = null;
+            $('#ingestion-fill').style.width = '0%';
+            $('#ingestion-stats').innerHTML = '<span class="text-red">Ingestion failed' + (data.message ? ': ' + data.message : '') + '</span>';
+            loadConnectors();
+          } else {
+            // Still running
+            var w = Math.min(90, parseInt($('#ingestion-fill').style.width) + 5);
+            $('#ingestion-fill').style.width = w + '%';
+            $('#ingestion-stats').innerHTML = '<span>Ingestion running... (' + (data.jobState || 'pending') + ')</span>';
+          }
+        });
+      }, 5000);
     }
 
     function showIngestionResult(result) {
