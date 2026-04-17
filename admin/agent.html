@@ -241,15 +241,13 @@
   <script>
     var agentId = getParam('id');
     var deployment = null;
-    var appUrl = null;
 
     if (!agentId) { window.location.href = '/admin'; }
 
-    // ── Load deployment ──
+    // ── Load agent ──
     function loadAgent() {
-      return provApi('GET', '/deployments/' + agentId).then(function(data) {
-        deployment = data.deployment;
-        appUrl = deployment.resources ? deployment.resources.appUrl : null;
+      return agentsApi('GET', '/' + agentId).then(function(data) {
+        deployment = data.agent;
         renderHeader();
         renderOverview();
         renderSettings();
@@ -289,25 +287,23 @@
       $('#detail-health').textContent = d.lastHealthCheck ? timeAgo(d.lastHealthCheck) : '—';
 
       // Load deploy logs
-      provApi('GET', '/deployments/' + agentId + '/logs').then(function(data) {
+      agentsApi('GET', '/' + agentId + '/logs').then(function(data) {
         $('#overview-deploy-steps').innerHTML = renderDeploySteps(data.logs || []);
       });
 
-      // Load knowledge stats if app is up
-      if (appUrl) {
-        agentApi(appUrl, 'GET', '/knowledge/stats').then(function(data) {
-          var e = data.entities || {};
-          var c = data.claims || {};
-          $('#stat-entities').textContent = e.total || 0;
-          $('#stat-claims').textContent = c.total || 0;
-          var connCount = (data.connectors || []).length;
-          $('#stat-connectors').textContent = connCount;
-        }).catch(function() {
-          $('#stat-entities').textContent = '—';
-          $('#stat-claims').textContent = '—';
-          $('#stat-connectors').textContent = '—';
-        });
-      }
+      // Load knowledge stats
+      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
+        var e = data.entities || {};
+        var c = data.claims || {};
+        $('#stat-entities').textContent = e.total || 0;
+        $('#stat-claims').textContent = c.total || 0;
+        var connCount = (data.connectors || []).length;
+        $('#stat-connectors').textContent = connCount;
+      }).catch(function() {
+        $('#stat-entities').textContent = '—';
+        $('#stat-claims').textContent = '—';
+        $('#stat-connectors').textContent = '—';
+      });
     }
 
     function renderSettings() {
@@ -326,12 +322,7 @@
 
     // ── Connectors tab ──
     function loadConnectors() {
-      if (!appUrl) {
-        $('#connectors-list').innerHTML = '<div class="text-dim">Agent not yet deployed — connectors available after deployment.</div>';
-        return;
-      }
-
-      agentApi(appUrl, 'GET', '/knowledge/connectors').then(function(data) {
+      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
         var connectors = data.connectors || [];
         if (!connectors.length) {
           $('#connectors-list').innerHTML =
@@ -369,9 +360,8 @@
     }
 
     function addConnector() {
-      if (!appUrl) return alert('Agent not deployed yet.');
       var type = $('#connector-type').value;
-      var body, path;
+      var body;
 
       if (type === 'github') {
         body = {
@@ -379,25 +369,22 @@
           repo: $('#gh-repo').value.trim(),
           token: $('#gh-token').value.trim() || undefined
         };
-        path = '/knowledge/connectors/github';
         if (!body.owner || !body.repo) return alert('Owner and repo are required.');
       } else if (type === 'slack') {
         body = { channel: $('#slack-channel').value.trim() };
-        path = '/knowledge/connectors/slack';
         if (!body.channel) return alert('Channel is required.');
       } else if (type === 'jira') {
         body = {
           project: $('#jira-project').value.trim(),
           token: $('#jira-token').value.trim()
         };
-        path = '/knowledge/connectors/jira';
         if (!body.project) return alert('Project key is required.');
       }
 
       $('#add-connector-btn').disabled = true;
       $('#add-connector-btn').textContent = 'Adding...';
 
-      agentApi(appUrl, 'POST', path, body).then(function(data) {
+      agentsApi('POST', '/' + agentId + '/connectors/' + type, body).then(function(data) {
         closeModal('add-connector-modal');
         $('#add-connector-btn').disabled = false;
         $('#add-connector-btn').textContent = 'Add Connector';
@@ -432,12 +419,7 @@
     var _allEntities = [];
 
     function loadEntities() {
-      if (!appUrl) {
-        $('#entity-list').innerHTML = '<div class="text-dim">Agent not yet deployed.</div>';
-        return;
-      }
-
-      agentApi(appUrl, 'GET', '/knowledge/entities?limit=200').then(function(data) {
+      agentsApi('GET', '/' + agentId + '/knowledge/entities?limit=200').then(function(data) {
         _allEntities = data.entities || [];
         renderEntities(_allEntities);
 
@@ -490,7 +472,7 @@
       $('#claims-entity-name').textContent = 'Claims — ' + entityName;
       $('#claims-list').innerHTML = '<div class="text-dim">Loading...</div>';
 
-      agentApi(appUrl, 'GET', '/knowledge/entities/' + entityId + '/claims').then(function(data) {
+      agentsApi('GET', '/' + agentId + '/knowledge/entities/' + entityId + '/claims').then(function(data) {
         var claims = data.claims || [];
         if (!claims.length) {
           $('#claims-list').innerHTML = '<div class="text-dim">No claims for this entity.</div>';
@@ -539,7 +521,7 @@
       $('#btn-health-check').textContent = 'Checking...';
       $('#action-result').style.display = 'none';
 
-      provApi('GET', '/deployments/' + agentId + '/health').then(function(data) {
+      agentsApi('GET', '/' + agentId + '/health').then(function(data) {
         var h = data.health || {};
         var checksHtml = (h.checks || []).map(function(c) {
           var color = c.status === 'ok' ? 'var(--green)' : (c.status === 'warn' ? 'var(--yellow)' : 'var(--red)');
@@ -564,7 +546,7 @@
     function retryDeploy() {
       if (!confirm('Retry deployment for this agent?')) return;
       $('#btn-retry').disabled = true;
-      provApi('POST', '/deployments/' + agentId + '/retry').then(function() {
+      agentsApi('POST', '/' + agentId + '/retry').then(function() {
         loadAgent();
       }).catch(function(err) {
         alert('Retry failed: ' + (err.message || err.error || 'Unknown'));
@@ -577,7 +559,7 @@
       if (!confirm('Are you sure you want to delete this agent? This cannot be undone.')) return;
       $('#btn-destroy').disabled = true;
       $('#btn-destroy').textContent = 'Deleting...';
-      provApi('POST', '/deployments/' + agentId + '/destroy').then(function() {
+      agentsApi('DELETE', '/' + agentId).then(function() {
         window.location.href = '/admin';
       }).catch(function(err) {
         alert('Delete failed: ' + (err.message || err.error || 'Unknown'));

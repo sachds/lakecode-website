@@ -1,7 +1,6 @@
 // ── Lakecode Admin — Shared JS ──
 
 var API_URL = 'https://api.lakecode.ai';
-var PROVISIONING_URL = 'https://admin.lakecode.ai';
 
 // ── Auth gate ──
 
@@ -67,14 +66,9 @@ function api(method, url, body) {
   });
 }
 
-// Provisioning API
-function provApi(method, path, body) {
-  return api(method, PROVISIONING_URL + path, body);
-}
-
-// Agent API (calls deployed app)
-function agentApi(appUrl, method, path, body) {
-  return api(method, appUrl + path, body);
+// Agents API — all calls go through api.lakecode.ai
+function agentsApi(method, path, body) {
+  return api(method, API_URL + '/agents' + path, body);
 }
 
 // ── Status helpers ──

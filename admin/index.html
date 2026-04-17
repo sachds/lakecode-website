@@ -145,8 +145,8 @@
 
     // ── Load agents ──
     function loadAgents() {
-      provApi('GET', '/deployments').then(function(data) {
-        renderAgents(data.deployments || []);
+      agentsApi('GET', '').then(function(data) {
+        renderAgents(data.agents || []);
       }).catch(function(err) {
         $('#agents-content').innerHTML = '<div class="empty-state"><p class="text-red">Failed to load agents: ' + (err.message || err.error || 'Unknown error') + '</p></div>';
       });
@@ -189,7 +189,7 @@
 
     // ── Load bundles ──
     function loadBundles() {
-      provApi('GET', '/bundles').then(function(data) {
+      agentsApi('GET', '/bundles').then(function(data) {
         var sel = $('#bundle');
         sel.innerHTML = '';
         (data.bundles || []).forEach(function(b) {
@@ -222,7 +222,7 @@
       $('#create-btn').disabled = true;
       $('#create-btn').textContent = 'Creating...';
 
-      provApi('POST', '/deployments', {
+      agentsApi('POST', '', {
         tenantId: team,
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
@@ -231,7 +231,7 @@
         admins: [email],
         users: [email]
       }).then(function(data) {
-        _deployId = data.deployment.id;
+        _deployId = data.agent.id;
         // Switch to progress view
         $('#create-form-view').style.display = 'none';
         $('#create-form-footer').style.display = 'none';
@@ -250,10 +250,10 @@
       if (!_deployId) return;
 
       Promise.all([
-        provApi('GET', '/deployments/' + _deployId),
-        provApi('GET', '/deployments/' + _deployId + '/logs')
+        agentsApi('GET', '/' + _deployId),
+        agentsApi('GET', '/' + _deployId + '/logs')
       ]).then(function(results) {
-        var dep = results[0].deployment;
+        var dep = results[0].agent;
         var logs = results[1].logs || [];
 
         $('#deploy-status-text').textContent = STATUS_LABELS[dep.status] || dep.status;
