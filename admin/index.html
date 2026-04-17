@@ -88,26 +88,9 @@
           <div class="form-hint">Used as tenant identifier</div>
         </div>
         <div class="form-group">
-          <label>Databricks connection</label>
-          <div id="dbx-connect-section">
-            <div id="dbx-not-connected" style="display:flex;gap:8px;align-items:center;">
-              <button type="button" class="btn btn-primary" onclick="connectDatabricks()" id="dbx-connect-btn">Connect to Databricks</button>
-              <span class="text-dim" style="font-size:12px;">OAuth &middot; opens in popup</span>
-            </div>
-            <div id="dbx-connected" style="display:none;">
-              <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.2);border-radius:6px;">
-                <span style="color:var(--green);">&#10003;</span>
-                <span style="font-size:13px;">Connected as <strong id="dbx-user-email"></strong></span>
-                <button type="button" class="btn btn-sm" onclick="disconnectDatabricks()" style="margin-left:auto;">Disconnect</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-hint">
-            Requires a <a href="https://docs.databricks.com/en/integrations/configure-oauth-app.html" target="_blank" style="color:var(--accent);">custom OAuth app</a> in your workspace with redirect URI: <code style="font-size:11px;background:var(--bg);padding:1px 4px;border-radius:3px;">https://lakecode.ai/admin/oauth-callback.html</code>
-          </div>
-          <div id="dbx-client-id-group" style="margin-top:8px;">
-            <input type="text" id="dbx-client-id" placeholder="OAuth Client ID from your Databricks workspace">
-          </div>
+          <label for="dbx-token">Databricks access token</label>
+          <input type="password" id="dbx-token" placeholder="dapi...">
+          <div class="form-hint">Workspace PAT with admin access. <a href="#" id="generate-token-link" onclick="openTokenPage(); return false;" style="color:var(--accent);">Generate token in your workspace &rarr;</a></div>
         </div>
         <div class="form-group">
           <label for="region">Region</label>
@@ -231,6 +214,7 @@
     function createAgent() {
       var name = $('#agent-name').value.trim();
       var wsUrl = $('#workspace-url').value.trim();
+      var dbxToken = $('#dbx-token').value.trim();
       var email = $('#admin-email').value.trim();
       var team = $('#team-name').value.trim();
       var region = $('#region').value;
@@ -240,12 +224,8 @@
         alert('Please fill in agent name, admin email, and team name.');
         return;
       }
-      if (!_oauthTokens && !wsUrl) {
-        alert('Please connect to Databricks or provide a workspace URL.');
-        return;
-      }
-      if (!_oauthTokens) {
-        alert('Please connect to Databricks first.');
+      if (!dbxToken) {
+        alert('Databricks access token is required.');
         return;
       }
 
@@ -257,7 +237,7 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
-        oauthTokens: _oauthTokens,
+        databricksToken: dbxToken,
         region: region,
         assistantSpecId: bundle,
         admins: [email],
@@ -330,119 +310,11 @@
       loadAgents();
     }
 
-    // ── Databricks OAuth ──
-    var _oauthTokens = null;
-    var _pkceVerifier = null;
-
-    // Generate PKCE code_verifier and code_challenge
-    function generatePKCE() {
-      var array = new Uint8Array(32);
-      crypto.getRandomValues(array);
-      var verifier = btoa(String.fromCharCode.apply(null, array))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))
-        .then(function(hash) {
-          var challenge = btoa(String.fromCharCode.apply(null, new Uint8Array(hash)))
-            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-          return { verifier: verifier, challenge: challenge };
-        });
-    }
-
-    function connectDatabricks() {
-      var wsUrl = $('#workspace-url').value.trim();
-      var clientId = $('#dbx-client-id').value.trim();
-
+    // ── Databricks token helper ──
+    function openTokenPage() {
+      var wsUrl = ($('#workspace-url').value || '').trim().replace(/\/$/, '');
       if (!wsUrl) { alert('Enter workspace URL first.'); return; }
-      if (!clientId) { alert('Enter your OAuth Client ID.'); return; }
-
-      // Normalize workspace URL
-      wsUrl = wsUrl.replace(/\/$/, '');
-
-      generatePKCE().then(function(pkce) {
-        _pkceVerifier = pkce.verifier;
-        var state = crypto.randomUUID();
-        sessionStorage.setItem('dbx_oauth_state', state);
-        sessionStorage.setItem('dbx_oauth_ws', wsUrl);
-        sessionStorage.setItem('dbx_oauth_client', clientId);
-
-        var authUrl = wsUrl + '/oidc/v1/authorize?' +
-          'client_id=' + encodeURIComponent(clientId) +
-          '&redirect_uri=' + encodeURIComponent(window.location.origin + '/admin/oauth-callback.html') +
-          '&response_type=code' +
-          '&scope=all-apis+offline_access' +
-          '&code_challenge=' + encodeURIComponent(pkce.challenge) +
-          '&code_challenge_method=S256' +
-          '&state=' + state;
-
-        // Open popup
-        var popup = window.open(authUrl, 'dbx_oauth', 'width=600,height=700,scrollbars=yes');
-        if (!popup) alert('Popup blocked. Please allow popups for this site.');
-
-        $('#dbx-connect-btn').disabled = true;
-        $('#dbx-connect-btn').textContent = 'Waiting for auth...';
-      });
-    }
-
-    // Listen for OAuth callback from popup
-    window.addEventListener('message', function(e) {
-      if (e.origin !== window.location.origin) return;
-      if (!e.data || e.data.type !== 'databricks-oauth-callback') return;
-
-      var code = e.data.code;
-      var state = e.data.state;
-
-      // Validate state
-      var expectedState = sessionStorage.getItem('dbx_oauth_state');
-      if (state !== expectedState) {
-        alert('OAuth state mismatch. Please try again.');
-        resetOAuthButton();
-        return;
-      }
-
-      var wsUrl = sessionStorage.getItem('dbx_oauth_ws');
-      var clientId = sessionStorage.getItem('dbx_oauth_client');
-
-      // Exchange code for tokens via our backend
-      agentsApi('POST', '/oauth/exchange', {
-        code: code,
-        codeVerifier: _pkceVerifier,
-        workspaceUrl: wsUrl,
-        clientId: clientId,
-        redirectUri: window.location.origin + '/admin/oauth-callback.html'
-      }).then(function(data) {
-        _oauthTokens = {
-          accessToken: data.access_token,
-          refreshToken: data.refresh_token,
-          workspaceUrl: wsUrl,
-          clientId: clientId
-        };
-        // Show connected state
-        $('#dbx-not-connected').style.display = 'none';
-        $('#dbx-connected').style.display = '';
-        $('#dbx-user-email').textContent = data.email || wsUrl.replace('https://', '').split('.')[0];
-        $('#dbx-client-id-group').style.display = 'none';
-        // Auto-fill workspace URL if empty
-        if (!$('#workspace-url').value.trim()) {
-          $('#workspace-url').value = wsUrl;
-        }
-      }).catch(function(err) {
-        alert('Token exchange failed: ' + (err.message || err.error || 'Unknown error'));
-        resetOAuthButton();
-      });
-    });
-
-    function disconnectDatabricks() {
-      _oauthTokens = null;
-      _pkceVerifier = null;
-      $('#dbx-not-connected').style.display = '';
-      $('#dbx-connected').style.display = 'none';
-      $('#dbx-client-id-group').style.display = '';
-      resetOAuthButton();
-    }
-
-    function resetOAuthButton() {
-      $('#dbx-connect-btn').disabled = false;
-      $('#dbx-connect-btn').textContent = 'Connect to Databricks';
+      window.open(wsUrl + '#setting/account/token', '_blank');
     }
 
   </script>
