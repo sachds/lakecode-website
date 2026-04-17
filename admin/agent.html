@@ -680,6 +680,22 @@
     // ── Logs tab ──
     var _logRefreshTimer = null;
 
+    var STEP_LABELS = {
+      create_workspace: 'Create workspace',
+      poll_workspace: 'Create workspace',
+      create_warehouse: 'Create SQL warehouse',
+      bootstrap_catalog: 'Bootstrap catalog & schema',
+      create_tables: 'Create state tables',
+      create_secret_scope: 'Create secret scope',
+      create_lakebase: 'Create Lakebase',
+      poll_lakebase: 'Create Lakebase',
+      migrate_knowledge_graph: 'Migrate knowledge graph',
+      deploy_app: 'Deploy app',
+      poll_app_deploy: 'Deploy app',
+      grant_permissions: 'Grant permissions',
+      health_check: 'Health check'
+    };
+
     function loadLogs() {
       agentsApi('GET', '/' + agentId + '/logs').then(function(data) {
         var logs = data.logs || [];
@@ -688,14 +704,29 @@
           return;
         }
 
+        // Deduplicate: for poll steps, only keep the last "started" and any completed/failed
+        // Group by step, collapse repeated "started" entries
+        var collapsed = [];
+        var lastPollStep = {};
+        logs.forEach(function(l) {
+          var isPoll = (l.step || '').indexOf('poll_') === 0;
+          if (isPoll && l.status === 'started') {
+            lastPollStep[l.step] = l; // Keep only the latest poll started
+          } else {
+            collapsed.push(l);
+          }
+        });
+        // Add back the last poll started entry for each poll step
+        Object.keys(lastPollStep).forEach(function(k) { collapsed.push(lastPollStep[k]); });
+
         // Sort newest first
-        logs.sort(function(a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
+        collapsed.sort(function(a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
 
         var html = '<div class="log-scroll"><table class="log-table"><thead><tr>' +
-          '<th>Time</th><th>Step</th><th>Status</th><th>Duration</th><th>Details</th>' +
+          '<th style="width:90px;">Time</th><th style="width:180px;">Step</th><th style="width:90px;">Status</th><th style="width:70px;">Duration</th><th>Details</th>' +
           '</tr></thead><tbody>';
 
-        logs.forEach(function(l) {
+        collapsed.forEach(function(l) {
           var statusClass = 'log-status-run';
           if (l.status === 'completed') statusClass = 'log-status-ok';
           else if (l.status === 'failed') statusClass = 'log-status-fail';
@@ -708,15 +739,20 @@
 
           var time = l.created_at ? new Date(l.created_at).toLocaleTimeString() : '';
           var dur = l.duration_ms ? formatDuration(l.duration_ms) : '';
+          var stepLabel = STEP_LABELS[l.step] || (l.step || '').replace(/_/g, ' ');
+
+          // Only show error in details, not the redundant "step: status" message
+          var detail = '';
+          if (l.error) {
+            detail = '<span class="log-error">' + l.error + '</span>';
+          }
 
           html += '<tr>' +
             '<td class="log-time">' + time + '</td>' +
-            '<td class="log-step">' + (l.step || '') + '</td>' +
+            '<td class="log-step">' + stepLabel + '</td>' +
             '<td class="' + statusClass + '">' + statusIcon + ' ' + (l.status || '') + '</td>' +
             '<td class="log-duration">' + dur + '</td>' +
-            '<td>' + (l.message || '') +
-              (l.error ? '<div class="log-error">' + l.error + '</div>' : '') +
-            '</td>' +
+            '<td>' + detail + '</td>' +
           '</tr>';
         });
 

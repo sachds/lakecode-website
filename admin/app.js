@@ -199,41 +199,63 @@ function closeModal(id) {
 // ── Deploy step rendering ──
 
 var DEPLOY_STEPS = [
-  { key: 'create_workspace', label: 'Create workspace' },
-  { key: 'bootstrap_catalog', label: 'Bootstrap catalog & schema' },
+  { key: 'create_workspace', poll: 'poll_workspace', label: 'Create workspace' },
   { key: 'create_warehouse', label: 'Create SQL warehouse' },
-  { key: 'create_volume', label: 'Create artifacts volume' },
+  { key: 'bootstrap_catalog', label: 'Bootstrap catalog & schema' },
   { key: 'create_tables', label: 'Create state tables' },
   { key: 'create_secret_scope', label: 'Create secret scope' },
-  { key: 'create_lakebase', label: 'Create Lakebase knowledge graph' },
-  { key: 'migrate_knowledge_graph', label: 'Migrate knowledge graph schema' },
-  { key: 'deploy_app', label: 'Deploy Databricks App' },
+  { key: 'create_lakebase', poll: 'poll_lakebase', label: 'Create Lakebase knowledge graph' },
+  { key: 'migrate_knowledge_graph', label: 'Migrate knowledge graph' },
+  { key: 'deploy_app', poll: 'poll_app_deploy', label: 'Deploy Databricks App' },
   { key: 'grant_permissions', label: 'Grant permissions' },
   { key: 'health_check', label: 'Health check' }
 ];
 
 function renderDeploySteps(logs) {
+  // Build a map of latest log per step
   var logMap = {};
   (logs || []).forEach(function(l) {
-    logMap[l.step] = l;
+    var existing = logMap[l.step];
+    if (!existing || (l.created_at || '') >= (existing.created_at || '')) {
+      logMap[l.step] = l;
+    }
   });
 
   return DEPLOY_STEPS.map(function(step) {
+    // Merge poll step into the parent — use the poll step's state if it's more recent
     var log = logMap[step.key];
+    var pollLog = step.poll ? logMap[step.poll] : null;
+
+    // Pick the most advanced state between the step and its poll
+    if (pollLog) {
+      if (!log) {
+        log = pollLog;
+      } else if (pollLog.status === 'completed') {
+        log = pollLog;
+      } else if (pollLog.status === 'failed') {
+        log = pollLog;
+      } else if (pollLog.status === 'started' && log.status === 'completed') {
+        // Poll is still running — show as running
+        log = { status: 'started', step: step.key, duration_ms: null, error: null };
+      }
+    }
+
     var state = 'pending';
     var icon = '&bull;';
     var dur = '';
+    var error = '';
     if (log) {
       if (log.status === 'completed') { state = 'completed'; icon = '&#10003;'; }
       else if (log.status === 'started') { state = 'running'; icon = '&#8635;'; }
       else if (log.status === 'failed') { state = 'failed'; icon = '&#10007;'; }
       else if (log.status === 'skipped') { state = 'completed'; icon = '&#8211;'; }
       if (log.duration_ms) dur = formatDuration(log.duration_ms);
+      if (log.error) error = log.error;
     }
     return '<div class="deploy-step ' + state + '">' +
       '<div class="deploy-step-icon' + (state === 'running' ? ' spinning' : '') + '">' + icon + '</div>' +
       '<div class="deploy-step-name">' + step.label +
-        (log && log.error ? '<div class="text-red" style="font-size:12px;margin-top:2px;">' + log.error + '</div>' : '') +
+        (error ? '<div class="text-red" style="font-size:12px;margin-top:2px;">' + error + '</div>' : '') +
       '</div>' +
       (dur ? '<div class="deploy-step-duration">' + dur + '</div>' : '') +
       '</div>';
