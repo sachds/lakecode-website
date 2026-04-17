@@ -752,6 +752,70 @@ a:hover { color: var(--accent-hover); }
   outline: none;
 }
 
+/* ── Log table ── */
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.log-table th {
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+}
+
+.log-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.log-table tr:last-child td { border-bottom: none; }
+
+.log-table .log-time {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.log-table .log-step {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.log-table .log-status-ok { color: var(--green); }
+.log-table .log-status-fail { color: var(--red); }
+.log-table .log-status-run { color: var(--accent); }
+.log-table .log-status-skip { color: var(--text-dim); }
+
+.log-table .log-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.log-table .log-duration {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.log-scroll {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
 /* ── Utilities ── */
 .text-dim { color: var(--text-dim); }
 .text-secondary { color: var(--text-secondary); }

@@ -58,6 +58,7 @@
       <button class="tab active" data-tab="overview">Overview</button>
       <button class="tab" data-tab="connectors">Connectors</button>
       <button class="tab" data-tab="knowledge">Knowledge</button>
+      <button class="tab" data-tab="logs">Logs</button>
       <button class="tab" data-tab="access">Access</button>
       <button class="tab" data-tab="settings">Settings</button>
     </div>
@@ -136,6 +137,24 @@
       </div>
     </div>
 
+    <!-- ═══ Logs Tab ═══ -->
+    <div class="tab-panel" id="tab-logs">
+      <div class="card">
+        <div class="card-header">
+          <h3>Provisioning logs</h3>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <label style="font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:4px;">
+              <input type="checkbox" id="logs-auto-refresh" onchange="toggleLogRefresh()"> Auto-refresh
+            </label>
+            <button class="btn btn-sm" onclick="loadLogs()">Refresh</button>
+          </div>
+        </div>
+        <div id="logs-content">
+          <div class="text-dim" style="font-size:13px;">Loading...</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ Access Tab ═══ -->
     <div class="tab-panel" id="tab-access">
       <div class="card">
@@ -170,6 +189,7 @@
         <div class="card-header"><h3>Actions</h3></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn" id="btn-health-check" onclick="runHealthCheck()">Run Health Check</button>
+          <button class="btn" id="btn-redeploy" onclick="redeployAgent()">Redeploy (latest version)</button>
           <button class="btn" id="btn-retry" onclick="retryDeploy()" style="display:none;">Retry Deployment</button>
           <button class="btn btn-danger" id="btn-destroy" onclick="destroyAgent()">Delete Agent</button>
         </div>
@@ -555,6 +575,22 @@
       });
     }
 
+    function redeployAgent() {
+      if (!confirm('Redeploy this agent with the latest version from R2?')) return;
+      $('#btn-redeploy').disabled = true;
+      $('#btn-redeploy').textContent = 'Redeploying...';
+      // Retry triggers a fresh provisioning run which re-uploads from R2 and deploys
+      agentsApi('POST', '/' + agentId + '/retry').then(function() {
+        loadAgent();
+        $('#btn-redeploy').disabled = false;
+        $('#btn-redeploy').textContent = 'Redeploy (latest version)';
+      }).catch(function(err) {
+        alert('Redeploy failed: ' + (err.message || err.error || 'Unknown'));
+        $('#btn-redeploy').disabled = false;
+        $('#btn-redeploy').textContent = 'Redeploy (latest version)';
+      });
+    }
+
     function destroyAgent() {
       if (!confirm('Are you sure you want to delete this agent? This cannot be undone.')) return;
       $('#btn-destroy').disabled = true;
@@ -568,10 +604,69 @@
       });
     }
 
+    // ── Logs tab ──
+    var _logRefreshTimer = null;
+
+    function loadLogs() {
+      agentsApi('GET', '/' + agentId + '/logs').then(function(data) {
+        var logs = data.logs || [];
+        if (!logs.length) {
+          $('#logs-content').innerHTML = '<div class="text-dim" style="font-size:13px;padding:16px 0;">No provisioning logs yet.</div>';
+          return;
+        }
+
+        // Sort newest first
+        logs.sort(function(a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
+
+        var html = '<div class="log-scroll"><table class="log-table"><thead><tr>' +
+          '<th>Time</th><th>Step</th><th>Status</th><th>Duration</th><th>Details</th>' +
+          '</tr></thead><tbody>';
+
+        logs.forEach(function(l) {
+          var statusClass = 'log-status-run';
+          if (l.status === 'completed') statusClass = 'log-status-ok';
+          else if (l.status === 'failed') statusClass = 'log-status-fail';
+          else if (l.status === 'skipped') statusClass = 'log-status-skip';
+
+          var statusIcon = '&#8635;';
+          if (l.status === 'completed') statusIcon = '&#10003;';
+          else if (l.status === 'failed') statusIcon = '&#10007;';
+          else if (l.status === 'skipped') statusIcon = '&#8211;';
+
+          var time = l.created_at ? new Date(l.created_at).toLocaleTimeString() : '';
+          var dur = l.duration_ms ? formatDuration(l.duration_ms) : '';
+
+          html += '<tr>' +
+            '<td class="log-time">' + time + '</td>' +
+            '<td class="log-step">' + (l.step || '') + '</td>' +
+            '<td class="' + statusClass + '">' + statusIcon + ' ' + (l.status || '') + '</td>' +
+            '<td class="log-duration">' + dur + '</td>' +
+            '<td>' + (l.message || '') +
+              (l.error ? '<div class="log-error">' + l.error + '</div>' : '') +
+            '</td>' +
+          '</tr>';
+        });
+
+        html += '</tbody></table></div>';
+        $('#logs-content').innerHTML = html;
+      }).catch(function() {
+        $('#logs-content').innerHTML = '<div class="text-dim" style="font-size:13px;">Failed to load logs.</div>';
+      });
+    }
+
+    function toggleLogRefresh() {
+      if ($('#logs-auto-refresh').checked) {
+        _logRefreshTimer = setInterval(loadLogs, 3000);
+      } else {
+        if (_logRefreshTimer) { clearInterval(_logRefreshTimer); _logRefreshTimer = null; }
+      }
+    }
+
     // ── Tab change handler ──
     window.onTabChange = function(tab) {
       if (tab === 'connectors') loadConnectors();
       if (tab === 'knowledge') loadEntities();
+      if (tab === 'logs') loadLogs();
       if (tab === 'access') loadAccess();
     };
 
