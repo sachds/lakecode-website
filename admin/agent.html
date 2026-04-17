@@ -117,6 +117,17 @@
 
     <!-- ═══ Knowledge Tab ═══ -->
     <div class="tab-panel" id="tab-knowledge">
+      <div class="card mb-16" id="kg-info">
+        <div class="card-header"><h3>Knowledge Graph</h3></div>
+        <table style="width:100%;font-size:13px;">
+          <tr><td class="text-dim" style="padding:4px 0;width:140px;">Lakebase project</td><td id="kg-project" class="mono">—</td></tr>
+          <tr><td class="text-dim" style="padding:4px 0;">Endpoint</td><td id="kg-endpoint" class="mono" style="font-size:12px;">—</td></tr>
+          <tr><td class="text-dim" style="padding:4px 0;">Database</td><td id="kg-database" class="mono">—</td></tr>
+          <tr><td class="text-dim" style="padding:4px 0;">Entities</td><td id="kg-entities">—</td></tr>
+          <tr><td class="text-dim" style="padding:4px 0;">Claims</td><td id="kg-claims">—</td></tr>
+        </table>
+      </div>
+
       <div class="filter-bar">
         <input type="text" id="entity-search" placeholder="Search entities..." oninput="filterEntities()">
         <select id="entity-type-filter" onchange="filterEntities()">
@@ -511,7 +522,27 @@
     // ── Knowledge tab ──
     var _allEntities = [];
 
+    function loadKnowledgeInfo() {
+      if (!deployment) return;
+      var r = deployment.resources || {};
+      $('#kg-project').textContent = r.lakebaseProjectId || '—';
+      $('#kg-endpoint').textContent = r.lakebaseEndpointHost || '—';
+      $('#kg-database').textContent = r.lakebaseEndpointHost ? 'databricks_postgres' : '—';
+
+      // Get entity/claim counts
+      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
+        var e = data.entities || {};
+        var c = data.claims || {};
+        $('#kg-entities').textContent = (e.total || 0) + (e.byType ? ' (' + Object.entries(e.byType).map(function(kv) { return kv[1] + ' ' + kv[0]; }).join(', ') + ')' : '');
+        $('#kg-claims').textContent = (c.total || 0) + (c.accepted ? ' (' + c.accepted + ' accepted, ' + (c.proposed || 0) + ' proposed)' : '');
+      }).catch(function() {
+        $('#kg-entities').textContent = '—';
+        $('#kg-claims').textContent = '—';
+      });
+    }
+
     function loadEntities() {
+      loadKnowledgeInfo();
       agentsApi('GET', '/' + agentId + '/knowledge/entities?limit=200').then(function(data) {
         _allEntities = data.entities || [];
         renderEntities(_allEntities);
