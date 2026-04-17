@@ -75,8 +75,9 @@
           <div class="form-hint">Lowercase letters, numbers, and hyphens only</div>
         </div>
         <div class="form-group">
-          <label for="workspace-url">Databricks workspace URL</label>
-          <input type="text" id="workspace-url" placeholder="https://xxx.cloud.databricks.com">
+          <label for="workspace-url">Databricks workspace URL <span class="text-dim" style="font-weight:400;">(optional)</span></label>
+          <input type="text" id="workspace-url" placeholder="https://xxx.cloud.databricks.com" oninput="toggleCredentials()">
+          <div class="form-hint">Leave blank to provision a new workspace. Enter a URL to deploy into an existing workspace.</div>
         </div>
         <div class="form-group">
           <label for="admin-email">Admin email</label>
@@ -87,7 +88,7 @@
           <input type="text" id="team-name" placeholder="e.g., acme-corp">
           <div class="form-hint">Used as tenant identifier</div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="dbx-credentials-section" style="display:none;">
           <label>Connect to Databricks</label>
           <div id="dbx-not-connected">
             <div class="form-hint" style="margin-bottom:10px;">
@@ -241,8 +242,8 @@
         alert('Please fill in agent name, admin email, and team name.');
         return;
       }
-      if (!_spCredentials) {
-        alert('Please connect to Databricks first.');
+      if (wsUrl && !_spCredentials) {
+        alert('Please connect to Databricks first (paste a temporary admin token).');
         return;
       }
 
@@ -254,8 +255,8 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
-        databricksClientId: _spCredentials.clientId,
-        databricksClientSecret: _spCredentials.clientSecret,
+        databricksClientId: _spCredentials ? _spCredentials.clientId : undefined,
+        databricksClientSecret: _spCredentials ? _spCredentials.clientSecret : undefined,
         region: region,
         assistantSpecId: bundle,
         admins: [email],
@@ -326,6 +327,12 @@
       _deployId = null;
       // Reload list
       loadAgents();
+    }
+
+    // ── Show/hide credentials based on workspace URL ──
+    function toggleCredentials() {
+      var wsUrl = $('#workspace-url').value.trim();
+      $('#dbx-credentials-section').style.display = wsUrl ? '' : 'none';
     }
 
     // ── Databricks bootstrap connection ──
