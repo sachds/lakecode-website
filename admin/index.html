@@ -266,6 +266,7 @@
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
         databricksToken: _spCredentials ? _spCredentials.spToken : undefined,
+        adminToken: _spCredentials ? _spCredentials.adminToken : undefined,
         catalog: $('#catalog').value.trim() || 'main',
         appSourcePath: $('#app-source-path').value.trim() || undefined,
         region: region,
@@ -372,7 +373,8 @@
         tempToken: tempToken
       }).then(function(data) {
         _spCredentials = {
-          spToken: data.spToken
+          spToken: data.spToken,
+          adminToken: data.adminToken
         };
         // Auto-fill workspace URL
         if (!$('#workspace-url').value.trim()) {
