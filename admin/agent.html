@@ -326,24 +326,19 @@
         $('#overview-deploy-steps').innerHTML = renderDeploySteps(data.logs || []);
       });
 
-      // Load knowledge stats from connector results in D1
-      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
-        var conns = data.connectors || [];
-        var totalEntities = 0, totalClaims = 0;
-        conns.forEach(function(c) {
-          var result = c.lastResult || c.last_result_json;
-          if (typeof result === 'string') try { result = JSON.parse(result); } catch {}
-          if (result) {
-            totalEntities += result.entities || result.totalEntities || 0;
-            totalClaims += result.claims || result.totalClaims || 0;
-          }
-        });
-        $('#stat-entities').textContent = totalEntities || '—';
-        $('#stat-claims').textContent = totalClaims || '—';
-        $('#stat-connectors').textContent = conns.length;
+      // Load knowledge stats via live SQL query + connector count
+      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
+        var e = data.entities || {};
+        var c = data.claims || {};
+        $('#stat-entities').textContent = e.total || '—';
+        $('#stat-claims').textContent = c.total || '—';
       }).catch(function() {
         $('#stat-entities').textContent = '—';
         $('#stat-claims').textContent = '—';
+      });
+      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
+        $('#stat-connectors').textContent = (data.connectors || []).length;
+      }).catch(function() {
         $('#stat-connectors').textContent = '—';
       });
     }
