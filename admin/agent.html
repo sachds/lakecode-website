@@ -118,7 +118,10 @@
     <!-- ═══ Knowledge Tab ═══ -->
     <div class="tab-panel" id="tab-knowledge">
       <div class="card mb-16" id="kg-info">
-        <div class="card-header"><h3>Knowledge Graph</h3></div>
+        <div class="card-header">
+          <h3>Knowledge Graph</h3>
+          <button class="btn btn-sm" onclick="syncKnowledgeGraph()" id="kg-sync-btn">Sync from Lakebase</button>
+        </div>
         <table style="width:100%;font-size:13px;">
           <tr><td class="text-dim" style="padding:4px 0;width:140px;">Lakebase project</td><td id="kg-project" class="mono">—</td></tr>
           <tr><td class="text-dim" style="padding:4px 0;">Endpoint</td><td id="kg-endpoint" class="mono" style="font-size:12px;">—</td></tr>
@@ -126,6 +129,7 @@
           <tr><td class="text-dim" style="padding:4px 0;">Entities</td><td id="kg-entities">—</td></tr>
           <tr><td class="text-dim" style="padding:4px 0;">Claims</td><td id="kg-claims">—</td></tr>
         </table>
+        <div id="kg-sync-status" style="display:none;margin-top:8px;font-size:12px;"></div>
       </div>
 
       <div class="filter-bar">
@@ -549,6 +553,29 @@
       }).catch(function() {
         $('#kg-entities').textContent = '—';
         $('#kg-claims').textContent = '—';
+      });
+    }
+
+    function syncKnowledgeGraph() {
+      $('#kg-sync-btn').disabled = true;
+      $('#kg-sync-btn').textContent = 'Syncing...';
+      $('#kg-sync-status').style.display = '';
+      $('#kg-sync-status').innerHTML = '<span style="color:var(--accent);">Submitting sync job to Databricks...</span>';
+
+      agentsApi('POST', '/' + agentId + '/knowledge/sync').then(function(data) {
+        if (data.status === 'sync_submitted') {
+          $('#kg-sync-status').innerHTML = '<span style="color:var(--accent);">Job submitted — entities will appear after the job completes. Check the Connectors tab to monitor progress.</span>';
+        } else {
+          $('#kg-sync-status').innerHTML = '<span style="color:var(--green);">Sync complete</span>';
+          loadKnowledgeInfo();
+          loadEntities();
+        }
+        $('#kg-sync-btn').disabled = false;
+        $('#kg-sync-btn').textContent = 'Sync from Lakebase';
+      }).catch(function(err) {
+        $('#kg-sync-status').innerHTML = '<span class="text-red">Sync failed: ' + (err.message || err.error || 'Unknown') + '</span>';
+        $('#kg-sync-btn').disabled = false;
+        $('#kg-sync-btn').textContent = 'Sync from Lakebase';
       });
     }
 
