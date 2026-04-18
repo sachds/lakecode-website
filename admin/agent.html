@@ -536,19 +536,16 @@
       $('#kg-endpoint').textContent = r.lakebaseEndpointHost || '—';
       $('#kg-database').textContent = r.lakebaseEndpointHost ? 'databricks_postgres' : '—';
 
-      // Get entity/claim counts from connector results in D1
-      agentsApi('GET', '/' + agentId + '/connectors').then(function(data) {
-        var totalEntities = 0, totalClaims = 0;
-        (data.connectors || []).forEach(function(c) {
-          var result = c.lastResult || c.last_result_json;
-          if (typeof result === 'string') try { result = JSON.parse(result); } catch {}
-          if (result) {
-            totalEntities += result.entities || result.totalEntities || 0;
-            totalClaims += result.claims || result.totalClaims || 0;
-          }
-        });
-        $('#kg-entities').textContent = totalEntities || '—';
-        $('#kg-claims').textContent = totalClaims || '—';
+      // Get entity/claim counts from Lakebase via SQL
+      agentsApi('GET', '/' + agentId + '/knowledge/stats').then(function(data) {
+        var e = data.entities || {};
+        var c = data.claims || {};
+        var entityText = (e.total || 0).toString();
+        if (e.byType && Object.keys(e.byType).length) {
+          entityText += ' (' + Object.entries(e.byType).map(function(kv) { return kv[1] + ' ' + kv[0]; }).join(', ') + ')';
+        }
+        $('#kg-entities').textContent = entityText || '—';
+        $('#kg-claims').textContent = c.total || '—';
       }).catch(function() {
         $('#kg-entities').textContent = '—';
         $('#kg-claims').textContent = '—';
