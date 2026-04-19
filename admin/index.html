@@ -34,6 +34,7 @@
       <a href="/admin" class="topbar-logo">lakecode<span>/admin</span></a>
       <nav class="topbar-nav">
         <a href="/admin" class="active">Agents</a>
+        <a href="/admin/settings.html">Settings</a>
       </nav>
     </div>
     <div class="topbar-right">
@@ -75,9 +76,14 @@
           <div class="form-hint">Lowercase letters, numbers, and hyphens only</div>
         </div>
         <div class="form-group">
-          <label for="workspace-url">Databricks workspace URL <span class="text-dim" style="font-weight:400;">(optional)</span></label>
-          <input type="text" id="workspace-url" placeholder="https://xxx.cloud.databricks.com" oninput="toggleCredentials()">
-          <div class="form-hint">Leave blank to provision a new workspace. Enter a URL to deploy into an existing workspace.</div>
+          <label for="workspace-url">Databricks workspace</label>
+          <div style="display:flex;gap:8px;">
+            <select id="workspace-select" onchange="onWorkspaceSelect()" style="flex:1;">
+              <option value="">Loading workspaces...</option>
+            </select>
+            <a href="/admin/settings.html" class="btn btn-sm" style="white-space:nowrap;">+ Connect new</a>
+          </div>
+          <input type="hidden" id="workspace-url" value="">
         </div>
         <div class="form-group">
           <label for="admin-email">Admin email</label>
@@ -88,38 +94,10 @@
           <input type="text" id="team-name" placeholder="e.g., acme-corp">
           <div class="form-hint">Used as tenant identifier</div>
         </div>
-        <div class="form-group" id="dbx-credentials-section" style="display:none;">
-          <label>Connect to Databricks</label>
-          <div id="dbx-not-connected">
-            <div class="form-hint" style="margin-bottom:10px;">
-              Paste a temporary admin token. We'll auto-create a service principal and discard the token.
-            </div>
-            <div style="display:flex;gap:8px;">
-              <input type="password" id="dbx-temp-token" placeholder="dapi..." style="flex:1;">
-              <button type="button" class="btn btn-primary" onclick="bootstrapConnection()" id="dbx-bootstrap-btn">Connect</button>
-            </div>
-            <div class="form-hint" style="margin-top:6px;">
-              <a href="#" onclick="openTokenPage(); return false;" style="color:var(--accent);">Generate a token in your workspace &rarr;</a> (can be deleted after connecting)
-            </div>
-          </div>
-          <div id="dbx-connected" style="display:none;">
-            <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.2);border-radius:6px;">
-              <span style="color:var(--green);">&#10003;</span>
-              <span style="font-size:13px;">Connected &mdash; service principal <strong id="dbx-sp-name"></strong> created</span>
-              <button type="button" class="btn btn-sm" onclick="disconnectDbx()" style="margin-left:auto;">Disconnect</button>
-            </div>
-          </div>
-          <div id="dbx-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red);"></div>
-        </div>
         <div class="form-group">
           <label for="catalog">Unity Catalog <span class="text-dim" style="font-weight:400;">(existing catalog to use)</span></label>
           <input type="text" id="catalog" placeholder="e.g., main" value="main">
           <div class="form-hint">Must already exist. We'll create a <code style="font-size:11px;background:var(--bg);padding:1px 4px;border-radius:3px;">lakecode_ops</code> schema inside it.</div>
-        </div>
-        <div class="form-group" id="app-source-group" style="display:none;">
-          <label for="app-source-path">App source path in workspace</label>
-          <input type="text" id="app-source-path" placeholder="/Workspace/Users/you@company.com/lakecode-app">
-          <div class="form-hint">Path where the lakecode app source is deployed. Leave blank to use default.</div>
         </div>
         <div class="form-group">
           <label for="region">Region</label>
@@ -175,7 +153,7 @@
   <script src="app.js"></script>
   <script>
     // ── Auth check ──
-    requireAuth().then(function(ok) { if (ok) { loadAgents(); loadBundles(); } });
+    requireAuth().then(function(ok) { if (ok) { loadAgents(); loadBundles(); loadWorkspaceOptions(); } });
 
     // ── Load agents ──
     function loadAgents() {
@@ -252,8 +230,8 @@
         alert('Please fill in agent name, admin email, and team name.');
         return;
       }
-      if (wsUrl && !_spCredentials) {
-        alert('Please connect to Databricks first (paste a temporary admin token).');
+      if (!wsUrl) {
+        alert('Please select a connected workspace.');
         return;
       }
 
@@ -265,8 +243,7 @@
         name: name,
         mode: wsUrl ? 'enterprise' : 'hosted',
         workspaceUrl: wsUrl || undefined,
-        databricksToken: _spCredentials ? _spCredentials.spToken : undefined,
-        adminToken: _spCredentials ? _spCredentials.adminToken : undefined,
+        // Tokens pulled from stored workspace credentials in D1
         catalog: $('#catalog').value.trim() || 'main',
         appSourcePath: $('#app-source-path').value.trim() || undefined,
         region: region,
@@ -342,82 +319,39 @@
     }
 
     // ── Show/hide credentials based on workspace URL ──
-    var _checkTimer = null;
-    function toggleCredentials() {
-      var wsUrl = $('#workspace-url').value.trim();
-      $('#dbx-credentials-section').style.display = wsUrl ? '' : 'none';
-      $('#app-source-group').style.display = wsUrl ? '' : 'none';
+    // ── Workspace selection ──
+    function loadWorkspaceOptions() {
+      agentsApi('GET', '').then(function(data) {
+        var agents = data.agents || [];
+        var seen = {};
+        var workspaces = [];
+        agents.forEach(function(a) {
+          var ws = (a.resources && a.resources.workspaceUrl) || '';
+          ws = ws.replace(/\/$/, '');
+          if (ws && !seen[ws]) {
+            seen[ws] = true;
+            workspaces.push(ws);
+          }
+        });
 
-      // Debounce: check for existing credentials after user stops typing
-      if (_checkTimer) clearTimeout(_checkTimer);
-      if (wsUrl) {
-        _checkTimer = setTimeout(function() { checkExistingCredentials(wsUrl); }, 500);
-      }
-    }
+        var sel = $('#workspace-select');
+        sel.innerHTML = '<option value="">Select a workspace...</option>';
+        workspaces.forEach(function(ws) {
+          var opt = document.createElement('option');
+          opt.value = ws;
+          opt.textContent = ws.replace('https://', '').split('.')[0];
+          sel.appendChild(opt);
+        });
 
-    function checkExistingCredentials(wsUrl) {
-      agentsApi('GET', '/workspace-credentials?workspace_url=' + encodeURIComponent(wsUrl)).then(function(data) {
-        if (data.found) {
-          // Workspace already connected — skip bootstrap
-          _spCredentials = { reuse: true };
-          $('#dbx-not-connected').style.display = 'none';
-          $('#dbx-connected').style.display = '';
-          $('#dbx-sp-name').textContent = 'existing connection';
+        if (!workspaces.length) {
+          sel.innerHTML = '<option value="">No workspaces connected</option>';
         }
-      }).catch(function() { /* not found, show bootstrap form */ });
-    }
-
-    // ── Databricks bootstrap connection ──
-    var _spCredentials = null;
-
-    function openTokenPage() {
-      var wsUrl = ($('#workspace-url').value || '').trim().replace(/\/$/, '');
-      if (!wsUrl) { alert('Enter workspace URL first.'); return; }
-      window.open(wsUrl + '#setting/account/token', '_blank');
-    }
-
-    function bootstrapConnection() {
-      var wsUrl = $('#workspace-url').value.trim().replace(/\/$/, '');
-      var tempToken = $('#dbx-temp-token').value.trim();
-
-      if (!wsUrl) { alert('Enter workspace URL first.'); return; }
-      if (!tempToken) { alert('Paste a temporary admin token.'); return; }
-
-      $('#dbx-bootstrap-btn').disabled = true;
-      $('#dbx-bootstrap-btn').textContent = 'Connecting...';
-      $('#dbx-error').style.display = 'none';
-
-      agentsApi('POST', '/bootstrap', {
-        workspaceUrl: wsUrl,
-        tempToken: tempToken
-      }).then(function(data) {
-        _spCredentials = {
-          spToken: data.spToken,
-          adminToken: data.adminToken
-        };
-        // Auto-fill workspace URL
-        if (!$('#workspace-url').value.trim()) {
-          $('#workspace-url').value = wsUrl;
-        }
-        // Show connected state
-        $('#dbx-not-connected').style.display = 'none';
-        $('#dbx-connected').style.display = '';
-        $('#dbx-sp-name').textContent = data.spName || data.clientId;
-      }).catch(function(err) {
-        $('#dbx-error').textContent = 'Failed: ' + (err.message || err.error || err.detail || 'Unknown error');
-        $('#dbx-error').style.display = '';
-        $('#dbx-bootstrap-btn').disabled = false;
-        $('#dbx-bootstrap-btn').textContent = 'Connect';
       });
     }
 
-    function disconnectDbx() {
-      _spCredentials = null;
-      $('#dbx-not-connected').style.display = '';
-      $('#dbx-connected').style.display = 'none';
-      $('#dbx-bootstrap-btn').disabled = false;
-      $('#dbx-bootstrap-btn').textContent = 'Connect';
-      $('#dbx-temp-token').value = '';
+    function onWorkspaceSelect() {
+      var ws = $('#workspace-select').value;
+      $('#workspace-url').value = ws;
     }
 
   </script>
