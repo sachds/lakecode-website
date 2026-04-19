@@ -342,10 +342,29 @@
     }
 
     // ── Show/hide credentials based on workspace URL ──
+    var _checkTimer = null;
     function toggleCredentials() {
       var wsUrl = $('#workspace-url').value.trim();
       $('#dbx-credentials-section').style.display = wsUrl ? '' : 'none';
       $('#app-source-group').style.display = wsUrl ? '' : 'none';
+
+      // Debounce: check for existing credentials after user stops typing
+      if (_checkTimer) clearTimeout(_checkTimer);
+      if (wsUrl) {
+        _checkTimer = setTimeout(function() { checkExistingCredentials(wsUrl); }, 500);
+      }
+    }
+
+    function checkExistingCredentials(wsUrl) {
+      agentsApi('GET', '/workspace-credentials?workspace_url=' + encodeURIComponent(wsUrl)).then(function(data) {
+        if (data.found) {
+          // Workspace already connected — skip bootstrap
+          _spCredentials = { reuse: true };
+          $('#dbx-not-connected').style.display = 'none';
+          $('#dbx-connected').style.display = '';
+          $('#dbx-sp-name').textContent = 'existing connection';
+        }
+      }).catch(function() { /* not found, show bootstrap form */ });
     }
 
     // ── Databricks bootstrap connection ──
