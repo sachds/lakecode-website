@@ -326,7 +326,11 @@
         var seen = {};
         var workspaces = [];
         agents.forEach(function(a) {
-          var ws = (a.resources && a.resources.workspaceUrl) || '';
+          // Try multiple paths where workspace URL might be
+          var ws = (a.resources && a.resources.workspaceUrl)
+            || (a.config && a.config.workspaceUrl)
+            || a.workspace_url
+            || '';
           ws = ws.replace(/\/$/, '');
           if (ws && !seen[ws]) {
             seen[ws] = true;
@@ -344,8 +348,10 @@
         });
 
         if (!workspaces.length) {
-          sel.innerHTML = '<option value="">No workspaces connected</option>';
+          sel.innerHTML = '<option value="">No workspaces — <a href="/admin/settings.html">connect one in Settings</a></option>';
         }
+      }).catch(function() {
+        $('#workspace-select').innerHTML = '<option value="">Failed to load workspaces</option>';
       });
     }
 
