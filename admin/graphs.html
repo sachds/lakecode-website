@@ -82,10 +82,13 @@
         </div>
         <div class="form-group">
           <label for="kg-project">Lakebase project</label>
-          <select id="kg-project">
+          <select id="kg-project" onchange="toggleNewProject()">
             <option value="">Select workspace first</option>
           </select>
-          <div class="form-hint">Each graph maps to a Lakebase project. Select an existing project or we'll use the default.</div>
+          <div id="new-project-name" style="display:none;margin-top:8px;">
+            <input type="text" id="kg-new-project-name" placeholder="Project name (lowercase, no spaces)">
+          </div>
+          <div class="form-hint">Select an existing Lakebase project or create a new one.</div>
         </div>
       </div>
       <div class="modal-footer">
@@ -180,37 +183,43 @@
         if (!agent) { sel.innerHTML = '<option value="lakecodekg">lakecodekg (default)</option>'; return; }
 
         agentsApi('GET', '/' + agent.id + '/lakebase-projects').then(function(pData) {
-          sel.innerHTML = '';
+          sel.innerHTML = '<option value="__new__">+ Create new project</option>';
           (pData.projects || []).forEach(function(p) {
             var opt = document.createElement('option');
             opt.value = p.project_id;
             opt.textContent = p.project_id + (p.owner ? ' (' + p.owner + ')' : '');
             sel.appendChild(opt);
           });
-          if (!pData.projects || !pData.projects.length) {
-            sel.innerHTML = '<option value="lakecodekg">lakecodekg (default)</option>';
-          }
         });
       });
+    }
+
+    function toggleNewProject() {
+      var isNew = $('#kg-project').value === '__new__';
+      $('#new-project-name').style.display = isNew ? '' : 'none';
     }
 
     function createGraph() {
       var name = $('#kg-name').value.trim();
       var desc = $('#kg-description').value.trim();
       var wsUrl = $('#kg-workspace').value;
-      var projectId = $('#kg-project').value || 'lakecodekg';
+      var projectSel = $('#kg-project').value;
+      var isNew = projectSel === '__new__';
+      var newProjectName = $('#kg-new-project-name').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
       if (!name) { alert('Name is required.'); return; }
       if (!wsUrl) { alert('Select a workspace.'); return; }
+      if (isNew && !newProjectName) { alert('Enter a project name.'); return; }
 
       $('#create-kg-btn').disabled = true;
-      $('#create-kg-btn').textContent = 'Creating...';
+      $('#create-kg-btn').textContent = isNew ? 'Creating Lakebase project...' : 'Creating...';
 
       api('POST', API_URL + '/knowledge-graphs', {
         name: name,
         description: desc,
         workspaceUrl: wsUrl,
-        lakebaseProjectId: projectId,
+        lakebaseProjectId: isNew ? newProjectName : projectSel,
+        createNewProject: isNew,
       }).then(function(data) {
         closeModal('create-kg-modal');
         $('#create-kg-btn').disabled = false;
