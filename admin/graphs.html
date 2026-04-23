@@ -183,13 +183,19 @@
         if (!agent) { sel.innerHTML = '<option value="lakecodekg">lakecodekg (default)</option>'; return; }
 
         agentsApi('GET', '/' + agent.id + '/lakebase-projects').then(function(pData) {
-          sel.innerHTML = '<option value="__new__">+ Create new project</option>';
+          sel.innerHTML = '';
           (pData.projects || []).forEach(function(p) {
             var opt = document.createElement('option');
             opt.value = p.project_id;
             opt.textContent = p.project_id + (p.owner ? ' (' + p.owner + ')' : '');
             sel.appendChild(opt);
           });
+          // Add "create new" as last option
+          var newOpt = document.createElement('option');
+          newOpt.value = '__new__';
+          newOpt.textContent = '+ Create new project';
+          sel.appendChild(newOpt);
+          toggleNewProject();
         });
       });
     }
