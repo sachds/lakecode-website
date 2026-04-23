@@ -202,6 +202,25 @@
       </div>
 
       <div class="card mb-16">
+        <div class="card-header"><h3>Knowledge Graph</h3></div>
+        <table style="width:100%;font-size:13px;">
+          <tr>
+            <td class="text-dim" style="padding:6px 0;width:140px;">Lakebase project</td>
+            <td>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <select id="settings-kg-select" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:13px;">
+                  <option value="">Loading...</option>
+                </select>
+                <button class="btn btn-sm" onclick="switchKnowledgeGraph()">Switch</button>
+              </div>
+            </td>
+          </tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Endpoint</td><td id="settings-kg-endpoint" class="mono" style="font-size:12px;">—</td></tr>
+        </table>
+        <div id="kg-switch-status" style="display:none;margin-top:8px;font-size:12px;"></div>
+      </div>
+
+      <div class="card mb-16">
         <div class="card-header"><h3>Actions</h3></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn" id="btn-health-check" onclick="runHealthCheck()">Run Health Check</button>
@@ -356,6 +375,61 @@
       if (d.status === 'failed') {
         $('#btn-retry').style.display = '';
       }
+
+      // Load KG settings
+      var r = d.resources || {};
+      $('#settings-kg-endpoint').textContent = r.lakebaseEndpointHost || '—';
+      loadLakebaseProjects(r.lakebaseProjectId);
+    }
+
+    function loadLakebaseProjects(currentProject) {
+      agentsApi('GET', '/' + agentId + '/lakebase-projects').then(function(data) {
+        var sel = $('#settings-kg-select');
+        sel.innerHTML = '';
+        var projects = data.projects || [];
+
+        if (!projects.length) {
+          sel.innerHTML = '<option value="">No Lakebase projects found</option>';
+          return;
+        }
+
+        projects.forEach(function(p) {
+          var opt = document.createElement('option');
+          opt.value = p.project_id;
+          opt.textContent = p.project_id + (p.owner ? ' (' + p.owner + ')' : '');
+          if (p.project_id === currentProject) opt.selected = true;
+          sel.appendChild(opt);
+        });
+
+        // Add "None" option
+        var noneOpt = document.createElement('option');
+        noneOpt.value = '';
+        noneOpt.textContent = '(none — disconnect KG)';
+        sel.appendChild(noneOpt);
+      }).catch(function() {
+        var sel = $('#settings-kg-select');
+        sel.innerHTML = '<option value="' + (currentProject || '') + '">' + (currentProject || 'unknown') + '</option>';
+      });
+    }
+
+    function switchKnowledgeGraph() {
+      var newProject = $('#settings-kg-select').value;
+      var currentProject = (deployment.resources || {}).lakebaseProjectId;
+
+      if (newProject === currentProject) return;
+
+      if (!confirm(newProject
+        ? 'Switch knowledge graph to "' + newProject + '"? The agent will be redeployed with the new connection.'
+        : 'Disconnect the knowledge graph from this agent?')) return;
+
+      agentsApi('POST', '/' + agentId + '/switch-kg', { projectId: newProject }).then(function(data) {
+        $('#kg-switch-status').style.display = '';
+        $('#kg-switch-status').innerHTML = '<span style="color:var(--green);">Knowledge graph updated to ' + (newProject || 'none') + '. Redeploying agent...</span>';
+        loadAgent();
+      }).catch(function(err) {
+        $('#kg-switch-status').style.display = '';
+        $('#kg-switch-status').innerHTML = '<span class="text-red">Failed: ' + (err.message || err.error || 'Unknown') + '</span>';
+      });
     }
 
     // ── Connectors tab ──
