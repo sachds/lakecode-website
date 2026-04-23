@@ -140,6 +140,16 @@
           <div class="form-group"><label>Repo</label><input type="text" id="gc-repo" placeholder="e.g., data-pipelines"></div>
           <div class="form-group"><label>Token (optional)</label><input type="password" id="gc-token" placeholder="ghp_..."></div>
         </div>
+        <div class="form-group">
+          <label for="gc-schedule">Sync schedule</label>
+          <select id="gc-schedule">
+            <option value="manual">Manual only</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="on_push">On push (webhook)</option>
+          </select>
+          <div class="form-hint">How often to re-ingest from this source</div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn" onclick="closeModal('add-graph-connector')">Cancel</button>
@@ -229,19 +239,63 @@
       var html = '';
       connectors.forEach(function(c) {
         var config = c.config_json ? JSON.parse(c.config_json) : {};
-        var summary = config.owner ? config.owner + '/' + config.repo : JSON.stringify(config).substring(0, 50);
         var lastResult = c.last_result_json;
         if (typeof lastResult === 'string') try { lastResult = JSON.parse(lastResult); } catch {}
 
-        html += '<div class="connector-card">' +
-          '<div class="connector-header"><span class="connector-name">' + c.connector_type + '</span><span class="connector-status ' + (c.status === 'active' ? 'ok' : (c.status === 'ingesting' ? 'pending' : (c.status === 'error' ? 'error' : 'pending'))) + '">' + c.status + '</span></div>' +
-          '<div class="connector-meta">' + summary + '</div>' +
-          (c.last_sync ? '<div class="connector-meta">Last sync: ' + timeAgo(c.last_sync) + '</div>' : '') +
-          (lastResult ? '<div class="connector-meta">' + (lastResult.entities || 0) + ' entities, ' + (lastResult.claims || 0) + ' claims</div>' : '') +
-          '<div style="margin-top:8px;display:flex;gap:6px;">' +
-            '<button class="btn btn-sm" onclick="runGraphIngestion(\'' + c.id + '\')">Run Ingestion</button>' +
-          '</div>' +
+        var schedule = c.sync_schedule || 'manual';
+        var isLive = schedule !== 'manual';
+        var scheduleLabel = { manual: 'Manual', daily: 'Daily', weekly: 'Weekly', on_push: 'On push' }[schedule] || schedule;
+
+        // Source identity
+        var sourceTitle = '';
+        var sourceDetail = '';
+        if (c.connector_type === 'github') {
+          sourceTitle = config.owner && config.repo ? config.owner + '/' + config.repo : 'GitHub';
+          sourceDetail = config.owner && config.repo ? 'github.com/' + config.owner + '/' + config.repo : '';
+        } else if (c.connector_type === 'web') {
+          sourceTitle = 'Web / Docs';
+          sourceDetail = (config.urls || []).join(', ').substring(0, 80);
+        } else {
+          sourceTitle = c.connector_type;
+        }
+
+        // Stats
+        var entities = lastResult ? (lastResult.entities || lastResult.totalEntities || 0) : 0;
+        var claims = lastResult ? (lastResult.claims || lastResult.totalClaims || 0) : 0;
+        var errors = lastResult ? (lastResult.errors || 0) : 0;
+        var duration = lastResult ? (lastResult.duration_sec || 0) : 0;
+
+        html += '<div class="connector-card-detail">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+            '<div>' +
+              '<div style="font-weight:600;font-size:14px;margin-bottom:2px;">' + sourceTitle + '</div>' +
+              (sourceDetail ? '<div style="font-size:12px;color:var(--text-dim);font-family:var(--mono);">' + sourceDetail + '</div>' : '') +
+            '</div>' +
+            '<div style="display:flex;gap:6px;align-items:center;">' +
+              '<span class="connector-live ' + (isLive ? 'active' : 'manual') + '">' + (isLive ? 'Live — ' + scheduleLabel : 'Manual') + '</span>' +
+            '</div>' +
+          '</div>';
+
+        // Stats row
+        if (lastResult) {
+          html += '<div class="connector-stats-row">' +
+            '<span><strong>' + entities + '</strong> entities</span>' +
+            '<span><strong>' + claims + '</strong> claims</span>' +
+            (errors > 0 ? '<span style="color:var(--red);"><strong>' + errors + '</strong> errors</span>' : '') +
+            (duration ? '<span>' + duration + 's</span>' : '') +
+            (c.last_sync ? '<span>Last sync: ' + timeAgo(c.last_sync) + '</span>' : '') +
+          '</div>';
+        } else {
+          html += '<div class="connector-stats-row"><span class="text-dim">Not yet ingested</span></div>';
+        }
+
+        // Actions
+        html += '<div style="margin-top:10px;display:flex;gap:6px;">' +
+          '<button class="btn btn-sm" onclick="runGraphIngestion(\'' + c.id + '\')">Run Ingestion</button>' +
+          (isLive ? '<button class="btn btn-sm" onclick="pauseConnector(\'' + c.id + '\')">Pause</button>' : '') +
         '</div>';
+
+        html += '</div>';
       });
       $('#g-connectors').innerHTML = html;
     }
@@ -289,9 +343,12 @@
 
     function addGraphConnector() {
       var type = $('#gc-type').value;
-      var body = {};
+      var schedule = $('#gc-schedule').value;
+      var body = { syncSchedule: schedule };
       if (type === 'github') {
-        body = { owner: $('#gc-owner').value.trim(), repo: $('#gc-repo').value.trim(), token: $('#gc-token').value.trim() || undefined };
+        body.owner = $('#gc-owner').value.trim();
+        body.repo = $('#gc-repo').value.trim();
+        body.token = $('#gc-token').value.trim() || undefined;
         if (!body.owner || !body.repo) { alert('Owner and repo required.'); return; }
       }
       api('POST', API_URL + '/knowledge-graphs/' + graphId + '/connectors/' + type, body).then(function() {
