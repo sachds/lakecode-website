@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graph — Lakecode Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div id="auth-gate" class="auth-gate">
+    <div class="auth-gate-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h2>Enterprise access required</h2>
+      <div class="auth-gate-error"></div>
+      <div class="auth-gate-actions">
+        <a href="/signin" class="btn btn-primary">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-content" style="display:none;">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/admin" class="topbar-logo">lakecode<span>/admin</span></a>
+      <nav class="topbar-nav">
+        <a href="/admin">Agents</a>
+        <a href="/admin/graphs.html" class="active">Knowledge Graphs</a>
+        <a href="/admin/settings.html">Settings</a>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <a href="/" class="btn btn-sm">Back to site</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">
+          <a href="/admin/graphs.html" style="color:var(--text-dim);">Knowledge Graphs</a> / <span id="graph-name-crumb">...</span>
+        </div>
+        <h1 id="graph-title">Loading...</h1>
+        <p id="graph-description" class="text-secondary"></p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="connectors">Connectors</button>
+      <button class="tab" data-tab="explorer">Entity Explorer</button>
+      <button class="tab" data-tab="agents">Equipped Agents</button>
+    </div>
+
+    <!-- Overview -->
+    <div class="tab-panel active" id="tab-overview">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Entities</div><div class="stat-value" id="g-stat-entities">—</div></div>
+        <div class="stat-card"><div class="stat-label">Claims</div><div class="stat-value" id="g-stat-claims">—</div></div>
+        <div class="stat-card"><div class="stat-label">Connectors</div><div class="stat-value" id="g-stat-connectors">—</div></div>
+        <div class="stat-card"><div class="stat-label">Agents</div><div class="stat-value" id="g-stat-agents">—</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Details</h3></div>
+        <table style="width:100%;font-size:13px;">
+          <tr><td class="text-dim" style="padding:6px 0;width:160px;">Lakebase project</td><td id="g-project" class="mono">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Endpoint</td><td id="g-endpoint" class="mono" style="font-size:12px;">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Workspace</td><td id="g-workspace">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Owner</td><td id="g-owner">—</td></tr>
+          <tr><td class="text-dim" style="padding:6px 0;">Created</td><td id="g-created">—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Connectors -->
+    <div class="tab-panel" id="tab-connectors">
+      <div class="card-header">
+        <h3>Data Sources</h3>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-graph-connector')">+ Add Connector</button>
+      </div>
+      <div id="g-connectors" class="connector-grid mt-16">
+        <div class="text-dim">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Entity Explorer -->
+    <div class="tab-panel" id="tab-explorer">
+      <div class="filter-bar">
+        <input type="text" id="g-entity-search" placeholder="Search entities..." oninput="filterGraphEntities()">
+        <select id="g-entity-type-filter" onchange="filterGraphEntities()">
+          <option value="">All types</option>
+        </select>
+      </div>
+      <div id="g-entity-list" class="entity-list">
+        <div class="text-dim">Loading...</div>
+      </div>
+      <div id="g-claims-panel" class="claims-panel" style="display:none;">
+        <div class="flex items-center justify-between">
+          <h4 id="g-claims-entity-name">Claims</h4>
+          <button class="btn btn-sm" onclick="$('#g-claims-panel').style.display='none'">Close</button>
+        </div>
+        <div id="g-claims-list" class="mt-16"></div>
+      </div>
+    </div>
+
+    <!-- Equipped Agents -->
+    <div class="tab-panel" id="tab-agents">
+      <div class="card-header">
+        <h3>Agents using this graph</h3>
+        <button class="btn btn-primary btn-sm" onclick="openModal('equip-agent-modal')">+ Equip Agent</button>
+      </div>
+      <div id="g-agents" class="mt-16">
+        <div class="text-dim">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Connector Modal -->
+  <div class="modal-overlay" id="add-graph-connector">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Connector</h2>
+        <button class="modal-close" onclick="closeModal('add-graph-connector')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="gc-type">Type</label>
+          <select id="gc-type">
+            <option value="github">GitHub</option>
+            <option value="web">Web / Docs</option>
+          </select>
+        </div>
+        <div id="gc-github">
+          <div class="form-group"><label>Owner</label><input type="text" id="gc-owner" placeholder="e.g., acme-corp"></div>
+          <div class="form-group"><label>Repo</label><input type="text" id="gc-repo" placeholder="e.g., data-pipelines"></div>
+          <div class="form-group"><label>Token (optional)</label><input type="password" id="gc-token" placeholder="ghp_..."></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('add-graph-connector')">Cancel</button>
+        <button class="btn btn-primary" onclick="addGraphConnector()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equip Agent Modal -->
+  <div class="modal-overlay" id="equip-agent-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Equip Agent</h2>
+        <button class="modal-close" onclick="closeModal('equip-agent-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Select agent</label>
+          <select id="equip-agent-select">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('equip-agent-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="equipAgent()">Equip</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    var graphId = getParam('id');
+    var graphData = null;
+    if (!graphId) window.location.href = '/admin/graphs.html';
+
+    requireAuth().then(function(ok) { if (ok) { initTabs(); loadGraph(); } });
+
+    function loadGraph() {
+      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
+        graphData = data.graph;
+        var g = data.graph;
+        document.title = g.name + ' — Knowledge Graph';
+        $('#graph-name-crumb').textContent = g.name;
+        $('#graph-title').textContent = g.name;
+        $('#graph-description').textContent = g.description || '';
+        $('#g-project').textContent = g.lakebase_project_id || '—';
+        $('#g-endpoint').textContent = g.lakebase_endpoint_host || '—';
+        $('#g-workspace').textContent = (g.workspace_url || '').replace('https://', '').split('.')[0] || '—';
+        $('#g-owner').textContent = g.owner_email || '—';
+        $('#g-created').textContent = g.created_at ? new Date(g.created_at).toLocaleDateString() : '—';
+
+        // Stats
+        var connectors = data.connectors || [];
+        var agents = data.agents || [];
+        $('#g-stat-connectors').textContent = connectors.length;
+        $('#g-stat-agents').textContent = agents.length;
+
+        // Render connectors
+        renderGraphConnectors(connectors);
+        // Render agents
+        renderEquippedAgents(agents);
+        // Load entity stats
+        loadGraphStats();
+      });
+    }
+
+    function loadGraphStats() {
+      // Find an agent equipped with this graph to query stats
+      if (!graphData) return;
+      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
+        var agents = data.agents || [];
+        if (!agents.length) {
+          $('#g-stat-entities').textContent = '—';
+          $('#g-stat-claims').textContent = '—';
+          return;
+        }
+        // Use first equipped agent to query KG stats
+        agentsApi('GET', '/' + agents[0].id + '/knowledge/stats').then(function(stats) {
+          var e = stats.entities || {};
+          var c = stats.claims || {};
+          $('#g-stat-entities').textContent = e.total || 0;
+          $('#g-stat-claims').textContent = c.total || 0;
+        }).catch(function() {
+          $('#g-stat-entities').textContent = '—';
+          $('#g-stat-claims').textContent = '—';
+        });
+      });
+    }
+
+    function renderGraphConnectors(connectors) {
+      if (!connectors.length) {
+        $('#g-connectors').innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><p>No connectors yet. Add a data source to start building this graph.</p></div>';
+        return;
+      }
+      var html = '';
+      connectors.forEach(function(c) {
+        var config = c.config_json ? JSON.parse(c.config_json) : {};
+        var summary = config.owner ? config.owner + '/' + config.repo : JSON.stringify(config).substring(0, 50);
+        html += '<div class="connector-card">' +
+          '<div class="connector-header"><span class="connector-name">' + c.connector_type + '</span><span class="connector-status ' + (c.status === 'active' ? 'ok' : 'pending') + '">' + c.status + '</span></div>' +
+          '<div class="connector-meta">' + summary + '</div>' +
+          (c.last_sync ? '<div class="connector-meta">Last sync: ' + timeAgo(c.last_sync) + '</div>' : '') +
+        '</div>';
+      });
+      $('#g-connectors').innerHTML = html;
+    }
+
+    function renderEquippedAgents(agents) {
+      if (!agents.length) {
+        $('#g-agents').innerHTML = '<div class="empty-state"><p>No agents equipped with this graph yet.</p></div>';
+        return;
+      }
+      var html = '<table class="agents-table"><thead><tr><th>Agent</th><th>Status</th><th>Role</th><th></th></tr></thead><tbody>';
+      agents.forEach(function(a) {
+        html += '<tr>' +
+          '<td><a href="agent.html?id=' + a.id + '">' + a.name + '</a></td>' +
+          '<td>' + statusBadge(a.status) + '</td>' +
+          '<td class="mono" style="font-size:12px;">' + (a.role || 'primary') + '</td>' +
+          '<td><button class="btn btn-sm btn-danger" onclick="unequipAgent(\'' + a.id + '\')">Remove</button></td>' +
+        '</tr>';
+      });
+      html += '</tbody></table>';
+      $('#g-agents').innerHTML = html;
+    }
+
+    function addGraphConnector() {
+      var type = $('#gc-type').value;
+      var body = {};
+      if (type === 'github') {
+        body = { owner: $('#gc-owner').value.trim(), repo: $('#gc-repo').value.trim(), token: $('#gc-token').value.trim() || undefined };
+        if (!body.owner || !body.repo) { alert('Owner and repo required.'); return; }
+      }
+      api('POST', API_URL + '/knowledge-graphs/' + graphId + '/connectors/' + type, body).then(function() {
+        closeModal('add-graph-connector');
+        loadGraph();
+      }).catch(function(err) {
+        alert('Failed: ' + (err.message || err.error || ''));
+      });
+    }
+
+    function equipAgent() {
+      var agentId = $('#equip-agent-select').value;
+      if (!agentId) { alert('Select an agent.'); return; }
+      api('POST', API_URL + '/knowledge-graphs/' + graphId + '/equip', { agentId: agentId }).then(function() {
+        closeModal('equip-agent-modal');
+        loadGraph();
+      }).catch(function(err) {
+        alert('Failed: ' + (err.message || err.error || ''));
+      });
+    }
+
+    function unequipAgent(agentId) {
+      if (!confirm('Remove this agent from the knowledge graph?')) return;
+      api('POST', API_URL + '/knowledge-graphs/' + graphId + '/unequip', { agentId: agentId }).then(function() {
+        loadGraph();
+      });
+    }
+
+    // Entity explorer
+    var _gEntities = [];
+    window.onTabChange = function(tab) {
+      if (tab === 'explorer') loadGraphEntities();
+      if (tab === 'agents') loadAgentOptions();
+    };
+
+    function loadGraphEntities() {
+      // Use first equipped agent to query entities
+      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
+        var agents = data.agents || [];
+        if (!agents.length) {
+          $('#g-entity-list').innerHTML = '<div class="text-dim">Equip an agent with this graph to browse entities.</div>';
+          return;
+        }
+        agentsApi('GET', '/' + agents[0].id + '/knowledge/entities?limit=200').then(function(eData) {
+          _gEntities = eData.entities || [];
+          renderGraphEntities(_gEntities);
+          var types = {};
+          _gEntities.forEach(function(e) { types[e.entity_type] = true; });
+          var sel = $('#g-entity-type-filter');
+          sel.innerHTML = '<option value="">All types</option>';
+          Object.keys(types).sort().forEach(function(t) {
+            sel.innerHTML += '<option value="' + t + '">' + t + '</option>';
+          });
+        });
+      });
+    }
+
+    function renderGraphEntities(entities) {
+      if (!entities.length) {
+        $('#g-entity-list').innerHTML = '<div class="empty-state"><p>No entities yet. Add a connector and run ingestion.</p></div>';
+        return;
+      }
+      var html = '';
+      entities.forEach(function(e) {
+        html += '<div class="entity-row" onclick="loadGraphClaims(\'' + e.id + '\', \'' + (e.canonical_name || '').replace(/'/g, "\\'") + '\')">' +
+          '<span class="entity-type">' + e.entity_type + '</span>' +
+          '<span class="entity-name">' + (e.canonical_name || e.id) + '</span>' +
+          '<span class="entity-desc">' + (e.description || '') + '</span>' +
+          '<span class="entity-confidence mono">' + ((e.confidence || 0) * 100).toFixed(0) + '%</span>' +
+        '</div>';
+      });
+      $('#g-entity-list').innerHTML = html;
+    }
+
+    function filterGraphEntities() {
+      var q = ($('#g-entity-search').value || '').toLowerCase();
+      var type = $('#g-entity-type-filter').value;
+      var filtered = _gEntities.filter(function(e) {
+        return (!type || e.entity_type === type) &&
+          (!q || (e.canonical_name || '').toLowerCase().indexOf(q) !== -1 || (e.description || '').toLowerCase().indexOf(q) !== -1);
+      });
+      renderGraphEntities(filtered);
+    }
+
+    function loadGraphClaims(entityId, entityName) {
+      $('#g-claims-panel').style.display = '';
+      $('#g-claims-entity-name').textContent = 'Claims — ' + entityName;
+      $('#g-claims-list').innerHTML = '<div class="text-dim">Loading...</div>';
+
+      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
+        var agents = data.agents || [];
+        if (!agents.length) return;
+        agentsApi('GET', '/' + agents[0].id + '/knowledge/entities/' + entityId + '/claims').then(function(cData) {
+          var claims = cData.claims || [];
+          if (!claims.length) { $('#g-claims-list').innerHTML = '<div class="text-dim">No claims.</div>'; return; }
+          var html = '';
+          claims.forEach(function(c) {
+            html += '<div class="claim-row">' +
+              '<span class="claim-predicate">' + c.predicate + '</span>' +
+              '<span class="claim-object">' + (c.object_literal || c.object_name || '—') + '</span>' +
+              '<span class="claim-state ' + c.lifecycle_state + '">' + c.lifecycle_state + '</span>' +
+            '</div>';
+          });
+          $('#g-claims-list').innerHTML = html;
+        });
+      });
+    }
+
+    function loadAgentOptions() {
+      agentsApi('GET', '').then(function(data) {
+        var sel = $('#equip-agent-select');
+        sel.innerHTML = '<option value="">Select agent...</option>';
+        (data.agents || []).forEach(function(a) {
+          var opt = document.createElement('option');
+          opt.value = a.id;
+          opt.textContent = a.config ? a.config.name : a.id;
+          sel.appendChild(opt);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

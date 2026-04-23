@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graphs — Lakecode Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Auth gate -->
+  <div id="auth-gate" class="auth-gate">
+    <div class="auth-gate-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h2>Enterprise access required</h2>
+      <p>Sign in with your enterprise account to manage knowledge graphs.</p>
+      <div class="auth-gate-error"></div>
+      <div class="auth-gate-actions">
+        <a href="/signin" class="btn btn-primary">Sign in</a>
+        <a href="mailto:sachin@lakecode.ai" class="btn">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-content" style="display:none;">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/admin" class="topbar-logo">lakecode<span>/admin</span></a>
+      <nav class="topbar-nav">
+        <a href="/admin">Agents</a>
+        <a href="/admin/graphs.html" class="active">Knowledge Graphs</a>
+        <a href="/admin/settings.html">Settings</a>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <a href="/" class="btn btn-sm">Back to site</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Knowledge Graphs</h1>
+        <p>Durable, queryable knowledge assets for your data platform</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('create-kg-modal')">+ Create Graph</button>
+    </div>
+
+    <div class="card" id="graphs-card">
+      <div id="graphs-content">
+        <div class="empty-state"><p>Loading...</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create KG Modal -->
+  <div class="modal-overlay" id="create-kg-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create Knowledge Graph</h2>
+        <button class="modal-close" onclick="closeModal('create-kg-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="kg-name">Name</label>
+          <input type="text" id="kg-name" placeholder="e.g., revenue-pipelines">
+          <div class="form-hint">A short, descriptive name for this knowledge graph</div>
+        </div>
+        <div class="form-group">
+          <label for="kg-description">Description</label>
+          <textarea id="kg-description" rows="2" placeholder="What domain does this graph cover?"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="kg-workspace">Workspace</label>
+          <select id="kg-workspace">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="kg-project">Lakebase project</label>
+          <select id="kg-project">
+            <option value="">Select workspace first</option>
+          </select>
+          <div class="form-hint">Each graph maps to a Lakebase project. Select an existing project or we'll use the default.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('create-kg-modal')">Cancel</button>
+        <button class="btn btn-primary" id="create-kg-btn" onclick="createGraph()">Create Graph</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth().then(function(ok) { if (ok) { loadGraphs(); loadWorkspaces(); } });
+
+    function loadGraphs() {
+      api('GET', API_URL + '/knowledge-graphs').then(function(data) {
+        renderGraphs(data.graphs || []);
+      }).catch(function(err) {
+        $('#graphs-content').innerHTML = '<div class="empty-state"><p class="text-red">Failed to load: ' + (err.message || err.error || '') + '</p></div>';
+      });
+    }
+
+    function renderGraphs(graphs) {
+      if (!graphs.length) {
+        $('#graphs-content').innerHTML =
+          '<div class="empty-state">' +
+            '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68"/></svg>' +
+            '<h3>No knowledge graphs yet</h3>' +
+            '<p>Create a knowledge graph to start building a durable asset for your data platform.</p>' +
+            '<button class="btn btn-primary" onclick="openModal(\'create-kg-modal\')">+ Create Graph</button>' +
+          '</div>';
+        return;
+      }
+
+      var html = '<table class="agents-table"><thead><tr>' +
+        '<th>Name</th><th>Lakebase Project</th><th>Connectors</th><th>Agents</th><th>Owner</th><th></th>' +
+        '</tr></thead><tbody>';
+
+      graphs.forEach(function(g) {
+        html += '<tr>' +
+          '<td><div class="agent-name"><a href="graph.html?id=' + g.id + '">' + g.name + '</a></div>' +
+            (g.description ? '<div class="agent-meta">' + g.description + '</div>' : '') +
+          '</td>' +
+          '<td class="mono" style="font-size:12px;">' + (g.lakebase_project_id || '—') + '</td>' +
+          '<td>' + (g.connectorCount || 0) + '</td>' +
+          '<td>' + (g.agentCount || 0) + '</td>' +
+          '<td style="font-size:12px;color:var(--text-dim);">' + (g.owner_email || '—') + '</td>' +
+          '<td><a href="graph.html?id=' + g.id + '" class="btn btn-sm">Details</a></td>' +
+        '</tr>';
+      });
+
+      html += '</tbody></table>';
+      $('#graphs-content').innerHTML = html;
+    }
+
+    function loadWorkspaces() {
+      agentsApi('GET', '').then(function(data) {
+        var agents = data.agents || [];
+        var seen = {};
+        var sel = $('#kg-workspace');
+        sel.innerHTML = '<option value="">Select workspace...</option>';
+        agents.forEach(function(a) {
+          var ws = (a.resources && a.resources.workspaceUrl) || (a.config && a.config.workspaceUrl) || '';
+          ws = ws.replace(/\/$/, '');
+          if (ws && !seen[ws]) {
+            seen[ws] = true;
+            var opt = document.createElement('option');
+            opt.value = ws;
+            opt.textContent = ws.replace('https://', '').split('.')[0];
+            sel.appendChild(opt);
+          }
+        });
+      });
+
+      $('#kg-workspace').addEventListener('change', function() {
+        loadLakebaseProjects(this.value);
+      });
+    }
+
+    function loadLakebaseProjects(wsUrl) {
+      var sel = $('#kg-project');
+      if (!wsUrl) { sel.innerHTML = '<option value="">Select workspace first</option>'; return; }
+      sel.innerHTML = '<option value="">Loading projects...</option>';
+
+      // Use any agent for this workspace to list projects
+      agentsApi('GET', '').then(function(data) {
+        var agent = (data.agents || []).find(function(a) {
+          var ws = (a.resources && a.resources.workspaceUrl) || '';
+          return ws.replace(/\/$/, '') === wsUrl;
+        });
+        if (!agent) { sel.innerHTML = '<option value="lakecodekg">lakecodekg (default)</option>'; return; }
+
+        agentsApi('GET', '/' + agent.id + '/lakebase-projects').then(function(pData) {
+          sel.innerHTML = '';
+          (pData.projects || []).forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.project_id;
+            opt.textContent = p.project_id + (p.owner ? ' (' + p.owner + ')' : '');
+            sel.appendChild(opt);
+          });
+          if (!pData.projects || !pData.projects.length) {
+            sel.innerHTML = '<option value="lakecodekg">lakecodekg (default)</option>';
+          }
+        });
+      });
+    }
+
+    function createGraph() {
+      var name = $('#kg-name').value.trim();
+      var desc = $('#kg-description').value.trim();
+      var wsUrl = $('#kg-workspace').value;
+      var projectId = $('#kg-project').value || 'lakecodekg';
+
+      if (!name) { alert('Name is required.'); return; }
+      if (!wsUrl) { alert('Select a workspace.'); return; }
+
+      $('#create-kg-btn').disabled = true;
+      $('#create-kg-btn').textContent = 'Creating...';
+
+      api('POST', API_URL + '/knowledge-graphs', {
+        name: name,
+        description: desc,
+        workspaceUrl: wsUrl,
+        lakebaseProjectId: projectId,
+      }).then(function(data) {
+        closeModal('create-kg-modal');
+        $('#create-kg-btn').disabled = false;
+        $('#create-kg-btn').textContent = 'Create Graph';
+        loadGraphs();
+      }).catch(function(err) {
+        alert('Failed: ' + (err.message || err.error || ''));
+        $('#create-kg-btn').disabled = false;
+        $('#create-kg-btn').textContent = 'Create Graph';
+      });
+    }
+  </script>
+</body>
+</html>
