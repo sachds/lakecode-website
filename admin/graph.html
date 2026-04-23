@@ -241,13 +241,43 @@
       connectors.forEach(function(c) {
         var config = c.config_json ? JSON.parse(c.config_json) : {};
         var summary = config.owner ? config.owner + '/' + config.repo : JSON.stringify(config).substring(0, 50);
+        var lastResult = c.last_result_json;
+        if (typeof lastResult === 'string') try { lastResult = JSON.parse(lastResult); } catch {}
+
         html += '<div class="connector-card">' +
-          '<div class="connector-header"><span class="connector-name">' + c.connector_type + '</span><span class="connector-status ' + (c.status === 'active' ? 'ok' : 'pending') + '">' + c.status + '</span></div>' +
+          '<div class="connector-header"><span class="connector-name">' + c.connector_type + '</span><span class="connector-status ' + (c.status === 'active' ? 'ok' : (c.status === 'ingesting' ? 'pending' : (c.status === 'error' ? 'error' : 'pending'))) + '">' + c.status + '</span></div>' +
           '<div class="connector-meta">' + summary + '</div>' +
           (c.last_sync ? '<div class="connector-meta">Last sync: ' + timeAgo(c.last_sync) + '</div>' : '') +
+          (lastResult ? '<div class="connector-meta">' + (lastResult.entities || 0) + ' entities, ' + (lastResult.claims || 0) + ' claims</div>' : '') +
+          '<div style="margin-top:8px;display:flex;gap:6px;">' +
+            '<button class="btn btn-sm" onclick="runGraphIngestion(\'' + c.id + '\')">Run Ingestion</button>' +
+          '</div>' +
         '</div>';
       });
       $('#g-connectors').innerHTML = html;
+    }
+
+    function runGraphIngestion(connectorId) {
+      // Find an equipped agent to run the ingestion through
+      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
+        var agents = data.agents || [];
+        if (!agents.length) {
+          alert('Equip an agent with this graph first — ingestion jobs run through the agent\'s workspace credentials.');
+          return;
+        }
+        // Use the first equipped agent
+        var agentId = agents[0].id;
+        agentsApi('POST', '/' + agentId + '/connectors/' + connectorId + '/ingest').then(function(result) {
+          if (result.runId) {
+            alert('Ingestion job submitted (run ID: ' + result.runId + '). Check the agent\'s Logs tab for progress.');
+          } else if (result.result) {
+            alert('Ingestion complete: ' + (result.result.entities || 0) + ' entities, ' + (result.result.claims || 0) + ' claims');
+          }
+          loadGraph();
+        }).catch(function(err) {
+          alert('Ingestion failed: ' + (err.message || err.error || ''));
+        });
+      });
     }
 
     function renderEquippedAgents(agents) {
