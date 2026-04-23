@@ -130,15 +130,34 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="gc-type">Type</label>
-          <select id="gc-type">
-            <option value="github">GitHub</option>
-            <option value="web">Web / Docs</option>
+          <select id="gc-type" onchange="toggleConnectorFields()">
+            <option value="github">GitHub Repository</option>
+            <option value="web">Web Pages / Docs</option>
+            <option value="text">Paste Text</option>
           </select>
         </div>
         <div id="gc-github">
           <div class="form-group"><label>Owner</label><input type="text" id="gc-owner" placeholder="e.g., acme-corp"></div>
           <div class="form-group"><label>Repo</label><input type="text" id="gc-repo" placeholder="e.g., data-pipelines"></div>
           <div class="form-group"><label>Token (optional)</label><input type="password" id="gc-token" placeholder="ghp_..."></div>
+        </div>
+        <div id="gc-web" style="display:none;">
+          <div class="form-group">
+            <label>URLs (one per line)</label>
+            <textarea id="gc-urls" rows="4" placeholder="https://docs.company.com/pipelines&#10;https://wiki.company.com/architecture&#10;https://confluence.company.com/display/DATA/Overview"></textarea>
+            <div class="form-hint">Each URL will be fetched, HTML stripped, and ingested into the knowledge graph.</div>
+          </div>
+        </div>
+        <div id="gc-text" style="display:none;">
+          <div class="form-group">
+            <label>Label</label>
+            <input type="text" id="gc-text-label" placeholder="e.g., Architecture Decision Record">
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <textarea id="gc-text-content" rows="6" placeholder="Paste documentation, architecture notes, runbooks, etc."></textarea>
+            <div class="form-hint">Raw text will be chunked and ingested via LLM extraction.</div>
+          </div>
         </div>
         <div class="form-group">
           <label for="gc-schedule">Sync schedule</label>
@@ -341,16 +360,34 @@
       $('#g-agents').innerHTML = html;
     }
 
+    function toggleConnectorFields() {
+      var type = $('#gc-type').value;
+      $('#gc-github').style.display = type === 'github' ? '' : 'none';
+      $('#gc-web').style.display = type === 'web' ? '' : 'none';
+      $('#gc-text').style.display = type === 'text' ? '' : 'none';
+    }
+
     function addGraphConnector() {
       var type = $('#gc-type').value;
       var schedule = $('#gc-schedule').value;
       var body = { syncSchedule: schedule };
+
       if (type === 'github') {
         body.owner = $('#gc-owner').value.trim();
         body.repo = $('#gc-repo').value.trim();
         body.token = $('#gc-token').value.trim() || undefined;
         if (!body.owner || !body.repo) { alert('Owner and repo required.'); return; }
+      } else if (type === 'web') {
+        var urlText = $('#gc-urls').value.trim();
+        if (!urlText) { alert('Enter at least one URL.'); return; }
+        body.urls = urlText.split('\n').map(function(u) { return u.trim(); }).filter(Boolean);
+      } else if (type === 'text') {
+        var label = $('#gc-text-label').value.trim();
+        var content = $('#gc-text-content').value.trim();
+        if (!content) { alert('Paste some content.'); return; }
+        body.texts = [{ label: label || 'manual', content: content }];
       }
+
       api('POST', API_URL + '/knowledge-graphs/' + graphId + '/connectors/' + type, body).then(function() {
         closeModal('add-graph-connector');
         loadGraph();
