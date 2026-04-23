@@ -210,25 +210,14 @@
     }
 
     function loadGraphStats() {
-      // Find an agent equipped with this graph to query stats
-      if (!graphData) return;
-      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
-        var agents = data.agents || [];
-        if (!agents.length) {
-          $('#g-stat-entities').textContent = '—';
-          $('#g-stat-claims').textContent = '—';
-          return;
-        }
-        // Use first equipped agent to query KG stats
-        agentsApi('GET', '/' + agents[0].id + '/knowledge/stats').then(function(stats) {
-          var e = stats.entities || {};
-          var c = stats.claims || {};
-          $('#g-stat-entities').textContent = e.total || 0;
-          $('#g-stat-claims').textContent = c.total || 0;
-        }).catch(function() {
-          $('#g-stat-entities').textContent = '—';
-          $('#g-stat-claims').textContent = '—';
-        });
+      api('GET', API_URL + '/knowledge-graphs/' + graphId + '/stats').then(function(stats) {
+        var e = stats.entities || {};
+        var c = stats.claims || {};
+        $('#g-stat-entities').textContent = e.total || 0;
+        $('#g-stat-claims').textContent = c.total || 0;
+      }).catch(function() {
+        $('#g-stat-entities').textContent = '—';
+        $('#g-stat-claims').textContent = '—';
       });
     }
 
@@ -339,24 +328,18 @@
     };
 
     function loadGraphEntities() {
-      // Use first equipped agent to query entities
-      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
-        var agents = data.agents || [];
-        if (!agents.length) {
-          $('#g-entity-list').innerHTML = '<div class="text-dim">Equip an agent with this graph to browse entities.</div>';
-          return;
-        }
-        agentsApi('GET', '/' + agents[0].id + '/knowledge/entities?limit=200').then(function(eData) {
-          _gEntities = eData.entities || [];
-          renderGraphEntities(_gEntities);
-          var types = {};
-          _gEntities.forEach(function(e) { types[e.entity_type] = true; });
-          var sel = $('#g-entity-type-filter');
-          sel.innerHTML = '<option value="">All types</option>';
-          Object.keys(types).sort().forEach(function(t) {
-            sel.innerHTML += '<option value="' + t + '">' + t + '</option>';
-          });
+      api('GET', API_URL + '/knowledge-graphs/' + graphId + '/entities?limit=200').then(function(eData) {
+        _gEntities = eData.entities || [];
+        renderGraphEntities(_gEntities);
+        var types = {};
+        _gEntities.forEach(function(e) { types[e.entity_type] = true; });
+        var sel = $('#g-entity-type-filter');
+        sel.innerHTML = '<option value="">All types</option>';
+        Object.keys(types).sort().forEach(function(t) {
+          sel.innerHTML += '<option value="' + t + '">' + t + '</option>';
         });
+      }).catch(function() {
+        $('#g-entity-list').innerHTML = '<div class="text-dim">Failed to load entities. Check workspace connection.</div>';
       });
     }
 
@@ -392,22 +375,20 @@
       $('#g-claims-entity-name').textContent = 'Claims — ' + entityName;
       $('#g-claims-list').innerHTML = '<div class="text-dim">Loading...</div>';
 
-      api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
-        var agents = data.agents || [];
-        if (!agents.length) return;
-        agentsApi('GET', '/' + agents[0].id + '/knowledge/entities/' + entityId + '/claims').then(function(cData) {
-          var claims = cData.claims || [];
-          if (!claims.length) { $('#g-claims-list').innerHTML = '<div class="text-dim">No claims.</div>'; return; }
-          var html = '';
-          claims.forEach(function(c) {
-            html += '<div class="claim-row">' +
-              '<span class="claim-predicate">' + c.predicate + '</span>' +
-              '<span class="claim-object">' + (c.object_literal || c.object_name || '—') + '</span>' +
-              '<span class="claim-state ' + c.lifecycle_state + '">' + c.lifecycle_state + '</span>' +
-            '</div>';
-          });
-          $('#g-claims-list').innerHTML = html;
+      api('GET', API_URL + '/knowledge-graphs/' + graphId + '/entities/' + entityId + '/claims').then(function(cData) {
+        var claims = cData.claims || [];
+        if (!claims.length) { $('#g-claims-list').innerHTML = '<div class="text-dim">No claims.</div>'; return; }
+        var html = '';
+        claims.forEach(function(c) {
+          html += '<div class="claim-row">' +
+            '<span class="claim-predicate">' + c.predicate + '</span>' +
+            '<span class="claim-object">' + (c.object_literal || c.object_name || '—') + '</span>' +
+            '<span class="claim-state ' + (c.lifecycle_state || '') + '">' + (c.lifecycle_state || '') + '</span>' +
+          '</div>';
         });
+        $('#g-claims-list').innerHTML = html;
+      }).catch(function() {
+        $('#g-claims-list').innerHTML = '<div class="text-dim">Failed to load claims.</div>';
       });
     }
 
