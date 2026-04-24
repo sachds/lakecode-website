@@ -164,10 +164,10 @@
           <div class="form-group"><label>Project ID or path</label><input type="text" id="gc-gl-project" placeholder="e.g., 278964 or gitlab-org/gitlab"><div class="form-hint">Numeric ID or URL-encoded path (e.g., gitlab-org%2Fgitlab)</div></div>
           <div class="form-group"><label>GitLab host</label><input type="text" id="gc-gl-host" placeholder="https://gitlab.com" value="https://gitlab.com"></div>
           <div class="form-group"><label>Token (optional for public repos)</label><input type="password" id="gc-gl-token" placeholder="glpat-..."></div>
-          <div class="form-group"><label>Branch</label><input type="text" id="gc-gl-ref" placeholder="main" value="main"></div>
+          <div class="form-group"><label>Branch</label><input type="text" id="gc-gl-ref" placeholder="master" value="master"></div>
           <div class="form-group"><label>Directories to walk (one per line, optional)</label><textarea id="gc-gl-dirs" rows="3" placeholder="transform/snowflake-dbt/models&#10;transform/snowflake-dbt/macros"></textarea><div class="form-hint">The connector will recursively walk these directories and ingest .sql, .yml, .md, .py files</div></div>
           <div class="form-group"><label>Specific files (one per line, optional)</label><textarea id="gc-gl-paths" rows="2" placeholder="dbt_project.yml&#10;.gitlab/merge_request_templates/Default.md"></textarea></div>
-          <div class="form-group"><label>Max merge requests</label><input type="number" id="gc-gl-max-mrs" value="50" min="0" max="200"></div>
+          <div class="form-group"><label>Max merge requests</label><input type="number" id="gc-gl-max-mrs" value="150" min="0" max="500"><div class="form-hint">Sorted by merged_at descending. 150 gives good coverage without dilution.</div></div>
         </div>
         <div id="gc-web" style="display:none;">
           <div class="form-group">
