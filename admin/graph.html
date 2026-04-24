@@ -340,11 +340,21 @@
         html += '<div style="margin-top:10px;display:flex;gap:6px;">' +
           '<button class="btn btn-sm" onclick="runGraphIngestion(\'' + c.id + '\')">Run Ingestion</button>' +
           (isLive ? '<button class="btn btn-sm" onclick="pauseConnector(\'' + c.id + '\')">Pause</button>' : '') +
+          '<button class="btn btn-sm btn-deny" onclick="deleteConnector(\'' + c.id + '\', \'' + (sourceTitle || '').replace(/'/g, '') + '\')">Delete</button>' +
         '</div>';
 
         html += '</div>';
       });
       $('#g-connectors').innerHTML = html;
+    }
+
+    function deleteConnector(connectorId, name) {
+      if (!confirm('Delete connector "' + name + '"? This won\'t remove entities already ingested.')) return;
+      api('DELETE', API_URL + '/knowledge-graphs/' + graphId + '/connectors/' + connectorId).then(function() {
+        loadGraph();
+      }).catch(function(err) {
+        alert('Delete failed: ' + (err.message || err.error || ''));
+      });
     }
 
     var _ingestPollTimer = null;
