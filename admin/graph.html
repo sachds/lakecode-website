@@ -83,6 +83,24 @@
         <h3>Data Sources</h3>
         <button class="btn btn-primary btn-sm" onclick="openModal('add-graph-connector')">+ Add Connector</button>
       </div>
+
+      <!-- Ingestion status banner -->
+      <div id="g-ingest-banner" style="display:none;margin-top:12px;">
+        <div class="card" style="border-color:var(--accent);background:rgba(88,166,255,0.05);">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="spinning" style="color:var(--accent);font-size:18px;">&#8635;</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;" id="g-ingest-title">Ingestion running...</div>
+              <div style="font-size:12px;color:var(--text-secondary);" id="g-ingest-detail"></div>
+            </div>
+            <div id="g-ingest-actions"></div>
+          </div>
+          <div style="margin-top:8px;">
+            <div class="ingestion-bar"><div class="ingestion-fill" id="g-ingest-fill" style="width:20%"></div></div>
+          </div>
+        </div>
+      </div>
+
       <div id="g-connectors" class="connector-grid mt-16">
         <div class="text-dim">Loading...</div>
       </div>
@@ -319,27 +337,129 @@
       $('#g-connectors').innerHTML = html;
     }
 
+    var _ingestPollTimer = null;
+    var _ingestConnectorId = null;
+    var _ingestAgentId = null;
+
     function runGraphIngestion(connectorId) {
+      // Show banner immediately
+      showIngestBanner('Submitting ingestion job...', 'Finding workspace credentials and submitting to Databricks...');
+
       // Find an equipped agent to run the ingestion through
       api('GET', API_URL + '/knowledge-graphs/' + graphId).then(function(data) {
         var agents = data.agents || [];
+
+        // If no equipped agents, try finding any agent for this workspace
         if (!agents.length) {
-          alert('Equip an agent with this graph first — ingestion jobs run through the agent\'s workspace credentials.');
-          return;
+          showIngestBanner('Looking for agent...', 'No agents equipped — searching workspace for available agents...');
+          return agentsApi('GET', '').then(function(aData) {
+            var allAgents = aData.agents || [];
+            if (!allAgents.length) {
+              hideIngestBanner();
+              alert('No agents found. Create and deploy an agent first, then equip it with this graph.');
+              return;
+            }
+            // Use first agent for this workspace
+            _ingestAgentId = allAgents[0].id;
+            submitIngestion(connectorId, _ingestAgentId);
+          });
         }
-        // Use the first equipped agent
-        var agentId = agents[0].id;
-        agentsApi('POST', '/' + agentId + '/connectors/' + connectorId + '/ingest').then(function(result) {
-          if (result.runId) {
-            alert('Ingestion job submitted (run ID: ' + result.runId + '). Check the agent\'s Logs tab for progress.');
-          } else if (result.result) {
-            alert('Ingestion complete: ' + (result.result.entities || 0) + ' entities, ' + (result.result.claims || 0) + ' claims');
-          }
-          loadGraph();
-        }).catch(function(err) {
-          alert('Ingestion failed: ' + (err.message || err.error || ''));
-        });
+
+        _ingestAgentId = agents[0].id;
+        submitIngestion(connectorId, _ingestAgentId);
+      }).catch(function(err) {
+        showIngestError('Failed to find agent: ' + (err.message || err.error || ''));
       });
+    }
+
+    function submitIngestion(connectorId, agentId) {
+      _ingestConnectorId = connectorId;
+      showIngestBanner('Submitting job...', 'Sending ingestion request to Databricks...');
+
+      agentsApi('POST', '/' + agentId + '/connectors/' + connectorId + '/ingest').then(function(result) {
+        if (result.runId || result.status === 'submitted') {
+          showIngestBanner('Ingestion running', 'Databricks Job submitted (Run ID: ' + (result.runId || '...') + '). Polling for status...', 30);
+          startIngestPolling(connectorId, agentId);
+        } else if (result.result) {
+          showIngestComplete(result.result);
+          loadGraph();
+        } else {
+          showIngestBanner('Ingestion triggered', 'Job submitted successfully.', 100);
+          setTimeout(function() { hideIngestBanner(); loadGraph(); }, 3000);
+        }
+      }).catch(function(err) {
+        showIngestError('Ingestion failed: ' + (err.message || err.error || ''));
+      });
+    }
+
+    function startIngestPolling(connectorId, agentId) {
+      if (_ingestPollTimer) clearInterval(_ingestPollTimer);
+      var pollCount = 0;
+      _ingestPollTimer = setInterval(function() {
+        pollCount++;
+        var progress = Math.min(85, 30 + pollCount * 3);
+        $('#g-ingest-fill').style.width = progress + '%';
+
+        agentsApi('GET', '/' + agentId + '/connectors/' + connectorId + '/status').then(function(data) {
+          if (data.status === 'active') {
+            clearInterval(_ingestPollTimer);
+            _ingestPollTimer = null;
+            showIngestComplete(data.result || data.lastResult);
+            loadGraph();
+          } else if (data.status === 'error') {
+            clearInterval(_ingestPollTimer);
+            _ingestPollTimer = null;
+            showIngestError('Ingestion failed' + (data.message ? ': ' + data.message : ''));
+            loadGraph();
+          } else {
+            var state = data.jobState || 'running';
+            showIngestBanner('Ingestion running', 'Job state: ' + state + ' — polling every 5s...', progress);
+          }
+        });
+      }, 5000);
+    }
+
+    function showIngestBanner(title, detail, progress) {
+      $('#g-ingest-banner').style.display = '';
+      $('#g-ingest-title').textContent = title;
+      $('#g-ingest-detail').textContent = detail || '';
+      if (progress !== undefined) {
+        $('#g-ingest-fill').style.width = progress + '%';
+      }
+      $('#g-ingest-actions').innerHTML = '';
+    }
+
+    function showIngestComplete(result) {
+      var entities = result ? (result.entities || result.totalEntities || 0) : 0;
+      var claims = result ? (result.claims || result.totalClaims || 0) : 0;
+      var duration = result ? (result.duration_sec || 0) : 0;
+
+      $('#g-ingest-banner').style.display = '';
+      $('#g-ingest-banner .card').style.borderColor = 'var(--green)';
+      $('#g-ingest-banner .card').style.background = 'rgba(63,185,80,0.05)';
+      $('#g-ingest-banner .spinning').className = '';
+      $('#g-ingest-banner .spinning' || document.querySelector('#g-ingest-banner div:first-child div:first-child')).innerHTML = '&#10003;';
+      $('#g-ingest-title').textContent = 'Ingestion complete';
+      $('#g-ingest-detail').textContent = entities + ' entities, ' + claims + ' claims extracted' + (duration ? ' in ' + duration + 's' : '');
+      $('#g-ingest-fill').style.width = '100%';
+      $('#g-ingest-actions').innerHTML = '<button class="btn btn-sm" onclick="hideIngestBanner()">Dismiss</button>';
+    }
+
+    function showIngestError(msg) {
+      $('#g-ingest-banner').style.display = '';
+      $('#g-ingest-banner .card').style.borderColor = 'var(--red)';
+      $('#g-ingest-banner .card').style.background = 'rgba(248,81,73,0.05)';
+      $('#g-ingest-title').textContent = 'Ingestion failed';
+      $('#g-ingest-detail').textContent = msg;
+      $('#g-ingest-fill').style.width = '0%';
+      $('#g-ingest-actions').innerHTML = '<button class="btn btn-sm" onclick="hideIngestBanner()">Dismiss</button>';
+    }
+
+    function hideIngestBanner() {
+      $('#g-ingest-banner').style.display = 'none';
+      // Reset styles
+      var card = $('#g-ingest-banner .card') || $('#g-ingest-banner').querySelector('.card');
+      if (card) { card.style.borderColor = 'var(--accent)'; card.style.background = 'rgba(88,166,255,0.05)'; }
     }
 
     function renderEquippedAgents(agents) {
