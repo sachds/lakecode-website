@@ -150,6 +150,7 @@
           <label for="gc-type">Type</label>
           <select id="gc-type" onchange="toggleConnectorFields()">
             <option value="github">GitHub Repository</option>
+            <option value="gitlab">GitLab Repository</option>
             <option value="web">Web Pages / Docs</option>
             <option value="text">Paste Text</option>
           </select>
@@ -158,6 +159,15 @@
           <div class="form-group"><label>Owner</label><input type="text" id="gc-owner" placeholder="e.g., acme-corp"></div>
           <div class="form-group"><label>Repo</label><input type="text" id="gc-repo" placeholder="e.g., data-pipelines"></div>
           <div class="form-group"><label>Token (optional)</label><input type="password" id="gc-token" placeholder="ghp_..."></div>
+        </div>
+        <div id="gc-gitlab" style="display:none;">
+          <div class="form-group"><label>Project ID or path</label><input type="text" id="gc-gl-project" placeholder="e.g., 278964 or gitlab-org/gitlab"><div class="form-hint">Numeric ID or URL-encoded path (e.g., gitlab-org%2Fgitlab)</div></div>
+          <div class="form-group"><label>GitLab host</label><input type="text" id="gc-gl-host" placeholder="https://gitlab.com" value="https://gitlab.com"></div>
+          <div class="form-group"><label>Token (optional for public repos)</label><input type="password" id="gc-gl-token" placeholder="glpat-..."></div>
+          <div class="form-group"><label>Branch</label><input type="text" id="gc-gl-ref" placeholder="main" value="main"></div>
+          <div class="form-group"><label>Directories to walk (one per line, optional)</label><textarea id="gc-gl-dirs" rows="3" placeholder="transform/snowflake-dbt/models&#10;transform/snowflake-dbt/macros"></textarea><div class="form-hint">The connector will recursively walk these directories and ingest .sql, .yml, .md, .py files</div></div>
+          <div class="form-group"><label>Specific files (one per line, optional)</label><textarea id="gc-gl-paths" rows="2" placeholder="dbt_project.yml&#10;.gitlab/merge_request_templates/Default.md"></textarea></div>
+          <div class="form-group"><label>Max merge requests</label><input type="number" id="gc-gl-max-mrs" value="50" min="0" max="200"></div>
         </div>
         <div id="gc-web" style="display:none;">
           <div class="form-group">
@@ -483,6 +493,7 @@
     function toggleConnectorFields() {
       var type = $('#gc-type').value;
       $('#gc-github').style.display = type === 'github' ? '' : 'none';
+      $('#gc-gitlab').style.display = type === 'gitlab' ? '' : 'none';
       $('#gc-web').style.display = type === 'web' ? '' : 'none';
       $('#gc-text').style.display = type === 'text' ? '' : 'none';
     }
@@ -497,6 +508,17 @@
         body.repo = $('#gc-repo').value.trim();
         body.token = $('#gc-token').value.trim() || undefined;
         if (!body.owner || !body.repo) { alert('Owner and repo required.'); return; }
+      } else if (type === 'gitlab') {
+        body.project_id = $('#gc-gl-project').value.trim();
+        body.host = $('#gc-gl-host').value.trim() || 'https://gitlab.com';
+        body.token = $('#gc-gl-token').value.trim() || undefined;
+        body.ref = $('#gc-gl-ref').value.trim() || 'main';
+        body.maxMRs = parseInt($('#gc-gl-max-mrs').value) || 50;
+        var dirs = $('#gc-gl-dirs').value.trim();
+        if (dirs) body.directories = dirs.split('\n').map(function(d) { return d.trim(); }).filter(Boolean);
+        var paths = $('#gc-gl-paths').value.trim();
+        if (paths) body.paths = paths.split('\n').map(function(p) { return p.trim(); }).filter(Boolean);
+        if (!body.project_id) { alert('Project ID or path is required.'); return; }
       } else if (type === 'web') {
         var urlText = $('#gc-urls').value.trim();
         if (!urlText) { alert('Enter at least one URL.'); return; }
