@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lakecode — AI-Powered CLI Agent for Databricks &amp; Snowflake</title>
-  <meta name="description" content="Lakecode is an AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy — all from your command line.">
+  <title>Lakecode — The Coding Assistant That Remembers</title>
+  <meta name="description" content="Lakecode is a terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests, then compiles the right context for every task.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,15 +15,14 @@
   <!-- Nav -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="#" class="logo">
+      <a href="/" class="logo">
         <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#commands">Commands</a>
-        <a href="#docs">Docs</a>
-        <a href="/pricing">Pricing</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#benchmarks">Benchmarks</a>
         <a href="/enterprise">Enterprise</a>
+        <a href="/docs">Docs</a>
         <a href="/blog">Blog</a>
         <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
         <button class="theme-toggle" aria-label="Toggle theme">
@@ -37,13 +36,12 @@
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- 1. HERO -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">AI-powered CLI agent for Databricks &amp; Snowflake</div>
-      <h1>Your data platform<br>command line.</h1>
+      <h1>The coding assistant<br>that remembers</h1>
       <p class="hero-sub">
-        An AI-powered terminal agent for Databricks and Snowflake. Debug jobs, prove data quality, analyze spend, and deploy &mdash; without leaving your terminal.
+        A terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests &mdash; then compiles the right context for every task.
       </p>
       <div class="hero-install">
         <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
@@ -64,411 +62,402 @@
           <span class="terminal-title">terminal</span>
         </div>
         <div class="terminal-body">
-          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode /debug job 4827</div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode "add retry logic to the payment service"</div>
           <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line dim">  Diagnosing job 4827...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Job config loaded &mdash; nightly_etl_pipeline</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Last 5 runs fetched &mdash; 3 failures in 24h</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Error logs extracted &mdash; OOM on task 3</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Query history analyzed &mdash; skew on join key</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Cluster metrics checked &mdash; 98% memory util</div>
+          <div class="terminal-line dim">  Compiling context...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: retry conventions from ms-009</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: payment service architecture decision</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: exponential backoff standard (team)</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Code: src/services/payment.ts loaded</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Code: src/utils/retry.ts loaded</div>
           <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Root cause:</strong> Data skew on customer_id join</div>
-          <div class="terminal-line">    causing OOM. Recommend salted join or larger</div>
-          <div class="terminal-line">    instance type. Full report saved to ./debug/</div>
+          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Context compiled:</strong> 3 memories, 2 files, 1 convention</div>
+          <div class="terminal-line">    Applied team retry pattern with exponential</div>
+          <div class="terminal-line">    backoff. Changes ready for review.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- What it does -->
-  <section id="features" class="section">
+  <!-- 2. PROBLEM -->
+  <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>What it does</h2>
-        <p>An AI agent that actually understands your Databricks and Snowflake workspace.</p>
+        <h2>Most coding assistants start from zero</h2>
+        <p>Every session. Every prompt. Every time.</p>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-          </div>
-          <h3>AI-powered debugging</h3>
-          <ul>
-            <li>Diagnose failed jobs end-to-end in seconds</li>
-            <li>LLM analyzes logs, query history, and cluster metrics</li>
-            <li>Get root-cause summaries, not just stack traces</li>
-          </ul>
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #ff6b6b;">Wander</h3>
+          <p style="color: rgba(255,255,255,0.6);">They explore the codebase from scratch every time, burning tokens on files they have already seen and patterns they have already learned.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          </div>
-          <h3>Data quality evidence</h3>
-          <ul>
-            <li>Generate evidence packs: schema, nulls, freshness, stats, samples</li>
-            <li>AI writes a plain-English health assessment</li>
-            <li>Attach to PRs, tickets, or audit trails</li>
-          </ul>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #ffa94d;">Compact</h3>
+          <p style="color: rgba(255,255,255,0.6);">When the context window fills, they summarize and compress &mdash; losing the specific details that actually matter for the next step.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <h3>Spend intelligence</h3>
-          <ul>
-            <li>Top spend breakdown from system billing tables</li>
-            <li>AI detects spikes and explains what changed</li>
-            <li>Audit jobs for missing timeouts, SLA risk, and failure patterns</li>
-          </ul>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
-          </div>
-          <h3>Deploy &amp; execute</h3>
-          <ul>
-            <li>Deploy files to your workspace from the terminal</li>
-            <li>Trigger job runs and poll until completion</li>
-            <li>Natural language commands &mdash; just describe what you need</li>
-          </ul>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #845ef7;">Forget</h3>
+          <p style="color: rgba(255,255,255,0.6);">Close the session and everything is gone. The next session knows nothing about what was learned, decided, or resolved before.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How it works -->
+  <!-- 3. PRODUCT OVERVIEW -->
   <section id="how-it-works" class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>How it works</h2>
-        <p>From install to running workflows in under two minutes.</p>
+        <h2>Lakecode gives agents a working memory</h2>
+        <p>A persistent, structured memory layer that makes every session build on the last.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h3>Install</h3>
-            <p>Install lakecode with npm. One command, no dependencies to manage.</p>
+            <h3>Remember</h3>
+            <p>Lakecode captures what matters from every session: architecture decisions, debugging findings, team conventions, test outcomes. Memory persists across sessions, branches, and teammates.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h3>Connect</h3>
-            <p>Sign in with Google OAuth and connect your Databricks or Snowflake workspace. Lakecode automatically profiles your catalogs, schemas, and jobs.</p>
+            <h3>Compile</h3>
+            <p>Before the agent writes a single line, Lakecode compiles the right context for the task. Not everything &mdash; just the memories, code, and conventions that are relevant right now.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h3>Run</h3>
-            <p>Use slash commands or describe what you need in plain English. The AI agent collects context, executes workflows, and delivers actionable results.</p>
+            <h3>Act</h3>
+            <p>The agent starts with exactly the context it needs. No wandering. No re-exploration. It produces better code, faster, because it already knows what your team knows.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Commands -->
-  <section id="commands" class="section">
+  <!-- 4. TERMINAL NATIVE -->
+  <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Commands</h2>
-        <p>Opinionated workflows for real Databricks and Snowflake engineering tasks.</p>
+        <h2>Works where engineers already work</h2>
+        <p>Terminal-native. No browser tab. No IDE plugin. No context switching.</p>
       </div>
-      <div class="commands-grid">
-        <div class="command-group">
-          <h3>Debugging &amp; Monitoring</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/status job &lt;id&gt;</code>
-              <span>Job config + last 5 runs at a glance</span>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+        <div>
+          <div class="hero-terminal" style="margin: 0;">
+            <div class="terminal-bar">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">terminal</span>
             </div>
-            <div class="command">
-              <code>/logs &lt;run-id&gt;</code>
-              <span>Run output + AI error analysis</span>
-            </div>
-            <div class="command">
-              <code>/debug job &lt;id&gt;</code>
-              <span>Full diagnosis: config, failures, logs, queries, root-cause summary</span>
-            </div>
-            <div class="command">
-              <code>/queries job &lt;id&gt;</code>
-              <span>SQL query history for the latest run</span>
-            </div>
-            <div class="command">
-              <code>/queries run &lt;run-id&gt;</code>
-              <span>SQL query history for a specific run</span>
+            <div class="terminal-body">
+              <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode "why does the auth test fail on CI?"</div>
+              <div class="terminal-line dim">&nbsp;</div>
+              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: auth refactor (3 days ago)</div>
+              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: CI env differs from local</div>
+              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Test: auth.test.ts line 42 assertion</div>
+              <div class="terminal-line dim">&nbsp;</div>
+              <div class="terminal-line">  The token expiry was changed from 1h to 15m</div>
+              <div class="terminal-line">  in the auth refactor, but the CI test still</div>
+              <div class="terminal-line">  uses a mock with 1h expiry. Fix applied.</div>
             </div>
           </div>
         </div>
-        <div class="command-group">
-          <h3>Data Quality</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/prove &lt;table&gt;</code>
-              <span>Evidence pack: schema, row counts, nulls, freshness, numeric stats, duplicates, samples + health assessment</span>
-            </div>
-            <div class="command">
-              <code>/audit jobs</code>
-              <span>Scan for SLA gaps, missing timeouts, recurring failures</span>
-            </div>
-          </div>
-        </div>
-        <div class="command-group">
-          <h3>Platform Ops</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/audit jobs</code>
-              <span>Scan jobs for SLA gaps, missing timeouts, runtime variability, failures; risk-scored report</span>
-            </div>
-            <div class="command">
-              <code>/cost top</code>
-              <span>Top spend drivers from billing system tables</span>
-            </div>
-            <div class="command">
-              <code>/cost spike</code>
-              <span>Compare day vs baseline; AI identifies likely drivers</span>
-            </div>
-            <div class="command">
-              <code>/drift detect</code>
-              <span>Compare deployed resources against bundle definitions</span>
-            </div>
-          </div>
-        </div>
-        <div class="command-group">
-          <h3>Deployment</h3>
-          <div class="command-list">
-            <div class="command">
-              <code>/deploy &lt;local&gt; &lt;ws-path&gt;</code>
-              <span>Import a local file into the workspace</span>
-            </div>
-            <div class="command">
-              <code>/run job &lt;id&gt;</code>
-              <span>Trigger job run + poll until completion</span>
-            </div>
-            <div class="command">
-              <code>/capture job &lt;id&gt;</code>
-              <span>Capture a job or pipeline into a Databricks Asset Bundle</span>
-            </div>
-            <div class="command">
-              <code>/uc explain-access</code>
-              <span>Trace why a principal has (or lacks) access to a Unity Catalog object</span>
-            </div>
-          </div>
+        <div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px;">
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Runs in your terminal</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Works alongside git, your editor, and your existing workflow. No new windows.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Natural language or slash commands</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Describe what you need in plain English, or use structured commands for repeatable workflows.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Reads your project in place</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">No uploading, syncing, or indexing step. Lakecode reads your local project and integrates with git context.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Works with any language or framework</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">TypeScript, Python, Rust, Go, Java &mdash; if it lives in a repo, Lakecode can work with it.</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Why lakecode -->
+  <!-- 5. MEMORY COMPOUNDS -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Why lakecode</h2>
+        <h2>Every session makes the next one smarter</h2>
+        <p>Memory compounds over time. The more you use Lakecode, the less context you need to provide.</p>
       </div>
-      <div class="why-grid">
-        <div class="why-card">
-          <h3>AI that understands your workspace</h3>
-          <p>Lakecode profiles your Databricks or Snowflake environment on connect &mdash; catalogs, schemas, jobs, warehouses. The AI reasons with real context, not generic prompts.</p>
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 880px; margin: 0 auto;">
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">ARCHITECTURE DECISIONS</h3>
+          <p style="color: rgba(255,255,255,0.6);">Why the team chose event sourcing. Why the API uses camelCase. Why auth is handled at the gateway. Decisions persist so agents stop re-litigating them.</p>
         </div>
-        <div class="why-card">
-          <h3>Evidence, not just answers</h3>
-          <p>Every workflow produces shareable artifacts &mdash; evidence packs, debug reports, cost breakdowns. Attach them to PRs, incidents, or audit trails.</p>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">DEBUGGING FINDINGS</h3>
+          <p style="color: rgba(255,255,255,0.6);">Root causes, environment quirks, and known failure modes. When a similar error appears, the agent already knows what was tried and what worked.</p>
         </div>
-        <div class="why-card">
-          <h3>Terminal-native, zero context switching</h3>
-          <p>Stop bouncing between Jobs UI, cluster logs, SQL editor, and dashboards. One command replaces five browser tabs.</p>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">TEAM CONVENTIONS</h3>
+          <p style="color: rgba(255,255,255,0.6);">Error handling patterns. Test structure. Naming standards. Import ordering. The unwritten rules that make code feel like it belongs in your codebase.</p>
+        </div>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">TEST OUTCOMES</h3>
+          <p style="color: rgba(255,255,255,0.6);">Which tests are flaky and why. Which edge cases have been validated. What coverage gaps exist. Agents write better tests because they know what has already been tested.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Security -->
-  <section id="security" class="section">
+  <!-- 6. CONTEXT COMPILER -->
+  <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Security &amp; trust</h2>
+        <h2>Not more context. Better context.</h2>
+        <p>The context compiler selects only what matters for each task &mdash; reducing noise and token waste.</p>
       </div>
-      <div class="security-grid">
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <h3>Runs locally</h3>
-          <p>Lakecode runs on your machine. Your credentials never leave your environment.</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"add caching to the user service"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
+            <li style="padding: 4px 0;">&#8594; caching convention (Redis, 15m TTL)</li>
+            <li style="padding: 4px 0;">&#8594; user service architecture memo</li>
+            <li style="padding: 4px 0;">&#8594; existing cache utility code</li>
+          </ul>
         </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3>Respects your permissions</h3>
-          <p>Lakecode only sees what your platform identity can see. Unity Catalog, Snowflake RBAC &mdash; no elevated permissions, no backdoors.</p>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"fix the flaky order test"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
+            <li style="padding: 4px 0;">&#8594; known flaky test finding (race condition)</li>
+            <li style="padding: 4px 0;">&#8594; order service test patterns</li>
+            <li style="padding: 4px 0;">&#8594; CI environment differences memo</li>
+          </ul>
         </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
-          </div>
-          <h3>Safe by default</h3>
-          <p>Plan/approval flow for risky operations. Built-in guardrails prevent common high-cost mistakes.</p>
-        </div>
-        <div class="security-card">
-          <div class="security-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          </div>
-          <h3>Ed25519 license keys</h3>
-          <p>Authentication uses cryptographically signed license keys. No shared secrets, no tokens stored on our servers.</p>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"refactor billing to use the new API"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
+            <li style="padding: 4px 0;">&#8594; new API migration decision doc</li>
+            <li style="padding: 4px 0;">&#8594; billing module dependencies map</li>
+            <li style="padding: 4px 0;">&#8594; error handling convention</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Install -->
-  <section id="install" class="section section-alt">
+  <!-- 7. BENCHMARKS -->
+  <section id="benchmarks" class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Get started</h2>
-        <p>Requires <a href="https://nodejs.org">Node.js 18+</a>. Two commands and you're in.</p>
+        <h2>13.3x fewer input tokens</h2>
+        <p>Measured on real engineering tasks. Compiled context replaces brute-force exploration.</p>
       </div>
-      <div class="install-block">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">terminal</span>
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
+          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">13.3x</p>
+          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">fewer input tokens per task</p>
         </div>
-        <div class="terminal-body">
-          <div class="terminal-line"><span class="terminal-prompt">$</span> npm install -g lakecode</div>
-          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode login</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line dim">  Opening browser for Google sign-in...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Authenticated as alice@company.com</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> License key saved</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Workspace connected &mdash; profiling...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> 3 catalogs, 12 schemas, 847 tables indexed</div>
-          <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line">  Ready. Type a command or describe what you need.</div>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
+          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">3.8x</p>
+          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">fewer tool calls per session</p>
+        </div>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
+          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">0</p>
+          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">re-exploration of known code</p>
+        </div>
+      </div>
+      <div style="margin-top: 40px; padding: 24px 32px; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; background: rgba(255,255,255,0.02); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin: 0 0 12px 0;">ms-009: retry logic task benchmark</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; font-size: 14px;">
+          <div>
+            <p style="color: rgba(255,255,255,0.4); margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Without Lakecode</p>
+            <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.6);">
+              <li style="padding: 3px 0;">Input tokens: 142,847</li>
+              <li style="padding: 3px 0;">Tool calls: 23</li>
+              <li style="padding: 3px 0;">Explored 14 files to find patterns</li>
+              <li style="padding: 3px 0;">Missed team retry convention</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: rgba(255,255,255,0.4); margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">With Lakecode</p>
+            <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.6);">
+              <li style="padding: 3px 0;">Input tokens: 10,742</li>
+              <li style="padding: 3px 0;">Tool calls: 6</li>
+              <li style="padding: 3px 0;">Loaded 2 files from compiled context</li>
+              <li style="padding: 3px 0;">Applied team retry convention correctly</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="section">
+  <!-- 8. SKILLS -->
+  <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>FAQ</h2>
+        <h2>Makes skills real</h2>
+        <p>Static skill files describe what to do. Lakecode-backed skills know how your team actually does it.</p>
       </div>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Is this free?</summary>
-          <p>Yes. Every account gets free daily credits &mdash; enough for a few commands per day. Resets every night. No credit card required. For heavier workloads, the Pro plan auto-reloads your balance so you never run out.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Do I need my own API keys?</summary>
-          <p>No. Lakecode includes a built-in AI proxy &mdash; just sign in and start running commands. If you prefer, you can bring your own Anthropic or OpenAI keys (BYOK) and use them directly.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What models does it use?</summary>
-          <p>By default, lakecode uses Claude (Anthropic) via our managed proxy. With BYOK, you can use your own Anthropic or OpenAI keys and choose which model to run.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Does lakecode modify my workspace?</summary>
-          <p>Most commands are read-only (debug, prove, cost, audit). Write commands like /deploy and /run job perform actions, but lakecode is explicit about what it's doing and uses plan/approval for risky operations.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Is this just a CLI wrapper?</summary>
-          <p>No. Lakecode is an AI agent with a workflow engine that chains steps, manages workspace context, and produces structured reports. It collects facts via APIs and SQL, then uses AI to interpret, summarize, and recommend.</p>
-        </details>
-        <details class="faq-item">
-          <summary>How does billing work?</summary>
-          <p>Usage-based. Each command consumes credits based on the AI tokens used. Free accounts get daily credits that reset at midnight UTC. Pro accounts add a payment method and auto-reload when the balance gets low. You only pay for what you use.</p>
-        </details>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div style="border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 28px; box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.4); margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">Static skill file</p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.8;">
+            <div># How to add a new API endpoint</div>
+            <div>1. Create route in /routes</div>
+            <div>2. Add validation middleware</div>
+            <div>3. Write tests</div>
+            <div>4. Update OpenAPI spec</div>
+            <div>&nbsp;</div>
+            <div style="color: rgba(255,255,255,0.3);">// Generic. No team context.</div>
+            <div style="color: rgba(255,255,255,0.3);">// Stale after the first refactor.</div>
+          </div>
+        </div>
+        <div style="border: 1px solid rgba(78,205,196,0.2); border-radius: 8px; padding: 28px; box-shadow: 0 0 24px rgba(78,205,196,0.06);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4ecdc4; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">Lakecode-backed skill</p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8;">
+            <div># How to add a new API endpoint</div>
+            <div>+ route pattern from /routes/users.ts</div>
+            <div>+ zod validation (team convention)</div>
+            <div>+ test pattern from auth.test.ts</div>
+            <div>+ error codes from error-handling memo</div>
+            <div>&nbsp;</div>
+            <div style="color: #4ecdc4;">// Compiled from real code + memory.</div>
+            <div style="color: #4ecdc4;">// Updates as your codebase evolves.</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing teaser -->
+  <!-- 9. WEB UI -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Simple pricing</h2>
-        <p>Start free. Scale when you need to.</p>
+        <h2>Terminal-native for engineers. Web-native for team memory.</h2>
+        <p>Two interfaces, one memory layer.</p>
       </div>
-      <div class="why-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 720px; margin: 0 auto;">
-        <div class="why-card">
-          <h3>Free</h3>
-          <p>Free daily credits, reset every night. Enough for a few commands per day &mdash; debug a job, prove a table, check spend. No credit card required.</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4ecdc4; letter-spacing: 0.5px;">TERMINAL (CLI)</h3>
+          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: rgba(255,255,255,0.6); font-size: 14px;">
+            <li style="padding: 6px 0;">Write code with compiled context</li>
+            <li style="padding: 6px 0;">Debug with memory of past findings</li>
+            <li style="padding: 6px 0;">Run skills backed by real conventions</li>
+            <li style="padding: 6px 0;">Capture new memories during sessions</li>
+            <li style="padding: 6px 0;">Natural language or slash commands</li>
+          </ul>
         </div>
-        <div class="why-card">
-          <h3>Pro</h3>
-          <p>Add a payment method, get auto-reloading credits when your balance is low. Default reload at $20. Usage-based &mdash; pay only for what you use.</p>
+        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4ecdc4; letter-spacing: 0.5px;">WEB DASHBOARD</h3>
+          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: rgba(255,255,255,0.6); font-size: 14px;">
+            <li style="padding: 6px 0;">Browse and search all team memories</li>
+            <li style="padding: 6px 0;">Edit, tag, and organize decisions</li>
+            <li style="padding: 6px 0;">Review memory usage and coverage</li>
+            <li style="padding: 6px 0;">Manage team access and permissions</li>
+            <li style="padding: 6px 0;">Track which memories drive the most value</li>
+          </ul>
         </div>
-      </div>
-      <div class="hero-actions" style="margin-top: 36px; margin-bottom: 0;">
-        <a href="/pricing" class="btn btn-secondary">View full pricing</a>
       </div>
     </div>
   </section>
 
-  <!-- Docs -->
-  <section id="docs" class="section">
+  <!-- 10. ENTERPRISE -->
+  <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Documentation</h2>
-        <p>Everything you need to get the most out of lakecode.</p>
+        <h2>Scales into governed engineering memory</h2>
+        <p>For teams that need control, compliance, and integration with existing infrastructure.</p>
       </div>
-      <div class="docs-grid">
-        <div class="doc-card">
-          <h3>Getting started</h3>
-          <p>Install lakecode, sign in with Google, connect your Databricks or Snowflake workspace, and run your first command.</p>
-          <a href="/docs/getting-started" class="doc-link">Read &rarr;</a>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;">
+        <div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px;">
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Governed memory policies</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Control what gets remembered, who can access it, and how long it persists. Approval workflows for team-wide memories.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">SSO and SCIM provisioning</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Integrate with your identity provider. Automatic user provisioning and de-provisioning.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Audit logging</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Full audit trail of memory access, creation, and compilation. Export to your SIEM.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Private deployment</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Run Lakecode in your own infrastructure. Your data never leaves your environment.</p>
+              </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <div>
+                <strong style="color: #e0e0e0;">Custom model routing</strong>
+                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Bring your own LLM endpoints. Route through your proxy. Use models approved by your security team.</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="doc-card">
-          <h3>How it works</h3>
-          <p>The step-based workflow engine: deterministic steps, AI interpretation, context management, and evidence generation.</p>
-          <a href="/docs/architecture" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Commands reference</h3>
-          <p>Complete reference for all commands: debugging, data quality, platform ops, deployment, and configuration.</p>
-          <a href="/docs/commands" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Configuration</h3>
-          <p>Conventions files, default catalogs/schemas, workspace profiles, naming patterns, and team standards.</p>
-          <a href="/docs/configuration" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Authentication &amp; billing</h3>
-          <p>Google OAuth, license keys, free and Pro tiers, BYOK setup, and managing your account.</p>
-          <a href="/docs/authentication" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Safety &amp; plan mode</h3>
-          <p>Plan/approval flow, guardrails, output truncation, and how lakecode keeps your workspace safe.</p>
-          <a href="/docs/security" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Evidence packs</h3>
-          <p>What evidence packs contain, how /prove generates them, and how to use them in your workflow.</p>
-          <a href="/docs/evidence" class="doc-link">Read &rarr;</a>
-        </div>
-        <div class="doc-card">
-          <h3>Billing &amp; credits</h3>
-          <p>Free tier, auto-reload, cost model, BYOK billing, and managing your balance.</p>
-          <a href="/docs/billing" class="doc-link">Read &rarr;</a>
+        <div style="border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 32px; box-shadow: 0 0 20px rgba(0,200,255,0.03);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4ecdc4; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">Databricks-native</p>
+          <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 16px 0;">For Databricks customers, Lakecode integrates directly with your lakehouse. Memory is stored in Unity Catalog. Access follows your existing governance model.</p>
+          <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.5); font-size: 14px;">
+            <li style="padding: 4px 0;">&#8594; Memory backed by Delta tables</li>
+            <li style="padding: 4px 0;">&#8594; Unity Catalog access controls</li>
+            <li style="padding: 4px 0;">&#8594; Workspace-level isolation</li>
+            <li style="padding: 4px 0;">&#8594; Integrates with MLflow tracking</li>
+          </ul>
+          <div style="margin-top: 20px;">
+            <a href="/enterprise" class="btn btn-secondary" style="font-size: 14px;">Learn more</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- 11. FINAL CTA -->
   <section class="section cta-section">
     <div class="container">
-      <h2>Start building with lakecode.</h2>
-      <p>Free to try, no credit card required.</p>
+      <h2>Stop rebuilding context every session</h2>
+      <p>Install Lakecode in 30 seconds. Start building memory that compounds.</p>
+      <div class="hero-install" style="margin-top: 32px;">
+        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
+          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
+          <span class="copy-hint">click to copy</span>
+          <span class="copy-done">copied!</span>
+        </div>
+      </div>
       <div class="hero-actions">
         <a href="/signin" class="btn btn-primary">Get Started Free</a>
         <a href="/docs" class="btn btn-secondary">View Docs</a>
@@ -481,18 +470,16 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>AI-powered terminal agent for Databricks &amp; Snowflake. Debug, prove, analyze, and deploy &mdash; all from your command line.</p>
+        <p>Terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests &mdash; then compiles the right context for every task.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
-          <a href="#features">Features</a>
-          <a href="#commands">Commands</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#benchmarks">Benchmarks</a>
           <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
+          <a href="/enterprise">Enterprise</a>
           <a href="/dashboard">Dashboard</a>
-          <a href="#security">Security</a>
-          <a href="#install">Install</a>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
