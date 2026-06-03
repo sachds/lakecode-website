@@ -1,4 +1,4 @@
-// ── Lakecode Admin — Shared JS ──
+// ── lakecode Admin — Shared JS ──
 
 var API_URL = 'https://api.lakecode.ai';
 

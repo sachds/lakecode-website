@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security &amp; Safety — Lakecode Docs</title>
+  <title>Security &amp; Safety — lakecode Docs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+        <img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
         <a href="/#features">Features</a>
@@ -72,13 +72,13 @@
           <div class="docs-content">
 
             <h3>Local execution</h3>
-            <p>Lakecode runs entirely on your machine. It connects to Databricks or Snowflake using your existing CLI profile and credentials. Your tokens never leave your machine &mdash; they are used locally to make API calls directly to your workspace.</p>
+            <p>lakecode runs entirely on your machine. It connects to Databricks or Snowflake using your existing CLI profile and credentials. Your tokens never leave your machine &mdash; they are used locally to make API calls directly to your workspace.</p>
 
             <h3>Permissions</h3>
-            <p>Lakecode respects your platform's permission model &mdash; Unity Catalog for Databricks, RBAC for Snowflake. If your account cannot access a catalog, schema, or table, neither can Lakecode. There is no privilege escalation.</p>
+            <p>lakecode respects your platform's permission model &mdash; Unity Catalog for Databricks, RBAC for Snowflake. If your account cannot access a catalog, schema, or table, neither can lakecode. There is no privilege escalation.</p>
 
             <h3>Plan mode</h3>
-            <p>For complex or potentially risky operations, Lakecode enters plan mode. Before executing, it shows you exactly what it intends to do and asks for confirmation. This prevents accidental modifications to production resources.</p>
+            <p>For complex or potentially risky operations, lakecode enters plan mode. Before executing, it shows you exactly what it intends to do and asks for confirmation. This prevents accidental modifications to production resources.</p>
 
             <h3>Guardrails</h3>
             <p>Built-in guardrails prevent common mistakes: dropping tables without confirmation, running unbounded queries, or deploying to production paths without explicit intent. These guardrails are always active and cannot be disabled.</p>
@@ -87,7 +87,7 @@
             <ul>
               <li>License keys are Ed25519 signed and verified server-side on every request</li>
               <li>The proxy does not log request or response content &mdash; only metadata (user ID, token counts, timestamps) for billing</li>
-              <li>Payments are handled by Stripe (PCI DSS compliant) &mdash; Lakecode never sees your card number</li>
+              <li>Payments are handled by Stripe (PCI DSS compliant) &mdash; lakecode never sees your card number</li>
               <li>Revoked keys are checked against a KV store on every request for instant invalidation</li>
             </ul>
 
@@ -111,7 +111,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <span class="logo"><img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
         <p>Terminal-native data platform agent.</p>
       </div>
       <div class="footer-links">
@@ -131,7 +131,7 @@
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+      <p>&copy; 2026 lakecode. All rights reserved.</p>
     </div>
   </footer>
 

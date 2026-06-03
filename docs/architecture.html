@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Architecture — Lakecode Docs</title>
+  <title>Architecture — lakecode Docs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+        <img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
         <a href="/#features">Features</a>
@@ -72,7 +72,7 @@
           <div class="docs-content">
 
             <h3>System overview</h3>
-            <p>Lakecode consists of three components that work together:</p>
+            <p>lakecode consists of three components that work together:</p>
             <ul>
               <li><strong>CLI</strong> &mdash; The CLI installed on your machine. Handles Databricks and Snowflake API calls, workspace profiling, skills injection, and user interaction.</li>
               <li><strong>Proxy Worker</strong> &mdash; A Cloudflare Worker that sits between the CLI and Anthropic&rsquo;s API. Validates license keys, tracks token usage, deducts credits, and forwards requests.</li>
@@ -108,7 +108,7 @@
             <p>The signing key is held by the Auth Worker. The corresponding public key is embedded in the Proxy Worker for verification. Keys cannot be forged or tampered with.</p>
 
             <h3>Workspace profiling</h3>
-            <p>On first run (or when the cache is stale), Lakecode calls the Databricks or Snowflake REST API to discover your workspace topology: catalogs, schemas, tables, and SQL warehouses. This profile is cached locally in <code>~/.lakecode/</code> and refreshed periodically. It allows the AI to understand your environment without you having to describe it every time.</p>
+            <p>On first run (or when the cache is stale), lakecode calls the Databricks or Snowflake REST API to discover your workspace topology: catalogs, schemas, tables, and SQL warehouses. This profile is cached locally in <code>~/.lakecode/</code> and refreshed periodically. It allows the AI to understand your environment without you having to describe it every time.</p>
 
           </div>
 
@@ -126,7 +126,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <span class="logo"><img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
         <p>Terminal-native data platform agent.</p>
       </div>
       <div class="footer-links">
@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+      <p>&copy; 2026 lakecode. All rights reserved.</p>
     </div>
   </footer>
 

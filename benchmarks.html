@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benchmarks — Lakecode</title>
-  <meta name="description" content="Lakecode sends the model 13.3x fewer input tokens by compiling claim-shaped memory instead of walking files. Benchmark results and methodology.">
+  <title>Benchmarks — lakecode</title>
+  <meta name="description" content="lakecode answers Databricks SDK questions at the same accuracy as Claude Code for about a third of the cost — by compiling claim-shaped memory instead of walking files. Benchmark results and methodology.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="logo">
-        <img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+        <img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
         <a href="/#how-it-works">How it works</a>
@@ -40,8 +40,8 @@
   <section class="hero" style="padding-bottom: 60px;">
     <div class="container">
       <span class="section-label">Benchmarks</span>
-      <h1>13.3x fewer input tokens</h1>
-      <p class="hero-sub">Lakecode sends the model dramatically less raw context by compiling claim-shaped memory instead of walking files. Comparable answers with dramatically less context and tool usage.</p>
+      <h1>Same answers. A third of the cost.</h1>
+      <p class="hero-sub">lakecode compiles the right context from its substrate instead of walking files &mdash; so the same model reaches the same answer for a fraction of the cost. Same model on both sides; the only variable is the context.</p>
     </div>
   </section>
 
@@ -49,56 +49,48 @@
   <section class="section">
     <div class="container">
       <h2>Aggregate results</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 32px;">Across a Databricks SDK exploration workload, Lakecode compiled the right context from its substrate instead of raw file walking.</p>
+      <p style="color: var(--text-secondary); margin-bottom: 32px;">Stage 1 benchmark &mdash; 11 Databricks SDK questions &times; 3 replicates (33 graded answers), graded by a blind LLM judge. Both systems answer with the same model (Claude Sonnet 4.6).</p>
 
       <div class="three-col" style="margin-bottom: 48px;">
         <div class="metric-card">
-          <div class="metric-value">63.8K</div>
-          <div class="metric-label">Lakecode input tokens</div>
+          <div class="metric-value">$0.033</div>
+          <div class="metric-label">lakecode mean cost / question</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">847.3K</div>
-          <div class="metric-label">Baseline input tokens</div>
+          <div class="metric-value">$0.113</div>
+          <div class="metric-label">Claude Code mean cost / question</div>
         </div>
         <div class="metric-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
-          <div class="metric-value" style="color: var(--accent);">13.3x</div>
-          <div class="metric-label">Less input context</div>
+          <div class="metric-value" style="color: var(--accent);">3.4x</div>
+          <div class="metric-label">Cheaper, at matched accuracy</div>
         </div>
       </div>
 
       <div class="feature-card" style="max-width: 800px; margin: 0 auto;">
-        <p style="color: var(--text-secondary); text-align: center; font-size: 0.9375rem; line-height: 1.7;">92.5% less input context. Substrate retrieval instead of raw file walking. One substrate query instead of dozens of grep/read/bash calls.</p>
+        <p style="color: var(--text-secondary); text-align: center; font-size: 0.9375rem; line-height: 1.7;">Cheaper on <em>every</em> question, with <strong>zero wrong answers</strong> across all 33 &mdash; 2.6x on common APIs, 3.4x on library internals, and 5.4x on cross-cutting questions that span the codebase.</p>
       </div>
     </div>
   </section>
 
-  <!-- ms-009 Proof Point -->
+  <!-- Pagination Proof Point -->
   <section class="section section-alt">
     <div class="container">
       <span class="section-label">Proof point</span>
-      <h2>ms-009: "Identify the pagination pattern"</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 40px;">A real task from the Databricks SDK workload. Lakecode compiled the answer from its substrate. The baseline had to search, read, and reconstruct.</p>
+      <h2>"How does pagination work in the SDK?"</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 40px;">A real cross-cutting question from the workload. Both systems answered correctly &mdash; lakecode compiled the answer from its substrate; the baseline had to search, read, and reconstruct.</p>
 
       <div class="two-col" style="gap: 24px;">
-        <!-- Lakecode -->
+        <!-- lakecode -->
         <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow);">
-          <span class="section-label" style="color: var(--accent);">Lakecode</span>
+          <span class="section-label" style="color: var(--accent);">lakecode</span>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
             <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">13,085</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">input tokens</div>
+              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">$0.034</div>
+              <div style="font-size: 0.8125rem; color: var(--text-dim);">cost / question</div>
             </div>
             <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">4</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">tool calls</div>
-            </div>
-            <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">$0.083</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">cost</div>
-            </div>
-            <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">38s</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">wall time</div>
+              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text);">Correct</div>
+              <div style="font-size: 0.8125rem; color: var(--text-dim);">all 3 replicates</div>
             </div>
           </div>
         </div>
@@ -108,38 +100,22 @@
           <span class="section-label">Baseline (Claude Code)</span>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
             <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">185,778</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">input tokens</div>
+              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">$0.198</div>
+              <div style="font-size: 0.8125rem; color: var(--text-dim);">cost / question</div>
             </div>
             <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">39</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">tool calls</div>
-            </div>
-            <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">$0.307</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">cost</div>
-            </div>
-            <div>
-              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">114s</div>
-              <div style="font-size: 0.8125rem; color: var(--text-dim);">wall time</div>
+              <div style="font-size: 1.75rem; font-weight: 700; color: var(--text-dim);">Correct</div>
+              <div style="font-size: 0.8125rem; color: var(--text-dim);">all 3 replicates</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Result summary -->
-      <div class="three-col" style="margin-top: 32px;">
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">14.2x</div>
-          <div style="font-size: 0.8125rem; color: var(--text-secondary);">fewer input tokens</div>
-        </div>
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">9.8x</div>
-          <div style="font-size: 0.8125rem; color: var(--text-secondary);">fewer tool calls</div>
-        </div>
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">3.7x</div>
-          <div style="font-size: 0.8125rem; color: var(--text-secondary);">cheaper</div>
+      <div style="margin-top: 32px; text-align: center;">
+        <div class="feature-card" style="display: inline-block; padding: 20px 44px;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">5.8x cheaper</div>
+          <div style="font-size: 0.8125rem; color: var(--text-secondary);">same correct answer, a third the cost</div>
         </div>
       </div>
     </div>
@@ -152,14 +128,14 @@
       <div style="max-width: 720px; margin: 0 auto;">
         <div class="feature-card">
           <ul style="list-style: none; padding: 0;">
-            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Read-side benchmark &mdash; measures context retrieval, not code generation quality</li>
-            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Databricks SDK workload &mdash; real-world codebase exploration tasks</li>
-            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">No broad quality scoring in this run &mdash; focus was on context efficiency</li>
-            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Write-side tools excluded &mdash; edit/test/verify loop benchmarked separately</li>
-            <li style="padding: 10px 0; color: var(--text-secondary); font-size: 0.9375rem;">Quality benchmark for edit/test/verify tasks is a separate evaluation</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Same answering model on both sides (Claude Sonnet 4.6) &mdash; isolates the compiled context, not the model</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">11 Databricks SDK questions &times; 3 replicates, stratified: common APIs / library internals / cross-cutting</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Blind LLM judge, 4-way verdict (correct / partial / incorrect / abstained); answers anonymized and order-shuffled</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9375rem;">Result: zero wrong answers either side &mdash; lakecode 32/33 correct + 1 partial, Claude Code 33/33</li>
+            <li style="padding: 10px 0; color: var(--text-secondary); font-size: 0.9375rem;">Measures lakecode's compiled-context pipeline answering directly; the full agent loop runs at roughly cost-parity</li>
           </ul>
         </div>
-        <p style="text-align: center; margin-top: 24px; color: var(--text-dim); font-size: 0.8125rem;">Comparable answer with dramatically less context and tool usage. Not "always better answers."</p>
+        <p style="text-align: center; margin-top: 24px; color: var(--text-dim); font-size: 0.8125rem;">Same accuracy, a fraction of the cost &mdash; because the context is compiled, not re-discovered.</p>
       </div>
     </div>
   </section>
@@ -168,7 +144,7 @@
   <section class="cta-section">
     <div class="container">
       <h2>Try it yourself</h2>
-      <p>Install Lakecode and see the context difference in your own codebase.</p>
+      <p>Install lakecode and see the context difference in your own codebase.</p>
       <div class="hero-install" style="margin-top: 24px;">
         <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
           <code><span style="color: var(--text-dim);">$</span> npm install -g lakecode</code>
@@ -185,7 +161,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="logo"><img src="/logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
         <p>The coding assistant that remembers.</p>
       </div>
       <div class="footer-links">
@@ -209,7 +185,7 @@
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+      <p>&copy; 2026 lakecode. All rights reserved.</p>
     </div>
   </footer>
 

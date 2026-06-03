@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent — Lakecode Admin</title>
+  <title>Agent — lakecode Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -314,7 +314,7 @@
     function renderHeader() {
       var d = deployment;
       var name = d.config ? d.config.name : d.id;
-      document.title = name + ' — Lakecode Admin';
+      document.title = name + ' — lakecode Admin';
       $('#agent-name-crumb').textContent = name;
       $('#agent-title').textContent = name;
       $('#agent-subtitle').textContent = (d.config ? d.config.tenantId : '') + ' · ' + (d.config ? d.config.region : '');

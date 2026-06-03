@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>From Eight Tabs to One Prompt — Lakecode Blog</title>
+  <title>From Eight Tabs to One Prompt — lakecode Blog</title>
   <meta name="description" content="Four real Databricks workflows that take hours in the browser and minutes with lakecode — incident debugging, Hive-to-UC migration, security audit, and workspace bootstrap.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,7 +77,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="/" class="logo">
-        <img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode
+        <img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
         <a href="/#features">Features</a>
@@ -137,7 +137,7 @@
         <pre><code>&gt; debug the latest failure of debug_workflow_etl — check if any upstream
   tables had schema changes or data volume anomalies in the last 24 hours</code></pre>
 
-        <p>Lakecode fetched the failed run, extracted the error (<code>UNRESOLVED_COLUMN: o.amount cannot be resolved</code>), pulled <code>DESCRIBE HISTORY</code> on all upstream tables, and surfaced three distinct findings:</p>
+        <p>lakecode fetched the failed run, extracted the error (<code>UNRESOLVED_COLUMN: o.amount cannot be resolved</code>), pulled <code>DESCRIBE HISTORY</code> on all upstream tables, and surfaced three distinct findings:</p>
 
         <p><strong>Schema Changes &mdash; raw_orders (last 24h)</strong></p>
 
@@ -196,7 +196,7 @@
   row counts match, copy all grants, find all jobs that reference the old
   namespace, and give me a migration report with status per table</code></pre>
 
-        <p>Lakecode executed five phases: schema creation, parallel CTAS for all tables, cross-catalog row count validation, grant migration with hive-to-UC translation, and a workspace-wide job scan.</p>
+        <p>lakecode executed five phases: schema creation, parallel CTAS for all tables, cross-catalog row count validation, grant migration with hive-to-UC translation, and a workspace-wide job scan.</p>
 
         <p><strong>Row Count Validation</strong></p>
 
@@ -242,7 +242,7 @@
   tables that need extra scrutiny, and show me the exact GRANT/REVOKE
   statements you'd execute</code></pre>
 
-        <p>Lakecode identified the PII table without being told which one was sensitive &mdash; it recognized <code>ssn_last4</code> and <code>phone</code> as PII columns from the schema alone. It then cross-referenced grants against observed SQL access in query history:</p>
+        <p>lakecode identified the PII table without being told which one was sensitive &mdash; it recognized <code>ssn_last4</code> and <code>phone</code> as PII columns from the schema alone. It then cross-referenced grants against observed SQL access in query history:</p>
 
         <table>
           <thead>
@@ -257,9 +257,9 @@
 
         <p>The remediation SQL was generated in the correct order &mdash; REVOKE first, then GRANT &mdash; with the PII table getting the most conservative treatment: full revocation with a recommendation to create a named access group and apply column masks before re-granting.</p>
 
-        <p>The zero-access finding on <code>user_pii</code> is the kind of signal that matters most in a security audit: broad privileges granted, no observed usage, sensitive data exposed. Lakecode surfaced it automatically.</p>
+        <p>The zero-access finding on <code>user_pii</code> is the kind of signal that matters most in a security audit: broad privileges granted, no observed usage, sensitive data exposed. lakecode surfaced it automatically.</p>
 
-        <p>One caveat: <code>system.query.history</code> covers queries from SQL warehouses and serverless compute for notebooks and jobs, so "observed access" reflects that scope rather than all possible access paths. Lakecode noted this distinction in its output.</p>
+        <p>One caveat: <code>system.query.history</code> covers queries from SQL warehouses and serverless compute for notebooks and jobs, so "observed access" reflects that scope rather than all possible access paths. lakecode noted this distinction in its output.</p>
 
         <div class="blog-timing">
           <p><strong>Time in the browser:</strong> Hours of manual cross-referencing across system tables</p>
@@ -284,7 +284,7 @@
   auto-termination, and blocks spot instances. Create a secret scope called
   fraud-team-creds. Give me a summary of everything that was created.</code></pre>
 
-        <p>Lakecode fired three APIs in parallel &mdash; Unity Catalog SQL for the catalog and grants, the Compute Policies REST API for governance, and the Secrets REST API for credential management:</p>
+        <p>lakecode fired three APIs in parallel &mdash; Unity Catalog SQL for the catalog and grants, the Compute Policies REST API for governance, and the Secrets REST API for credential management:</p>
 
         <p><strong>Catalog &amp; Schemas</strong></p>
 
@@ -347,7 +347,7 @@
 
         <p>These four workflows span different roles &mdash; the on-call engineer debugging at 2am, the data engineer running a migration, the security lead preparing for an audit, the platform admin onboarding a team. What they share is the same structural problem: the work isn't intellectually hard, it's operationally scattered. The information and actions live across a dozen UI surfaces, and the human is the integration layer holding it all together.</p>
 
-        <p>Lakecode replaces the integration layer. You describe the outcome. It orchestrates the right API calls, in the right order, with the right parameters &mdash; stitching results across Databricks surfaces and producing structured output you can actually use.</p>
+        <p>lakecode replaces the integration layer. You describe the outcome. It orchestrates the right API calls, in the right order, with the right parameters &mdash; stitching results across Databricks surfaces and producing structured output you can actually use.</p>
 
         <p>Hours to minutes. Eight tabs to one prompt.</p>
 
@@ -362,7 +362,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="logo"><img src="../logo-dark.png" alt="Lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="Lakecode" class="logo-icon logo-light"> lakecode</span>
+        <span class="logo"><img src="../logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="../logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
         <p>Terminal-native data platform agent.</p>
       </div>
       <div class="footer-links">
@@ -387,7 +387,7 @@
       </div>
     </div>
     <div class="container footer-bottom">
-      <p>&copy; 2026 Lakecode. All rights reserved.</p>
+      <p>&copy; 2026 lakecode. All rights reserved.</p>
     </div>
   </footer>
 
