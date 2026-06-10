@@ -149,9 +149,10 @@ h1, h2, h3, h4, h5, h6 {
 /* ---- 3 · Brand beats ------------------------------------------ */
 
 .logo {
-  font-family: var(--font-mono-ds);
+  /* the original wordmark face — JetBrains Mono, kept for the logo only */
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   letter-spacing: 0;
   color: var(--text);
   text-decoration: none;
