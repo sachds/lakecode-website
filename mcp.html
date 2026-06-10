@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP — lakecode</title>
+  <meta name="description" content="Keep your agent. One install gives it your org's memory — grounded answers out of the substrate, findings back into it, every write gated, attributed, and reviewable in your console.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ds.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
+      </a>
+      <div class="nav-links">
+        <a href="/#how-it-works">How it works</a>
+        <a href="/benchmarks">Proof</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/mcp" class="active">MCP</a>
+        <a href="/docs">Docs</a>
+        <a href="https://console.lakecode.ai" class="btn btn-sm nav-auth-btn">Sign in</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero lc-water-surface" data-theme="dark" style="padding-bottom: 60px;">
+    <div class="container">
+      <span class="section-label">MCP &middot; bring your own agent</span>
+      <h1>Keep your agent.</h1>
+      <p class="hero-sub">One install gives it your org's memory &mdash; grounded answers out of the substrate, findings back into it, every write gated, attributed, and reviewable in your console. Claude Code, Cursor, or anything that speaks MCP.</p>
+      <div class="hero-actions" style="margin-top: 32px;">
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access%20(MCP)" class="btn btn-primary">Request beta access</a>
+        <a href="/benchmarks" class="btn btn-secondary">See the proof</a>
+      </div>
+      <div class="hero-terminal" style="max-width: 720px;">
+        <div class="terminal-bar">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">$</span> claude mcp add lakecode --transport http https://engine.lakecode.ai/mcp</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> 8 tools available at init &middot; Bearer lk_ &middot; tenant-scoped</div>
+          <div class="terminal-line dim">&nbsp;</div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode mcp install   <span style="color: #767D78;"># adds the policy snippet + prefetch hook too</span></div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> CLAUDE.md policy snippet written</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> prefetch hook registered &mdash; grounded from the first turn</div>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); font-size: 0.8125rem; margin-top: 16px;">Local mode ships today; the hosted endpoint is rolling out to beta orgs. The bundle is installed with you at onboarding.</p>
+    </div>
+  </section>
+
+  <!-- The bundle -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">What "the MCP" actually is</span>
+        <h2>A bundle, not a server entry</h2>
+        <p>Bare availability isn't adoption: without the policy snippet, models elect to read the substrate <strong>0%</strong> of the time. <code>mcp add</code> alone is a checkbox &mdash; the bundle is the product.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 920px; margin: 0 auto;">
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">1 &middot; THE SERVER</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;"><code>claude mcp add</code> over streamable HTTP with a Bearer <code>lk_</code> key. 20 tools local, an 8-tool sidecar cut hosted &mdash; available at init, tenant-scoped reads and writes.</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">reachability probe: all-green incl. headless/cron &middot; remote smoke: auth 401, catalog, tenant isolation &middot; 2026-06</p>
+        </div>
+        <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">2 &middot; THE POLICY SNIPPET</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">One block in your CLAUDE.md. It's the reads lever: unprompted substrate election goes from <strong style="color: var(--text);">0% &rarr; 91%</strong> &mdash; the agent starts checking org memory because it decided to, not because you pasted context.</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">election re-probe (H4) &middot; 2026-06 &middot; model-pinned: fable</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">3 &middot; THE PREFETCH HOOK</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">Tool election happens mid-turn &mdash; after the model has already started deciding. The hook injects grounding <em>before</em> that: a guaranteed grounded first turn, covering cold starts, the pre-decision window, and models that never elect.</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Tier-1 analog: &minus;22% tool calls at identical correctness &middot; 2026-06-04 &middot; CC-specific validation (P1/P2) pre-registered, pending</p>
+        </div>
+        <div class="feature-card" style="opacity: 0.75;">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--text-dim);">4 &middot; LATER &middot; THE STOP-HOOK</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">A write floor for cold-start users and abruptly-ended sessions. Deliberately demoted on the data: real multi-turn sessions already record routinely &mdash; 109 records across the dogfood window without it.</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">re-scoped down by the election addendum &middot; 2026-06-10</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Governed writes -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The write path</span>
+        <h2>Findings flow back &mdash; gated, attributed, reviewable</h2>
+        <p>Your agent doesn't just read org memory. What it learns goes back into the substrate &mdash; through the same governance as every other write.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card">
+          <h3>Gated</h3>
+          <p>Every write passes the G1&ndash;G5 gates: 0.90 dedup on both write paths, rate caps, evidence-keyed confidence. Junk doesn't accumulate just because an agent was chatty.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Attributed &amp; isolated</h3>
+          <p>Contributor and client attribution on every write, inside <code>lk_</code> tenant namespaces &mdash; cross-tenant isolation smoked end-to-end; foreign corpus names are never honored.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Durable &amp; reviewable</h3>
+          <p>Retry &rarr; dead-letter &rarr; redrive: a spooled write is an accepted write, never silently lost. Everything lands in the console's review queue with its provenance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Clients</span>
+        <h2>Works where your agents work</h2>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">CLAUDE CODE</h3>
+          <p style="color: var(--text-secondary);">The full bundle: server + CLAUDE.md snippet + prefetch hook. Grounded reads at 91% election, write-back on wrap-up, review in the console.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">CURSOR</h3>
+          <p style="color: var(--text-secondary);"><code>mcp.json</code> + a rules file. No hook support yet, so read-mostly with manual recording &mdash; stated plainly until we've measured more.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">AUTOMATION</h3>
+          <p style="color: var(--text-secondary);">Headless and cron runs are all-green over HTTP &mdash; the same grounded recall in CI and scheduled jobs, with the env contract documented.</p>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); font-size: 0.8125rem; max-width: 720px; margin: 32px auto 0; text-align: center;">Honest limits, stated here and in the docs: how well a client <em>uses</em> injected grounding is unmeasured until the pre-registered P1/P2 and head-to-head runs land; off-domain injection has a known limitation (miss markers catch empty results, not irrelevant ones); OAuth for web connectors is v1 &mdash; Bearer <code>lk_</code> covers Claude Code and Cursor today.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section lc-water-surface" data-theme="dark">
+    <div class="container">
+      <h2>Your agent, your org's memory</h2>
+      <p>The bundle is installed with you at onboarding &mdash; and your own agent's sessions start compounding the same substrate the <code>lakecode</code> CLI uses.</p>
+      <div class="hero-actions" style="margin-top: 24px;">
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access%20(MCP)" class="btn btn-primary">Request beta access</a>
+        <a href="/docs" class="btn btn-secondary">What onboarding includes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
+        <p>The coding agent with a governed, compounding memory.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="/#how-it-works">How it works</a>
+          <a href="/benchmarks">Proof</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/enterprise">Enterprise</a>
+          <a href="/mcp">MCP</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="/docs">Docs</a>
+          <a href="/benchmarks">Benchmarks &amp; method</a>
+          <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access">Beta access</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 lakecode. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js?v=3"></script>
+</body>
+</html>
