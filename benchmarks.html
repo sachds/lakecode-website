@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Benchmarks — lakecode</title>
-  <meta name="description" content="Revy's published results: efficiency on execution-bound tasks (~27% cheaper at identical correctness), correctness on knowledge-bound tasks (0/3→3/3), coding parity, and the cross-session flywheel. Every claim dated and model-pinned.">
+  <meta name="description" content="lakecode's published results: efficiency on execution-bound tasks (~27% cheaper at identical correctness), correctness on knowledge-bound tasks (0/3→3/3), coding parity, and the cross-session flywheel. Every claim dated and model-pinned.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -72,12 +72,12 @@
               <span style="color: var(--text-dim);">0/3</span>
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="color: var(--text-secondary); width: 150px; flex-shrink: 0;">Revy, cold</span>
+              <span style="color: var(--text-secondary); width: 150px; flex-shrink: 0;">lakecode, cold</span>
               <span style="color: var(--red);">&#10007; &#10007; &#10007;</span>
               <span style="color: var(--text-dim);">0/3</span>
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="color: var(--text); width: 150px; flex-shrink: 0;">Revy + substrate</span>
+              <span style="color: var(--text); width: 150px; flex-shrink: 0;">lakecode + substrate</span>
               <span style="color: var(--green);">&#10003; &#10003; &#10003;</span>
               <span style="color: var(--green); font-weight: 700;">3/3</span>
             </div>
@@ -120,7 +120,7 @@
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Correctness on knowledge-bound tasks</td>
-              <td style="padding: 14px 16px;">CC 0/3 &middot; Revy cold 0/3 &middot; Revy seeded <strong style="color: var(--green);">3/3</strong> &mdash; one claim flips 0&rarr;100%</td>
+              <td style="padding: 14px 16px;">CC 0/3 &middot; lakecode cold 0/3 &middot; lakecode seeded <strong style="color: var(--green);">3/3</strong> &mdash; one claim flips 0&rarr;100%</td>
               <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">n=3; single knowledge-trap domain</td>
             </tr>
@@ -139,7 +139,7 @@
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Single-turn pipeline economics</td>
               <td style="padding: 14px 16px;">$0.033 vs $0.113 per question (~3&times; cheaper), 5&ndash;8&times; fewer tokens, equal quality on covered questions</td>
-              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">revy-vs-CC benchmark &middot; May 2026 &middot; Sonnet 4.6 both sides</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">single-turn pipeline vs CC &middot; May 2026 &middot; Sonnet 4.6 both sides</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">coverage-limited on repo internals; the CC baseline itself moved 30% in 17 days &mdash; hence absolute costs</td>
             </tr>
             <tr>
@@ -163,7 +163,7 @@
       <div class="three-col" style="margin-bottom: 48px;">
         <div class="metric-card">
           <div class="metric-value">$0.033</div>
-          <div class="metric-label">Revy pipeline, mean cost / question &middot; 32/33 correct + 1 partial, 0 wrong</div>
+          <div class="metric-label">lakecode pipeline, mean cost / question &middot; 32/33 correct + 1 partial, 0 wrong</div>
         </div>
         <div class="metric-card">
           <div class="metric-value">$0.113</div>
@@ -178,7 +178,7 @@
       <!-- Pagination Proof Point -->
       <div class="feature-card" style="max-width: 800px; margin: 0 auto;">
         <span class="section-label">Worked example &middot; "How does pagination work in the SDK?"</span>
-        <p style="color: var(--text-secondary); font-size: 0.9375rem; margin: 12px 0 20px 0;">A real cross-cutting question from the workload. Both systems answered correctly in all 3 replicates &mdash; Revy compiled the answer from its substrate at <strong style="color: var(--text);">$0.034</strong> per question; the baseline searched, read, and reconstructed at <strong style="color: var(--text);">$0.198</strong>. Same answer, 5.8&times; the cost.</p>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; margin: 12px 0 20px 0;">A real cross-cutting question from the workload. Both systems answered correctly in all 3 replicates &mdash; lakecode compiled the answer from its substrate at <strong style="color: var(--text);">$0.034</strong> per question; the baseline searched, read, and reconstructed at <strong style="color: var(--text);">$0.198</strong>. Same answer, 5.8&times; the cost.</p>
         <p style="color: var(--text-dim); font-size: 0.8125rem; margin: 0;">This is the regime where compiled context shines: questions whose answer spans the codebase. It is an economics claim, not a correctness claim &mdash; the baseline got there too, it just paid full price for the trip.</p>
       </div>
     </div>
@@ -209,7 +209,7 @@
       <h2>See it on your own repo</h2>
       <p>The flywheel demo &mdash; cold fail, teach once, warm pass &mdash; runs live on your code during beta onboarding.</p>
       <div class="hero-actions" style="margin-top: 24px;">
-        <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" class="btn btn-primary">Request beta access</a>
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access" class="btn btn-primary">Request beta access</a>
         <a href="/pricing" class="btn btn-secondary">The cost model</a>
       </div>
     </div>
@@ -220,7 +220,7 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Revy &mdash; the coding agent with a governed, compounding memory.</p>
+        <p>lakecode &mdash; the coding agent with a governed, compounding memory.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
@@ -239,7 +239,7 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <a href="/docs">Docs</a>
-          <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access">Beta access</a>
+          <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access">Beta access</a>
         </div>
       </div>
     </div>
