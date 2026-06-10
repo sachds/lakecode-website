@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enterprise — lakecode</title>
-  <meta name="description" content="lakecode scales into governed engineering memory for teams. Shared substrate, permission-aware retrieval, audit trails, and Databricks-native deployment.">
+  <meta name="description" content="Revy for Databricks platform teams: the substrate ingests Unity Catalog lineage and notebooks, grounds agents in the lakehouse, and projects agent knowledge back into UC — so you govern agents with tooling you already trust.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +20,8 @@
       </a>
       <div class="nav-links">
         <a href="/#how-it-works">How it works</a>
-        <a href="/benchmarks">Benchmarks</a>
+        <a href="/benchmarks">Proof</a>
+        <a href="/pricing">Pricing</a>
         <a href="/enterprise" class="active">Enterprise</a>
         <a href="/docs">Docs</a>
         <a href="/blog">Blog</a>
@@ -39,117 +40,152 @@
   <!-- Hero -->
   <section class="hero" style="padding-bottom: 60px;">
     <div class="container">
-      <span class="section-label">Enterprise</span>
-      <h1>Governed engineering memory for teams</h1>
-      <p class="hero-sub">lakecode starts in the terminal and scales into a governed memory layer for teams and enterprises. Customer data. Customer governance. Shared memory for every agent.</p>
+      <span class="section-label">Enterprise &middot; the Databricks edition</span>
+      <h1>Grounded in your lakehouse.<br>Governed in Unity Catalog.</h1>
+      <p class="hero-sub">Coding agents are arriving on your data platform whether you're ready or not. Revy is built for the team that has to answer for them: the substrate ingests Unity Catalog lineage and notebooks, grounds every agent in lakehouse reality, and projects what agents know <em>back into UC</em> &mdash; so you govern them with the tooling you already trust.</p>
       <div class="hero-actions" style="margin-top: 32px;">
-        <a href="mailto:sachin@lakecode.ai" class="btn btn-primary">Book a Demo</a>
-        <a href="/benchmarks" class="btn btn-secondary">View Benchmarks</a>
+        <a href="mailto:sachin@lakecode.ai?subject=Revy%20Databricks%20design%20partner" class="btn btn-primary">Talk to us</a>
+        <a href="/benchmarks" class="btn btn-secondary">See the proof</a>
       </div>
     </div>
   </section>
 
-  <!-- Shared Memory -->
+  <!-- The governance problem -->
   <section class="section">
     <div class="container">
-      <span class="section-label">Shared substrate</span>
-      <h2>Engineering memory that belongs to the team</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">Individual engineers build memory through their sessions. Enterprise lakecode promotes that memory into a shared substrate that every team member and every agent can draw from.</p>
+      <span class="section-label">The problem</span>
+      <h2>You can't adopt what you can't govern</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">Black-box agent memory is a compliance non-starter on a data platform. Before an agent touches production-adjacent work, the platform team needs three answers &mdash; continuously, not in a one-time review.</p>
 
       <div class="three-col">
         <div class="feature-card">
-          <h3>Shared team memory</h3>
-          <p>Findings, decisions, root causes, and constraints discovered by any engineer become available to the whole team. The second engineer should not rediscover the first engineer's fix.</p>
+          <h3>What does the agent know?</h3>
+          <p>Every piece of substrate knowledge is a structured claim with confidence &mdash; inspectable and editable in the console, not embedded in opaque weights or a context window that vanished.</p>
         </div>
         <div class="feature-card">
-          <h3>Source-connected ingestion</h3>
-          <p>Connect GitHub, GitLab, Confluence, docs, and internal tools. lakecode continuously ingests and extracts structured knowledge into the substrate.</p>
+          <h3>Where did it learn it?</h3>
+          <p>Claims carry provenance: the source file, commit, notebook, lineage edge, or session that produced them. Knowledge without a paper trail doesn't get promoted.</p>
         </div>
         <div class="feature-card">
-          <h3>Permission-aware retrieval</h3>
-          <p>The substrate respects access controls. Engineers see only the memory their permissions allow. Sensitive findings stay scoped to authorized teams.</p>
+          <h3>Who approved it?</h3>
+          <p>Agent write-back is gated. Proposed knowledge climbs a promotion ladder &mdash; local &rarr; workspace &rarr; org &mdash; with review before anything becomes org-wide truth.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Governance -->
+  <!-- How the Databricks edition works -->
   <section class="section section-alt">
     <div class="container">
-      <span class="section-label">Governance</span>
-      <h2>Inspectable, auditable, governed</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">Every piece of memory has provenance. Every context compilation is traceable. Every finding can be reviewed before it becomes team knowledge.</p>
-
-      <div class="three-col">
-        <div class="feature-card">
-          <h3>Audit trails</h3>
-          <p>Full trace of what memory was compiled, what the model saw, and what actions were taken. MLflow integration for cost tracking and trace inspection.</p>
+      <div class="section-header">
+        <span class="section-label">How it works</span>
+        <h2>The lakehouse loop</h2>
+        <p>The same work &rarr; capture &rarr; govern &rarr; ground loop, wired into the platform you already operate.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Ingest the lakehouse</h3>
+            <p>Unity Catalog metadata, table- and column-level lineage, and notebook&harr;table reference graphs flow into the substrate &mdash; alongside your repos and docs. The agent learns how your data actually derives, not how the wiki says it does.</p>
+          </div>
         </div>
-        <div class="feature-card">
-          <h3>Evidence packs</h3>
-          <p>Structured artifacts from every session &mdash; findings, citations, diffs, and rationale. Attach to PRs, incidents, or compliance reviews.</p>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Ground the agents</h3>
+            <p>Sessions auto-prime from lakehouse knowledge: which band IDs are valid, why a constant is what it is, what failed last quarter. This is the knowledge-bound regime &mdash; where grounding flips answers from confidently wrong to correct (0/3 &rarr; 3/3, 2026-06-08).</p>
+          </div>
         </div>
-        <div class="feature-card">
-          <h3>Review queue</h3>
-          <p>Findings flow through a review process before becoming durable team memory. Proposed claims can be accepted, rejected, or refined by senior engineers.</p>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Project back into UC</h3>
+            <p>What agents learn is projected into Unity Catalog lineage and audit surfaces. Agent knowledge shows up where your governance reviews already happen &mdash; your controls become the distribution channel, not an afterthought.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Run it in-workspace</h3>
+            <p>The Databricks edition ships as an in-workspace Databricks App. We validate the governance projection with your platform team during onboarding, against a pass/fail bar agreed up front.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Deployment -->
+  <!-- The bar -->
   <section class="section">
     <div class="container">
-      <span class="section-label">Deployment</span>
-      <h2>Runs where your data lives</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">lakecode deploys inside your environment. No data leaves your perimeter. Your infrastructure, your governance, your models.</p>
+      <span class="section-label">Why this is credible</span>
+      <h2>The bar an own-agent has to clear &mdash; and the evidence</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">Governance requires owning the loop &mdash; capture at commit time and gated write-back can't be bolted onto someone else's agent. So Revy has to be a credible agent in its own right. The bar, with receipts:</p>
+
+      <div class="three-col">
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0 0 8px 0;">6/6 = 6/6</p>
+          <h3 style="font-size: 1rem;">Agent mechanics at parity</h3>
+          <p style="font-size: 0.875rem;">Coding parity with Claude Code; bug-fixes byte-identical, same model both arms.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 12px 0 0 0;">coding-bench v1 &middot; 2026-06 &middot; n=1/task</p>
+        </div>
+        <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--green); margin: 0 0 8px 0;">0/3 &rarr; 3/3</p>
+          <h3 style="font-size: 1rem;">A decisive grounding edge</h3>
+          <p style="font-size: 0.875rem;">On knowledge-bound tasks, one substrate claim flips correctness from 0% to 100% &mdash; the regime where lakehouse knowledge lives.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 12px 0 0 0;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6</p>
+        </div>
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0 0 8px 0;">Glass box</p>
+          <h3 style="font-size: 1rem;">Governance built in</h3>
+          <p style="font-size: 0.875rem;">Provenance on every claim, gated write-back, promotion governance &mdash; and the UC projection validated with your platform team during onboarding.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 12px 0 0 0;">validation gate agreed per design partner</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Operating terms -->
+  <section class="section section-alt">
+    <div class="container">
+      <span class="section-label">Operating terms</span>
+      <h2>Honest terms for the beta</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 40px; max-width: 680px;">What we offer design partners today &mdash; written into a one-page agreement, not just this website.</p>
 
       <div class="two-col">
         <div class="feature-card">
-          <h3>Private deployment</h3>
+          <h3>Isolation &amp; data handling</h3>
           <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 2;">
-            <li>Deploy on your own infrastructure</li>
-            <li>SSO / SCIM integration</li>
-            <li>Custom model routing</li>
-            <li>VPC / private link support</li>
-            <li>SOC 2 compatible architecture</li>
+            <li>Dedicated database per beta org &mdash; physical isolation</li>
+            <li>Cross-tenant isolation proven by automated test before handover</li>
+            <li>The substrate is your data: exportable any time, deleted on exit</li>
+            <li>Backups with point-in-time recovery, restore tested</li>
+            <li>BYO Anthropic key, or a managed key with a spend cap</li>
           </ul>
         </div>
-        <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow);">
-          <span class="section-label" style="color: var(--accent); margin-bottom: 12px;">Databricks-native</span>
-          <h3>Databricks engineering memory</h3>
-          <p style="margin-bottom: 16px;">lakecode runs natively on Databricks, using the platform's own infrastructure for storage, governance, and compute.</p>
+        <div class="feature-card">
+          <h3>Onboarding, done with you</h3>
           <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 2;">
-            <li>Lakebase substrate storage</li>
-            <li>Unity Catalog governance</li>
-            <li>MLflow tracing</li>
-            <li>UC Volumes for evidence packs</li>
-            <li>Jobs / Lakeflow for continuous ingestion</li>
-            <li>Databricks Apps deployment</li>
+            <li>We ingest your repos, docs, and (wave 2) UC metadata</li>
+            <li>A golden-question acceptance set written with your team, pass bar agreed before commitment</li>
+            <li>The flywheel demo &mdash; cold fail, teach once, warm pass &mdash; live on your repo</li>
+            <li>Weekly usage &amp; cost reports; named feedback channel</li>
+            <li>Known rough edges disclosed up front</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Integrations -->
-  <section class="section section-alt">
+  <!-- Teams -->
+  <section class="section">
     <div class="container">
-      <span class="section-label">Integrations</span>
-      <h2>Connects to your existing tools</h2>
-      <div class="three-col" style="margin-top: 32px;">
-        <div class="feature-card" style="text-align: center;">
-          <h3>MCP</h3>
-          <p>Model Context Protocol for agent-to-agent memory sharing</p>
-        </div>
-        <div class="feature-card" style="text-align: center;">
-          <h3>GitHub / GitLab</h3>
-          <p>Ingest PRs, CODEOWNERS, docs, and code structure</p>
-        </div>
-        <div class="feature-card" style="text-align: center;">
-          <h3>Confluence / Docs</h3>
-          <p>Extract decisions, runbooks, and architecture docs</p>
-        </div>
+      <div class="section-header">
+        <h2>Not on Databricks? The team substrate stands alone.</h2>
+        <p>The shared org substrate &mdash; promotion ladder, review, provenance &mdash; works on any codebase. The lakehouse edition is the enterprise wedge, not the boundary.</p>
+      </div>
+      <div class="hero-actions" style="justify-content: center; display: flex; gap: 12px;">
+        <a href="/pricing" class="btn btn-secondary">How team pricing works</a>
       </div>
     </div>
   </section>
@@ -157,11 +193,11 @@
   <!-- CTA -->
   <section class="cta-section">
     <div class="container">
-      <h2>Give your team durable engineering memory</h2>
-      <p>See how lakecode scales from individual terminal to governed team substrate.</p>
+      <h2>Become a design partner</h2>
+      <p>One org at a time, onboarded personally &mdash; with an acceptance bar we agree on before you commit.</p>
       <div class="hero-actions" style="margin-top: 24px;">
-        <a href="mailto:sachin@lakecode.ai" class="btn btn-primary">Book a Demo</a>
-        <a href="/benchmarks" class="btn btn-secondary">View Benchmarks</a>
+        <a href="mailto:sachin@lakecode.ai?subject=Revy%20Databricks%20design%20partner" class="btn btn-primary">Talk to us</a>
+        <a href="/benchmarks" class="btn btn-secondary">View the proof</a>
       </div>
     </div>
   </section>
@@ -171,25 +207,27 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>The coding assistant that remembers.</p>
+        <p>Revy &mdash; the coding agent with a governed, compounding memory.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
           <a href="/#how-it-works">How it works</a>
-          <a href="/benchmarks">Benchmarks</a>
+          <a href="/benchmarks">Proof</a>
+          <a href="/pricing">Pricing</a>
           <a href="/enterprise">Enterprise</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
         </div>
         <div class="footer-col">
           <h4>Resources</h4>
           <a href="/docs">Docs</a>
-          <a href="/blog">Blog</a>
-          <a href="mailto:sachin@lakecode.ai">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
+          <a href="/benchmarks">Benchmarks &amp; method</a>
+          <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access">Beta access</a>
         </div>
       </div>
     </div>
