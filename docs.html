@@ -4,56 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — lakecode</title>
-  <meta name="description" content="lakecode documentation. Installation, commands, configuration, billing, and architecture.">
+  <meta name="description" content="lakecode is in private beta. Design partners get working documentation on day one — a first-session guide, the benchmark method docs, and a console walkthrough. Public docs land with general availability.">
+  <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="pages.css">
-  <style>
-    .docs-nav-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .docs-nav-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: border-color 0.2s, transform 0.2s;
-      display: block;
-      color: var(--text);
-    }
-    .docs-nav-card:hover {
-      border-color: var(--accent);
-      color: var(--text);
-      transform: translateY(-2px);
-    }
-    .docs-nav-card h3 {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .docs-nav-card p {
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin: 0;
-    }
-    @media (max-width: 900px) {
-      .docs-nav-grid {
-        grid-template-columns: 1fr 1fr !important;
-      }
-    }
-    @media (max-width: 480px) {
-      .docs-nav-grid {
-        grid-template-columns: 1fr !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="ds.css">
 </head>
 <body>
 
@@ -64,12 +21,11 @@
         <img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode
       </a>
       <div class="nav-links">
-        <a href="/#features">Features</a>
-        <a href="/#commands">Commands</a>
-        <a href="/docs" class="active">Docs</a>
+        <a href="/#how-it-works">How it works</a>
+        <a href="/benchmarks">Proof</a>
         <a href="/pricing">Pricing</a>
         <a href="/enterprise">Enterprise</a>
-        <a href="/blog">Blog</a>
+        <a href="/docs" class="active">Docs</a>
         <a href="/signin" class="btn btn-sm nav-auth-btn">Sign in</a>
         <button class="theme-toggle" aria-label="Toggle theme">
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -83,91 +39,55 @@
   </nav>
 
   <!-- Hero -->
-  <section class="page-hero">
+  <section class="hero lc-water-surface" data-theme="dark" style="padding-bottom: 60px;">
     <div class="container">
-      <h1>Documentation</h1>
-      <p class="page-sub">Everything you need to install, configure, and use lakecode with your Databricks or Snowflake workspace.</p>
+      <span class="section-label">Documentation</span>
+      <h1>Docs ship with the beta.</h1>
+      <p class="hero-sub">lakecode is in private beta, onboarded one team at a time. Design partners get working documentation on day one &mdash; written against your own setup, not a generic quickstart. The public manual lands with general availability.</p>
+      <div class="hero-actions" style="margin-top: 32px;">
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access" class="btn btn-primary">Request beta access</a>
+        <a href="/benchmarks" class="btn btn-secondary">Read the proof instead</a>
+      </div>
     </div>
   </section>
 
-  <!-- Doc cards -->
+  <!-- What partners receive -->
   <section class="section">
     <div class="container">
-      <div class="docs-nav-grid">
-        <a href="/docs/getting-started" class="docs-nav-card">
-          <h3>Getting Started</h3>
-          <p>Install, login, and run your first command.</p>
-        </a>
-        <a href="/docs/authentication" class="docs-nav-card">
-          <h3>Authentication</h3>
-          <p>OAuth, license keys, and BYOK.</p>
-        </a>
-        <a href="/docs/commands" class="docs-nav-card">
-          <h3>Commands</h3>
-          <p>Full reference for every slash command.</p>
-        </a>
-        <a href="/docs/configuration" class="docs-nav-card">
-          <h3>Configuration</h3>
-          <p>Conventions, skills, and environment.</p>
-        </a>
-        <a href="/docs/billing" class="docs-nav-card">
-          <h3>Billing &amp; Credits</h3>
-          <p>Free tier, auto-reload, and cost model.</p>
-        </a>
-        <a href="/docs/evidence" class="docs-nav-card">
-          <h3>Evidence Packs</h3>
-          <p>Structured outputs for audits and PRs.</p>
-        </a>
-        <a href="/docs/security" class="docs-nav-card">
-          <h3>Security &amp; Safety</h3>
-          <p>Permissions, plan mode, and guardrails.</p>
-        </a>
-        <a href="/docs/architecture" class="docs-nav-card">
-          <h3>Architecture</h3>
-          <p>How the proxy, auth, and CLI fit together.</p>
-        </a>
+      <div class="section-header">
+        <span class="section-label">At onboarding</span>
+        <h2>What design partners receive</h2>
+        <p>Four documents, delivered and walked through during onboarding &mdash; each one specific to your team.</p>
       </div>
-
-      <!-- Enterprise docs -->
-      <div id="enterprise" style="margin-top: 64px;">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <h2 style="font-size: 1.5rem; font-weight: 700;">Enterprise</h2>
-          <p style="color: var(--text-secondary); font-size: 0.9375rem;">Deployment, governance, and configuration for enterprise customers.</p>
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 880px; margin: 0 auto;">
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">FIRST-SESSION GUIDE</h3>
+          <p style="color: var(--text-secondary);">One page: initialize a workspace, connect your corpora, what write-back persists and when, and where the review queue lives. Everything needed to run a first real session.</p>
         </div>
-        <div class="docs-nav-grid" style="grid-template-columns: repeat(5, 1fr);">
-          <a href="/docs/enterprise/deployment" class="docs-nav-card">
-            <h3>Deployment</h3>
-            <p>Databricks Apps, Model Serving, and CLI setup.</p>
-          </a>
-          <a href="/docs/enterprise/approval-gates" class="docs-nav-card">
-            <h3>Approval Gates</h3>
-            <p>Safety classification and approval workflows.</p>
-          </a>
-          <a href="/docs/enterprise/assistantspec" class="docs-nav-card">
-            <h3>AssistantSpec</h3>
-            <p>Org-wide configuration reference.</p>
-          </a>
-          <a href="/docs/enterprise/connectors" class="docs-nav-card">
-            <h3>Connectors</h3>
-            <p>Slack and Jira integration setup.</p>
-          </a>
-          <a href="/docs/enterprise/ai-gateway" class="docs-nav-card">
-            <h3>AI Gateway</h3>
-            <p>Model governance and rate limiting.</p>
-          </a>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">BENCHMARK METHOD DOCS</h3>
+          <p style="color: var(--text-secondary);">The pre-registrations, judge prompts, and raw run records behind every number on the proof page. Check our work &mdash; that's the point of publishing it.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">CONSOLE WALKTHROUGH</h3>
+          <p style="color: var(--text-secondary);">The glass box, live: claims with provenance and confidence, inline editing, the promotion ladder, sessions and sources. Your reviewers learn it in one sitting.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; color: var(--accent-cyan);">ACCEPTANCE SET</h3>
+          <p style="color: var(--text-secondary);">10&ndash;15 golden questions about <em>your</em> systems, written with your team, with a pass bar agreed up front &mdash; run before you commit to anything.</p>
         </div>
       </div>
+      <p style="color: var(--text-dim); font-size: 0.8125rem; text-align: center; max-width: 560px; margin: 32px auto 0;">Using Claude Code or Cursor? The substrate also serves any MCP client &mdash; the same grounded recall, in the agent you already run. Setup is part of onboarding.</p>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="cta-section">
+  <section class="cta-section lc-water-surface" data-theme="dark">
     <div class="container">
-      <h2>Ready to get started?</h2>
-      <p>Install lakecode and run your first command in under a minute.</p>
-      <div class="hero-actions">
-        <a href="/signin" class="btn btn-primary">Sign in with Google</a>
-        <a href="/pricing" class="btn btn-secondary">View Pricing</a>
+      <h2>Get the docs by getting the beta</h2>
+      <p>One team at a time, onboarded personally. Your repo, your golden questions, the flywheel demo on your own code.</p>
+      <div class="hero-actions" style="margin-top: 24px;">
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access" class="btn btn-primary">Request beta access</a>
       </div>
     </div>
   </section>
@@ -177,21 +97,26 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native data platform agent.</p>
+        <p>The coding agent with a governed, compounding memory.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
-          <a href="/#features">Features</a>
-          <a href="/#commands">Commands</a>
+          <a href="/#how-it-works">How it works</a>
+          <a href="/benchmarks">Proof</a>
           <a href="/pricing">Pricing</a>
-        <a href="/enterprise">Enterprise</a>
-        <a href="/blog">Blog</a>
+          <a href="/enterprise">Enterprise</a>
         </div>
         <div class="footer-col">
-          <h4>Account</h4>
-          <a href="/signin">Sign in</a>
-          <a href="/dashboard">Dashboard</a>
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="mailto:hello@lakecode.ai">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="/docs">Docs</a>
+          <a href="/benchmarks">Benchmarks &amp; method</a>
+          <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access">Beta access</a>
         </div>
       </div>
     </div>
