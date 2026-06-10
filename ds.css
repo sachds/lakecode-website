@@ -149,14 +149,14 @@ h1, h2, h3, h4, h5, h6 {
 /* ---- 3 · Brand beats ------------------------------------------ */
 
 .logo {
-  font-family: var(--font-pixel);
-  font-weight: 400;
-  font-size: 1.2rem;
+  font-family: var(--font-mono-ds);
+  font-weight: 600;
+  font-size: 1.05rem;
   letter-spacing: 0;
   color: var(--text);
   text-decoration: none;
 }
-.logo-icon { height: 18px; width: auto; margin-right: 4px; }
+.logo-icon { height: 17px; width: auto; margin-right: 4px; }
 
 /* mono eyebrow — the section label signature */
 .section-label {
