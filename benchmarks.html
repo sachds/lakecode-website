@@ -7,8 +7,9 @@
   <meta name="description" content="Revy's published results: efficiency on execution-bound tasks (~27% cheaper at identical correctness), correctness on knowledge-bound tasks (0/3→3/3), coding parity, and the cross-session flywheel. Every claim dated and model-pinned.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ds.css">
 </head>
 <body>
 
@@ -38,7 +39,7 @@
   </nav>
 
   <!-- Hero -->
-  <section class="hero" style="padding-bottom: 60px;">
+  <section class="hero lc-water-surface" data-theme="dark" style="padding-bottom: 60px;">
     <div class="container">
       <span class="section-label">Proof</span>
       <h1>Cheaper where you'd already be right.<br>Correct where you'd be wrong.</h1>
@@ -55,16 +56,16 @@
       <div class="two-col" style="gap: 24px; margin-bottom: 16px;">
         <!-- Efficiency -->
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Execution-bound &middot; efficiency</p>
-          <p style="font-size: 2.25rem; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">~27% cheaper</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Execution-bound &middot; efficiency</p>
+          <p style="font-size: 2.25rem; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">~27% cheaper</p>
           <p style="color: var(--text); margin: 0 0 12px 0; font-size: 0.9375rem;">~22&ndash;26% fewer tool calls, identical correctness</p>
           <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0 0 16px 0;">Same agent, same model, same tasks &mdash; the only variable is whether the substrate is warm. Memory removes re-exploration; correctness is unchanged <em>by design of the regime</em>.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Tier-1 auto-prime A/B + write-back cold/warm A/B &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; 20 runs, 0 failed</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Tier-1 auto-prime A/B + write-back cold/warm A/B &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; 20 runs, 0 failed</p>
         </div>
         <!-- Correctness -->
         <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Knowledge-bound &middot; correctness</p>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Knowledge-bound &middot; correctness</p>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
               <span style="color: var(--text-secondary); width: 150px; flex-shrink: 0;">Claude Code</span>
               <span style="color: var(--red);">&#10007; &#10007; &#10007;</span>
@@ -82,7 +83,7 @@
             </div>
           </div>
           <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0 0 16px 0;">A causal matrix: when the answer depends on knowledge that isn't in the repo, every cold arm is <em>confidently wrong</em> &mdash; and one substrate claim flips the result from 0% to 100%. No model upgrade closes this gap, because the knowledge isn't in any training set.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Grounded-coding bench causal matrix &middot; 2026-06-08 &middot; claude-sonnet-4-6 everywhere &middot; n=3 per arm &middot; single knowledge-trap domain</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Grounded-coding bench causal matrix &middot; 2026-06-08 &middot; claude-sonnet-4-6 everywhere &middot; n=3 per arm &middot; single knowledge-trap domain</p>
         </div>
       </div>
       <p style="color: var(--text-dim); font-size: 0.8125rem; max-width: 720px;">Why two regimes? Because blending them overstates both claims. The efficiency number is measured at identical correctness; the correctness number is measured where baselines fail. They are never the same number, and we never present one as the other.</p>
@@ -108,43 +109,43 @@
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Coding parity with Claude Code</td>
               <td style="padding: 14px 16px;">6/6 = 6/6; bug-fixes byte-identical (same model both arms)</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">coding-bench v1 &middot; 2026-06</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">coding-bench v1 &middot; 2026-06</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">small generic fixture; n=1 per task</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Efficiency moat (warm vs cold substrate)</td>
               <td style="padding: 14px 16px;">~22&ndash;26% fewer tool calls, ~27% cheaper, identical correctness</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">execution-bound tasks; correctness unchanged by design of the regime</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Correctness on knowledge-bound tasks</td>
               <td style="padding: 14px 16px;">CC 0/3 &middot; Revy cold 0/3 &middot; Revy seeded <strong style="color: var(--green);">3/3</strong> &mdash; one claim flips 0&rarr;100%</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">n=3; single knowledge-trap domain</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Cross-session code-change persistence</td>
               <td style="padding: 14px 16px;">cold 0/2 vs warm <strong style="color: var(--green);">2/2</strong> on a seeded convention; cold fabricated nothing</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">n=2</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Substrate self-heals</td>
               <td style="padding: 14px 16px;">failing production query fixed by one ingested clarifying finding &mdash; zero code change, same day</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">cp-07 timestamped record &middot; 2026-05</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">cp-07 timestamped record &middot; 2026-05</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">single observed instance</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Single-turn pipeline economics</td>
               <td style="padding: 14px 16px;">$0.033 vs $0.113 per question (~3&times; cheaper), 5&ndash;8&times; fewer tokens, equal quality on covered questions</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">revy-vs-CC benchmark &middot; May 2026 &middot; Sonnet 4.6 both sides</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">revy-vs-CC benchmark &middot; May 2026 &middot; Sonnet 4.6 both sides</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">coverage-limited on repo internals; the CC baseline itself moved 30% in 17 days &mdash; hence absolute costs</td>
             </tr>
             <tr>
               <td style="padding: 14px 16px 14px 0; color: var(--text); font-weight: 500;">Memory pollution</td>
               <td style="padding: 14px 16px;">personal-note corpus never leaked into codebase answers (0/2; notes ranked 75&ndash;100)</td>
-              <td style="padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">memory-as-findings probe &middot; 2026-06-02</td>
+              <td style="padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;">memory-as-findings probe &middot; 2026-06-02</td>
               <td style="padding: 14px 0; font-size: 0.8125rem;">relevance-based; no hard filter yet</td>
             </tr>
           </tbody>
@@ -203,7 +204,7 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta-section">
+  <section class="cta-section lc-water-surface" data-theme="dark">
     <div class="container">
       <h2>See it on your own repo</h2>
       <p>The flywheel demo &mdash; cold fail, teach once, warm pass &mdash; runs live on your code during beta onboarding.</p>

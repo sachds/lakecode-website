@@ -7,8 +7,9 @@
   <meta name="description" content="Revy is the coding agent with a governed, compounding memory: it learns your systems once, gets cheaper and more correct every session, and lets the org see and govern everything it knows. By lakecode.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ds.css">
 </head>
 <body>
 
@@ -38,10 +39,10 @@
   </nav>
 
   <!-- 1. HERO -->
-  <section class="hero">
+  <section class="hero lc-water-surface" data-theme="dark">
     <div class="container">
       <span class="section-label">Revy &middot; by lakecode</span>
-      <h1>Agents forget.<br>Revy compounds.</h1>
+      <h1>Agents forget.<br>Revy compounds.<span class="lc-caret"></span></h1>
       <p class="hero-sub">
         Revy is the coding agent with a governed, compounding memory. It learns your systems once, gets cheaper and more correct every session &mdash; and your org can see and govern everything it knows.
       </p>
@@ -87,11 +88,11 @@
           <p style="color: var(--text-secondary);">Every session starts cold and re-derives your codebase's quirks, internal APIs, and conventions. You pay the same exploration cost in tokens and time, forever.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: #f59e0b;">Confidently wrong</h3>
+          <h3 style="color: var(--signal-caution);">Confidently wrong</h3>
           <p style="color: var(--text-secondary);">Why a constant is 4471. Which IDs are valid. What failed last quarter. The knowledge that decides correctness was never written anywhere a model can see &mdash; no context window, fine-tune, or doc-RAG reaches it.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: #845ef7;">Ungovernable</h3>
+          <h3 style="color: var(--signal-info);">Ungovernable</h3>
           <p style="color: var(--text-secondary);">What does the agent know? Where did it learn it? Who approved it? Black-box agent memory is a compliance non-starter &mdash; especially on a data platform.</p>
         </div>
       </div>
@@ -149,16 +150,16 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch;">
         <!-- Execution-bound -->
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Execution-bound &middot; the answer is in the repo</p>
-          <p style="font-size: 40px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">~27% cheaper</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Execution-bound &middot; the answer is in the repo</p>
+          <p style="font-size: 40px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">~27% cheaper</p>
           <p style="color: var(--text-secondary); margin: 0 0 16px 0; font-size: 14px;">~22&ndash;26% fewer tool calls, at <strong>identical correctness</strong>.</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">When exploration can find the answer, memory is an efficiency lever: the agent skips the wandering it already did last time. Correctness is unchanged by design &mdash; that's what defines this regime.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; 20 runs</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; 20 runs</p>
         </div>
         <!-- Knowledge-bound -->
         <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Knowledge-bound &middot; the answer lives in org knowledge</p>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Knowledge-bound &middot; the answer lives in org knowledge</p>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="color: var(--text-secondary); width: 130px; flex-shrink: 0;">Claude Code</span>
               <span style="color: var(--red);">&#10007; &#10007; &#10007;</span>
@@ -176,7 +177,7 @@
             </div>
           </div>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">When correctness depends on knowledge that was never in the repo, agents without it are <em>confidently wrong</em> &mdash; and no model upgrade fixes that. One substrate claim flips the result from 0% to 100%.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 everywhere &middot; n=3 per arm &middot; single knowledge-trap domain</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 everywhere &middot; n=3 per arm &middot; single knowledge-trap domain</p>
         </div>
       </div>
       <p style="color: var(--text-dim); font-size: 0.8125rem; text-align: center; max-width: 640px; margin: 24px auto 0;">Two regimes, two claims. Efficiency numbers are measured at identical correctness on execution-bound tasks; correctness numbers are knowledge-bound tasks where baselines fail. They are never the same number.</p>
@@ -193,15 +194,15 @@
       </div>
       <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--red); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">1 &middot; Cold &middot; 0/2</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--red); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">1 &middot; Cold &middot; 0/2</p>
           <p style="color: var(--text-secondary); font-size: 14px;">A fresh session is asked to add the project's mandatory outbound HTTP headers. It queries the substrate, finds nothing &mdash; and declines to invent a value. No fabrication.</p>
         </div>
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #f59e0b; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">2 &middot; Teach once</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--signal-caution); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">2 &middot; Teach once</p>
           <p style="color: var(--text-secondary); font-size: 14px;">The convention ships once &mdash; <code style="font-size: 12px;">User-Agent: revy-fetch/4471</code>, a gateway allow-list rule from an incident. The commit hook persists it as a claim with provenance.</p>
         </div>
         <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">3 &middot; Warm &middot; 2/2</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">3 &middot; Warm &middot; 2/2</p>
           <p style="color: var(--text-secondary); font-size: 14px;">A fresh, independent session retrieves the claim and writes the exact header into generated code, citing the incident &mdash; no shared context window, no fine-tune, no RAG of the diff.</p>
         </div>
       </div>
@@ -209,7 +210,7 @@
         <div style="display: inline-block; border: 1px dashed var(--border-light); border-radius: 8px; padding: 16px 32px; color: var(--text-dim); font-size: 0.875rem;">
           &#9654;&nbsp; Recorded demo of the full cold &rarr; teach &rarr; warm run &mdash; coming with the beta. <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" style="color: var(--accent);">Request access</a> to see it on your own repo.
         </div>
-        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 16px 0 0 0;">Flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 16px 0 0 0;">Flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
       </div>
     </div>
   </section>
@@ -224,28 +225,28 @@
       </div>
       <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 880px; margin: 0 auto;">
         <div class="feature-card">
-          <p style="font-size: 28px; font-weight: 700; color: var(--text); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">6/6 = 6/6</p>
+          <p style="font-size: 28px; font-weight: 700; color: var(--text); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">6/6 = 6/6</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">Coding parity with Claude Code &mdash; bug-fixes byte-identical.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">coding-bench v1 &middot; 2026-06 &middot; same model both arms &middot; small generic fixture, n=1 per task</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">coding-bench v1 &middot; 2026-06 &middot; same model both arms &middot; small generic fixture, n=1 per task</p>
         </div>
         <div class="feature-card">
-          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">&minus;27% cost</p>
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">&minus;27% cost</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">~22&ndash;26% fewer tool calls at identical correctness, warm vs cold substrate.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; execution-bound tasks</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; execution-bound tasks</p>
         </div>
         <div class="feature-card">
-          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">0/3 &rarr; 3/3</p>
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">0/3 &rarr; 3/3</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">On knowledge-bound tasks, one substrate claim flips correctness from 0% to 100%.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 &middot; n=3 per arm, single domain</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 &middot; n=3 per arm, single domain</p>
         </div>
         <div class="feature-card">
-          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">0/2 &rarr; 2/2</p>
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'IBM Plex Mono', monospace;">0/2 &rarr; 2/2</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">Fresh sessions honor a convention a prior session persisted; cold runs fabricated nothing.</p>
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
         </div>
       </div>
       <div style="margin-top: 32px; padding: 24px 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); max-width: 880px; margin-left: auto; margin-right: auto;">
-        <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin: 0 0 12px 0;">Single-turn pipeline economics &middot; Stage 1 &middot; Databricks SDK &middot; May 2026</p>
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin: 0 0 12px 0;">Single-turn pipeline economics &middot; Stage 1 &middot; Databricks SDK &middot; May 2026</p>
         <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 20px 0;">11 questions &times; 3 replicates, graded by a blind LLM judge. Both systems answer with the same model (Claude Sonnet 4.6) &mdash; the gap is the compiled context, not the model.</p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; font-size: 14px;">
           <div>
@@ -281,7 +282,7 @@
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
         <div class="feature-card">
-          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">TERMINAL (CLI)</h3>
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">TERMINAL (CLI)</h3>
           <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: var(--text-secondary); font-size: 14px;">
             <li style="padding: 6px 0;">A full coding agent: <code style="font-size: 13px;">revy chat</code></li>
             <li style="padding: 6px 0;">Auto-primes from the substrate at session start</li>
@@ -291,7 +292,7 @@
           </ul>
         </div>
         <div class="feature-card">
-          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">CONSOLE</h3>
+          <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">CONSOLE</h3>
           <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: var(--text-secondary); font-size: 14px;">
             <li style="padding: 6px 0;">Inspect and edit every claim, with provenance</li>
             <li style="padding: 6px 0;">Review queue for proposed knowledge</li>
@@ -315,27 +316,27 @@
 
       <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 960px; margin: 0 auto;">
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR CODE</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR CODE</h3>
           <p style="color: var(--text-secondary);">An entity graph over the codebase &mdash; structure, interfaces, tests, configs &mdash; with claims extracted and linked to the entities they describe.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR SESSIONS</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR SESSIONS</h3>
           <p style="color: var(--text-secondary);">Findings, root causes, failed paths. The agent's own write-back is gated &mdash; proposed knowledge goes through review before it becomes org truth.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">GIT HISTORY</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">GIT HISTORY</h3>
           <p style="color: var(--text-secondary);">Code-change rationale captured at commit time. The <em>why</em> behind changes &mdash; knowledge that never existed in any document &mdash; persists beyond the merge.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR DOCS</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR DOCS</h3>
           <p style="color: var(--text-secondary);">Architecture docs, runbooks, ADRs &mdash; extracted into structured claims and linked into the same graph as the code they describe.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">DATABRICKS UC</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">DATABRICKS UC</h3>
           <p style="color: var(--text-secondary);">Unity Catalog metadata, table and column lineage, notebook&harr;table references &mdash; the lakehouse edition grounds agents in your data platform itself.</p>
         </div>
         <div class="feature-card">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR TEAM</h3>
+          <h3 style="color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR TEAM</h3>
           <p style="color: var(--text-secondary);">The promotion ladder turns one engineer's finding into the whole team's prior &mdash; after review. The second engineer never rediscovers the first one's fix.</p>
         </div>
       </div>
@@ -360,7 +361,7 @@
       </div>
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"add caching to the user service"</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"add caching to the user service"</p>
           <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
             <li style="padding: 4px 0;">&#8594; caching convention (Redis, 15m TTL)</li>
             <li style="padding: 4px 0;">&#8594; user service architecture decision</li>
@@ -368,7 +369,7 @@
           </ul>
         </div>
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"fix the flaky order test"</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"fix the flaky order test"</p>
           <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
             <li style="padding: 4px 0;">&#8594; known flaky-test finding (race condition)</li>
             <li style="padding: 4px 0;">&#8594; order service test patterns</li>
@@ -376,7 +377,7 @@
           </ul>
         </div>
         <div class="feature-card">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"refactor billing to use the new API"</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"refactor billing to use the new API"</p>
           <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
             <li style="padding: 4px 0;">&#8594; API migration decision + rationale</li>
             <li style="padding: 4px 0;">&#8594; billing module dependency graph</li>
@@ -486,7 +487,7 @@
           </ul>
         </div>
         <div style="border: 1px solid var(--border); border-radius: 8px; padding: 32px; background: var(--surface);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">The Databricks edition</p>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">The Databricks edition</p>
           <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">Grounded in your lakehouse. Governed in Unity Catalog. Revy ingests UC lineage and notebook graphs &mdash; and projects what your agents know back into UC, so your platform team governs agents with the tooling they already trust.</p>
           <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); font-size: 14px;">
             <li style="padding: 4px 0;">&#8594; Ingests UC metadata, lineage, notebooks</li>
@@ -502,7 +503,7 @@
   </section>
 
   <!-- 12. FINAL CTA -->
-  <section class="section cta-section">
+  <section class="section cta-section lc-water-surface" data-theme="dark">
     <div class="container">
       <h2>Stop re-teaching your agent</h2>
       <p>Revy is in private beta with design-partner teams. Your repo, your golden questions, the flywheel demo on your own code.</p>
