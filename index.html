@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>lakecode — The Coding Assistant That Remembers</title>
-  <meta name="description" content="lakecode is a terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests, then compiles the right context for every task.">
+  <title>Revy — the coding agent that compounds | lakecode</title>
+  <meta name="description" content="Revy is the coding agent with a governed, compounding memory: it learns your systems once, gets cheaper and more correct every session, and lets the org see and govern everything it knows. By lakecode.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
       </a>
       <div class="nav-links">
         <a href="#how-it-works">How it works</a>
-        <a href="#benchmarks">Benchmarks</a>
+        <a href="#benchmarks">Proof</a>
         <a href="/enterprise">Enterprise</a>
         <a href="/docs">Docs</a>
         <a href="/blog">Blog</a>
@@ -39,21 +39,16 @@
   <!-- 1. HERO -->
   <section class="hero">
     <div class="container">
-      <h1>The coding assistant<br>that remembers</h1>
+      <span class="section-label">Revy &middot; by lakecode</span>
+      <h1>Agents forget.<br>Revy compounds.</h1>
       <p class="hero-sub">
-        A terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests &mdash; then compiles the right context for every task.
+        Revy is the coding agent with a governed, compounding memory. It learns your systems once, gets cheaper and more correct every session &mdash; and your org can see and govern everything it knows.
       </p>
-      <div class="hero-install">
-        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
-          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
-          <span class="copy-hint">click to copy</span>
-          <span class="copy-done">copied!</span>
-        </div>
-      </div>
       <div class="hero-actions">
-        <a href="/signin" class="btn btn-primary">Get Started Free</a>
-        <a href="/docs" class="btn btn-secondary">View Docs</a>
+        <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" class="btn btn-primary">Request beta access</a>
+        <a href="#benchmarks" class="btn btn-secondary">See the proof</a>
       </div>
+      <p style="color: var(--text-dim); font-size: 0.8125rem; margin-top: 16px;">Private beta &mdash; we onboard design-partner teams personally, one at a time.</p>
       <div class="hero-terminal">
         <div class="terminal-bar">
           <span class="terminal-dot red"></span>
@@ -62,18 +57,17 @@
           <span class="terminal-title">terminal</span>
         </div>
         <div class="terminal-body">
-          <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode "add retry logic to the payment service"</div>
+          <div class="terminal-line"><span class="terminal-prompt">$</span> revy chat "add retry logic to the payment client"</div>
           <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line dim">  Compiling context...</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: retry conventions from last session</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: payment service architecture decision</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: exponential backoff standard (team)</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Code: src/services/payment.ts loaded</div>
-          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Code: src/utils/retry.ts loaded</div>
+          <div class="terminal-line dim">  Priming from substrate...</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Decision DEC-001: exponential backoff standard</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Constraint INC-4471: mandatory outbound User-Agent</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Failed path: naive retry on 429 (last quarter)</div>
+          <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Code: src/payment/client.py loaded</div>
           <div class="terminal-line dim">&nbsp;</div>
-          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Context compiled:</strong> 3 memories, 2 files, 1 convention</div>
-          <div class="terminal-line">    Applied team retry pattern with exponential</div>
-          <div class="terminal-line">    backoff. Changes ready for review.</div>
+          <div class="terminal-line">  <span class="t-green">&#9679;</span> <strong>Grounded:</strong> 3 claims, 1 failed path avoided</div>
+          <div class="terminal-line">    Applied the team backoff standard with the</div>
+          <div class="terminal-line">    required gateway headers. Ready for review.</div>
         </div>
       </div>
     </div>
@@ -84,65 +78,320 @@
     <div class="container">
       <div class="section-header">
         <h2>Building is easy. Maintaining is hard.</h2>
-        <p>Every team can ship v1. The hard part is year two &mdash; when the original authors have moved on, the docs are stale, and the only record of why things work is scattered across closed PRs and Slack threads. Coding assistants make this worse, not better.</p>
+        <p>Every team can ship v1. The hard part is year two &mdash; when the original authors have moved on, the docs are stale, and the only record of why things work is scattered across closed PRs and Slack threads. Coding agents make this worse, not better.</p>
       </div>
-      <p style="color: var(--text-secondary); text-align: center; max-width: 640px; margin: -16px auto 32px; font-size: 0.9375rem;">Most coding assistants start from zero every session. They can write code, but they can't remember why code exists.</p>
       <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #ff6b6b;">Wander</h3>
-          <p style="color: rgba(255,255,255,0.6);">They explore the codebase from scratch every time, burning tokens on files they have already seen and patterns they have already learned.</p>
+        <div class="feature-card">
+          <h3 style="color: var(--red);">Amnesiac</h3>
+          <p style="color: var(--text-secondary);">Every session starts cold and re-derives your codebase's quirks, internal APIs, and conventions. You pay the same exploration cost in tokens and time, forever.</p>
         </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #ffa94d;">Compact</h3>
-          <p style="color: rgba(255,255,255,0.6);">When the context window fills, they summarize and compress &mdash; losing the specific details that actually matter for the next step.</p>
+        <div class="feature-card">
+          <h3 style="color: #f59e0b;">Confidently wrong</h3>
+          <p style="color: var(--text-secondary);">Why a constant is 4471. Which IDs are valid. What failed last quarter. The knowledge that decides correctness was never written anywhere a model can see &mdash; no context window, fine-tune, or doc-RAG reaches it.</p>
         </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #845ef7;">Forget</h3>
-          <p style="color: rgba(255,255,255,0.6);">Close the session and everything is gone. The next session knows nothing about what was learned, decided, or resolved before.</p>
+        <div class="feature-card">
+          <h3 style="color: #845ef7;">Ungovernable</h3>
+          <p style="color: var(--text-secondary);">What does the agent know? Where did it learn it? Who approved it? Black-box agent memory is a compliance non-starter &mdash; especially on a data platform.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 3. PRODUCT OVERVIEW -->
+  <!-- 3. THE LOOP -->
   <section id="how-it-works" class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>lakecode gives agents a working memory</h2>
-        <p>A persistent, structured memory layer that makes every session build on the last.</p>
+        <h2>One loop: work &rarr; capture &rarr; govern &rarr; ground</h2>
+        <p>Every session's exploration becomes the next session's prior. That's the whole product.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h3>Remember</h3>
-            <p>lakecode captures what matters from every session: architecture decisions, debugging findings, team conventions, test outcomes. Memory persists across sessions, branches, and teammates.</p>
+            <h3>Work</h3>
+            <p>Revy is a full coding agent in your terminal. It auto-primes from the substrate at session start &mdash; your org's decisions, constraints, findings, and failed paths &mdash; then gets to work.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h3>Compile</h3>
-            <p>Before the agent writes a single line, lakecode compiles the right context for the task. Not everything &mdash; just the memories, code, and conventions that are relevant right now.</p>
+            <h3>Capture</h3>
+            <p>What the session learns persists: findings, decisions, failed paths &mdash; and code-change rationale captured at commit time. Knowledge that never existed in any document.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h3>Act</h3>
-            <p>The agent starts with exactly the context it needs. No wandering. No re-exploration. It produces better code, faster, because it already knows what your team knows.</p>
+            <h3>Govern</h3>
+            <p>Nothing becomes org truth silently. Claims carry provenance and confidence, flow through a review queue, and climb a promotion ladder: local &rarr; workspace &rarr; org.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Ground</h3>
+            <p>The next session &mdash; yours or a teammate's &mdash; starts already knowing. Cheaper where you'd already be right, correct where you'd be wrong. The loop compounds.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4. TERMINAL NATIVE -->
+  <!-- 4. TWO REGIMES -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Works where engineers already work</h2>
-        <p>Terminal-native. No browser tab. No IDE plugin. No context switching.</p>
+        <span class="section-label">Two regimes</span>
+        <h2>Cheaper where you'd already be right.<br>Correct where you'd be wrong.</h2>
+        <p>Memory does two different jobs. We measure them separately &mdash; and never blend the numbers.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch;">
+        <!-- Execution-bound -->
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Execution-bound &middot; the answer is in the repo</p>
+          <p style="font-size: 40px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">~27% cheaper</p>
+          <p style="color: var(--text-secondary); margin: 0 0 16px 0; font-size: 14px;">~22&ndash;26% fewer tool calls, at <strong>identical correctness</strong>.</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">When exploration can find the answer, memory is an efficiency lever: the agent skips the wandering it already did last time. Correctness is unchanged by design &mdash; that's what defines this regime.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; 20 runs</p>
+        </div>
+        <!-- Knowledge-bound -->
+        <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">Knowledge-bound &middot; the answer lives in org knowledge</p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="color: var(--text-secondary); width: 130px; flex-shrink: 0;">Claude Code</span>
+              <span style="color: var(--red);">&#10007; &#10007; &#10007;</span>
+              <span style="color: var(--text-dim);">0/3</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="color: var(--text-secondary); width: 130px; flex-shrink: 0;">Revy, cold</span>
+              <span style="color: var(--red);">&#10007; &#10007; &#10007;</span>
+              <span style="color: var(--text-dim);">0/3</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="color: var(--text); width: 130px; flex-shrink: 0;">Revy + substrate</span>
+              <span style="color: var(--accent-cyan);">&#10003; &#10003; &#10003;</span>
+              <span style="color: var(--accent-cyan); font-weight: 700;">3/3</span>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">When correctness depends on knowledge that was never in the repo, agents without it are <em>confidently wrong</em> &mdash; and no model upgrade fixes that. One substrate claim flips the result from 0% to 100%.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0; border-top: 1px solid var(--border); padding-top: 12px;">Grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 everywhere &middot; n=3 per arm &middot; single knowledge-trap domain</p>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); font-size: 0.8125rem; text-align: center; max-width: 640px; margin: 24px auto 0;">Two regimes, two claims. Efficiency numbers are measured at identical correctness on execution-bound tasks; correctness numbers are knowledge-bound tasks where baselines fail. They are never the same number.</p>
+    </div>
+  </section>
+
+  <!-- 5. FLYWHEEL -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The flywheel</span>
+        <h2>Teach it once. It stays taught.</h2>
+        <p>The causal validation, end to end: same prompt, same repo, same agent &mdash; the only variable is what the substrate holds.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--red); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">1 &middot; Cold &middot; 0/2</p>
+          <p style="color: var(--text-secondary); font-size: 14px;">A fresh session is asked to add the project's mandatory outbound HTTP headers. It queries the substrate, finds nothing &mdash; and declines to invent a value. No fabrication.</p>
+        </div>
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #f59e0b; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">2 &middot; Teach once</p>
+          <p style="color: var(--text-secondary); font-size: 14px;">The convention ships once &mdash; <code style="font-size: 12px;">User-Agent: revy-fetch/4471</code>, a gateway allow-list rule from an incident. The commit hook persists it as a claim with provenance.</p>
+        </div>
+        <div class="feature-card" style="border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 1px;">3 &middot; Warm &middot; 2/2</p>
+          <p style="color: var(--text-secondary); font-size: 14px;">A fresh, independent session retrieves the claim and writes the exact header into generated code, citing the incident &mdash; no shared context window, no fine-tune, no RAG of the diff.</p>
+        </div>
+      </div>
+      <div style="margin-top: 32px; text-align: center;">
+        <div style="display: inline-block; border: 1px dashed var(--border-light); border-radius: 8px; padding: 16px 32px; color: var(--text-dim); font-size: 0.875rem;">
+          &#9654;&nbsp; Recorded demo of the full cold &rarr; teach &rarr; warm run &mdash; coming with the beta. <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" style="color: var(--accent);">Request access</a> to see it on your own repo.
+        </div>
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 16px 0 0 0;">Flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PROOF -->
+  <section id="benchmarks" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Proof</span>
+        <h2>Dated, pinned, caveated</h2>
+        <p>Every number comes from a pre-registered run with the model pinned and the caveats attached. If a claim isn't dated, we don't ship it.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 880px; margin: 0 auto;">
+        <div class="feature-card">
+          <p style="font-size: 28px; font-weight: 700; color: var(--text); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">6/6 = 6/6</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">Coding parity with Claude Code &mdash; bug-fixes byte-identical.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">coding-bench v1 &middot; 2026-06 &middot; same model both arms &middot; small generic fixture, n=1 per task</p>
+        </div>
+        <div class="feature-card">
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">&minus;27% cost</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">~22&ndash;26% fewer tool calls at identical correctness, warm vs cold substrate.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">auto-prime + write-back A/Bs &middot; 2026-06-04 &middot; claude-sonnet-4-6 both arms &middot; execution-bound tasks</p>
+        </div>
+        <div class="feature-card">
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">0/3 &rarr; 3/3</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">On knowledge-bound tasks, one substrate claim flips correctness from 0% to 100%.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">grounded-coding bench &middot; 2026-06-08 &middot; claude-sonnet-4-6 &middot; n=3 per arm, single domain</p>
+        </div>
+        <div class="feature-card">
+          <p style="font-size: 28px; font-weight: 700; color: var(--accent-cyan); margin: 0 0 4px 0; font-family: 'JetBrains Mono', monospace;">0/2 &rarr; 2/2</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px 0;">Fresh sessions honor a convention a prior session persisted; cold runs fabricated nothing.</p>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin: 0;">flywheel causal validation &middot; 2026-06-09 &middot; claude-sonnet-4-6 &middot; n=2 per arm</p>
+        </div>
+      </div>
+      <div style="margin-top: 32px; padding: 24px 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); max-width: 880px; margin-left: auto; margin-right: auto;">
+        <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin: 0 0 12px 0;">Single-turn pipeline economics &middot; Stage 1 &middot; Databricks SDK &middot; May 2026</p>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 20px 0;">11 questions &times; 3 replicates, graded by a blind LLM judge. Both systems answer with the same model (Claude Sonnet 4.6) &mdash; the gap is the compiled context, not the model.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; font-size: 14px;">
+          <div>
+            <p style="color: var(--accent-cyan); margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Revy pipeline</p>
+            <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary);">
+              <li style="padding: 3px 0;">Mean cost / question: <strong style="color: var(--text);">$0.033</strong></li>
+              <li style="padding: 3px 0;">Correct: 32 / 33 <span style="color: var(--text-dim);">(+1 partial)</span></li>
+              <li style="padding: 3px 0;">Wrong answers: <strong style="color: var(--text);">0</strong></li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: var(--text-dim); margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Claude Code</p>
+            <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary);">
+              <li style="padding: 3px 0;">Mean cost / question: <strong style="color: var(--text);">$0.113</strong></li>
+              <li style="padding: 3px 0;">Correct: 33 / 33</li>
+              <li style="padding: 3px 0;">Wrong answers: 0</li>
+            </ul>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 13px; margin: 20px 0 0 0; border-top: 1px solid var(--border); padding-top: 16px;">Cheaper on <em>every</em> question &mdash; 2.6&times; on common APIs, 3.4&times; on library internals, 5.4&times; on cross-cutting questions. Caveats: coverage-limited to repo internals, and agentic baselines move fast &mdash; the Claude Code baseline itself dropped 30% in 17 days. That's why we publish absolute costs, not just ratios.</p>
+      </div>
+      <p style="text-align: center; margin-top: 24px;"><a href="/benchmarks" class="btn btn-secondary" style="font-size: 14px;">Full results &amp; methodology</a></p>
+    </div>
+  </section>
+
+  <!-- 7. GLASS BOX -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The glass box</span>
+        <h2>An agent your org can audit</h2>
+        <p>Every claim has provenance. Nothing is promoted silently. Two surfaces, one substrate.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div class="feature-card">
+          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">TERMINAL (CLI)</h3>
+          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: var(--text-secondary); font-size: 14px;">
+            <li style="padding: 6px 0;">A full coding agent: <code style="font-size: 13px;">revy chat</code></li>
+            <li style="padding: 6px 0;">Auto-primes from the substrate at session start</li>
+            <li style="padding: 6px 0;">Persists findings, decisions, and failed paths</li>
+            <li style="padding: 6px 0;">Captures code-change rationale at commit time</li>
+            <li style="padding: 6px 0;">Works alongside git, your editor, your workflow</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-cyan); letter-spacing: 0.5px;">CONSOLE</h3>
+          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: var(--text-secondary); font-size: 14px;">
+            <li style="padding: 6px 0;">Inspect and edit every claim, with provenance</li>
+            <li style="padding: 6px 0;">Review queue for proposed knowledge</li>
+            <li style="padding: 6px 0;">Promotion ladder: local &rarr; workspace &rarr; org</li>
+            <li style="padding: 6px 0;">Sessions, sources, and model picker</li>
+            <li style="padding: 6px 0;">The substrate is your data &mdash; exportable, always</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. WHAT FEEDS THE SUBSTRATE -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Sources</span>
+        <h2>What feeds the substrate</h2>
+        <p>Structured org memory &mdash; claims with provenance and confidence &mdash; built from ingestion and from what your agents learn. Refreshes incrementally on commit.</p>
+      </div>
+
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 960px; margin: 0 auto;">
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR CODE</h3>
+          <p style="color: var(--text-secondary);">An entity graph over the codebase &mdash; structure, interfaces, tests, configs &mdash; with claims extracted and linked to the entities they describe.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR SESSIONS</h3>
+          <p style="color: var(--text-secondary);">Findings, root causes, failed paths. The agent's own write-back is gated &mdash; proposed knowledge goes through review before it becomes org truth.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">GIT HISTORY</h3>
+          <p style="color: var(--text-secondary);">Code-change rationale captured at commit time. The <em>why</em> behind changes &mdash; knowledge that never existed in any document &mdash; persists beyond the merge.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR DOCS</h3>
+          <p style="color: var(--text-secondary);">Architecture docs, runbooks, ADRs &mdash; extracted into structured claims and linked into the same graph as the code they describe.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">DATABRICKS UC</h3>
+          <p style="color: var(--text-secondary);">Unity Catalog metadata, table and column lineage, notebook&harr;table references &mdash; the lakehouse edition grounds agents in your data platform itself.</p>
+        </div>
+        <div class="feature-card">
+          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR TEAM</h3>
+          <p style="color: var(--text-secondary);">The promotion ladder turns one engineer's finding into the whole team's prior &mdash; after review. The second engineer never rediscovers the first one's fix.</p>
+        </div>
+      </div>
+
+      <!-- Beta -->
+      <div style="max-width: 640px; margin: 48px auto 0; text-align: center;">
+        <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Private beta &mdash; design partners</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 20px;">We onboard one team at a time: ingest your repos and docs, write a golden-question acceptance set with you, and run the flywheel demo on your own code &mdash; cold fail, teach once, warm pass.</p>
+        <div class="hero-actions" style="margin-top: 0;">
+          <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" class="btn btn-primary">Request beta access</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. RETRIEVAL -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Not more context. Better context.</h2>
+        <p>Hybrid retrieval &mdash; vector, lexical, graph, rerank &mdash; selects only what matters for each task, measured on a frozen canonical bench.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"add caching to the user service"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
+            <li style="padding: 4px 0;">&#8594; caching convention (Redis, 15m TTL)</li>
+            <li style="padding: 4px 0;">&#8594; user service architecture decision</li>
+            <li style="padding: 4px 0;">&#8594; existing cache utility code</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"fix the flaky order test"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
+            <li style="padding: 4px 0;">&#8594; known flaky-test finding (race condition)</li>
+            <li style="padding: 4px 0;">&#8594; order service test patterns</li>
+            <li style="padding: 4px 0;">&#8594; CI environment differences finding</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"refactor billing to use the new API"</p>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
+            <li style="padding: 4px 0;">&#8594; API migration decision + rationale</li>
+            <li style="padding: 4px 0;">&#8594; billing module dependency graph</li>
+            <li style="padding: 4px 0;">&#8594; error handling convention</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. MEETS YOU WHERE YOU WORK -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Meets developers where they already work</h2>
+        <p>Terminal-native agent. And the substrate serves any MCP client &mdash; Claude Code, Cursor, your editor.</p>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
         <div>
@@ -154,10 +403,10 @@
               <span class="terminal-title">terminal</span>
             </div>
             <div class="terminal-body">
-              <div class="terminal-line"><span class="terminal-prompt">$</span> lakecode "why does the auth test fail on CI?"</div>
+              <div class="terminal-line"><span class="terminal-prompt">$</span> revy chat "why does the auth test fail on CI?"</div>
               <div class="terminal-line dim">&nbsp;</div>
-              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: auth refactor (3 days ago)</div>
-              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Memory: CI env differs from local</div>
+              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Finding: auth refactor (3 days ago)</div>
+              <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Finding: CI env differs from local</div>
               <div class="terminal-line dim">  <span class="t-green">&#10003;</span> Test: auth.test.ts line 42 assertion</div>
               <div class="terminal-line dim">&nbsp;</div>
               <div class="terminal-line">  The token expiry was changed from 1h to 15m</div>
@@ -169,31 +418,31 @@
         <div>
           <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px;">
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Runs in your terminal</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Works alongside git, your editor, and your existing workflow. No new windows.</p>
+                <strong style="color: var(--text);">Runs in your terminal</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">A full coding agent alongside git, your editor, and your existing workflow. No new windows.</p>
               </div>
             </li>
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Natural language or slash commands</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Describe what you need in plain English, or use structured commands for repeatable workflows.</p>
+                <strong style="color: var(--text);">Grounded before it starts</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">Auto-primes from the substrate at session start, and persists what it learns &mdash; including rationale at commit time.</p>
               </div>
             </li>
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Reads your project in place</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">No uploading, syncing, or indexing step. lakecode reads your local project and integrates with git context.</p>
+                <strong style="color: var(--text);">MCP: the substrate as a service</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">Your org's memory grounds Claude Code, Cursor, and any MCP client &mdash; not just Revy.</p>
               </div>
             </li>
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Works with any language or framework</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">TypeScript, Python, Rust, Go, Java &mdash; if it lives in a repo, lakecode can work with it.</p>
+                <strong style="color: var(--text);">Any language or framework</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">TypeScript, Python, Rust, Go, Java &mdash; if it lives in a repo, Revy can learn it.</p>
               </div>
             </li>
           </ul>
@@ -202,324 +451,63 @@
     </div>
   </section>
 
-  <!-- 5. MEMORY COMPOUNDS -->
+  <!-- 11. ENTERPRISE / DATABRICKS -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Every session makes the next one smarter</h2>
-        <p>Memory compounds over time. The more you use lakecode, the less context you need to provide.</p>
-      </div>
-      <div class="features-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 880px; margin: 0 auto;">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">ARCHITECTURE DECISIONS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Why the team chose event sourcing. Why the API uses camelCase. Why auth is handled at the gateway. Decisions persist so agents stop re-litigating them.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">DEBUGGING FINDINGS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Root causes, environment quirks, and known failure modes. When a similar error appears, the agent already knows what was tried and what worked.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">TEAM CONVENTIONS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Error handling patterns. Test structure. Naming standards. Import ordering. The unwritten rules that make code feel like it belongs in your codebase.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="color: #4ecdc4; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.5px;">TEST OUTCOMES</h3>
-          <p style="color: rgba(255,255,255,0.6);">Which tests are flaky and why. Which edge cases have been validated. What coverage gaps exist. Agents write better tests because they know what has already been tested.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5b. WHAT FEEDS THE SUBSTRATE -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Sources</span>
-        <h2>What feeds the substrate</h2>
-        <p>lakecode starts learning from your first session. Connect more sources to accelerate.</p>
-      </div>
-
-      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 960px; margin: 0 auto;">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR CODE</h3>
-          <p style="color: rgba(255,255,255,0.6);">Repo structure, imports, interfaces, test files, configs. lakecode reads the project in place &mdash; no indexing step, no upload.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR SESSIONS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Findings, fixes, failed approaches, root causes. Every debugging session can write durable memory that future sessions draw from.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR PRs</h3>
-          <p style="color: rgba(255,255,255,0.6);">Design decisions, rationale, review comments, rejected approaches. The reasoning behind changes persists beyond the merge.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR DOCS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Architecture docs, runbooks, ADRs, Confluence pages. Structured knowledge extracted and linked to the entities they describe.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR TEAM</h3>
-          <p style="color: rgba(255,255,255,0.6);">Promoted findings, shared constraints, conventions. Individual memory becomes team knowledge through a review process.</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08);">
-          <h3 style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.5px;">YOUR TESTS</h3>
-          <p style="color: rgba(255,255,255,0.6);">Test outcomes, flaky tests, coverage gaps, edge cases validated. Agents write better tests because they know what has been tested.</p>
-        </div>
-      </div>
-
-      <!-- Getting Started -->
-      <div style="max-width: 600px; margin: 48px auto 0; text-align: center;">
-        <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Get started in 30 seconds</h3>
-        <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 20px;">lakecode starts learning from your first session. No configuration required.</p>
-        <div class="hero-terminal" style="margin: 0 auto; max-width: 480px; text-align: left;">
-          <div class="terminal-bar">
-            <span class="terminal-dot" style="background: #ff5f57;"></span>
-            <span class="terminal-dot" style="background: #febc2e;"></span>
-            <span class="terminal-dot" style="background: #28c840;"></span>
-          </div>
-          <div class="terminal-body">
-            <div><span style="color: var(--text-dim);">$</span> <span style="color: var(--green);">npm install -g lakecode</span></div>
-            <div><span style="color: var(--text-dim);">$</span> <span style="color: var(--green);">lakecode init</span></div>
-            <div><span style="color: var(--text-dim);">$</span> <span style="color: var(--green);">lakecode "explain this module"</span></div>
-            <div style="margin-top: 8px; color: var(--text-dim);"># Memory starts building from session one.</div>
-            <div style="color: var(--text-dim);"># Connect sources to accelerate.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. CONTEXT COMPILER -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Not more context. Better context.</h2>
-        <p>The context compiler selects only what matters for each task &mdash; reducing noise and token waste.</p>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"add caching to the user service"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
-            <li style="padding: 4px 0;">&#8594; caching convention (Redis, 15m TTL)</li>
-            <li style="padding: 4px 0;">&#8594; user service architecture memo</li>
-            <li style="padding: 4px 0;">&#8594; existing cache utility code</li>
-          </ul>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"fix the flaky order test"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
-            <li style="padding: 4px 0;">&#8594; known flaky test finding (race condition)</li>
-            <li style="padding: 4px 0;">&#8594; order service test patterns</li>
-            <li style="padding: 4px 0;">&#8594; CI environment differences memo</li>
-          </ul>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin-bottom: 12px;">"refactor billing to use the new API"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: rgba(255,255,255,0.5);">
-            <li style="padding: 4px 0;">&#8594; new API migration decision doc</li>
-            <li style="padding: 4px 0;">&#8594; billing module dependencies map</li>
-            <li style="padding: 4px 0;">&#8594; error handling convention</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. BENCHMARKS -->
-  <section id="benchmarks" class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Same answers. A third of the cost.</h2>
-        <p>Measured, not estimated &mdash; the same model answers on both sides, so the only variable is the context lakecode compiles.</p>
-      </div>
-      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
-          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">3.4&times;</p>
-          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">cheaper per question than Claude Code</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
-          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">0</p>
-          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">wrong answers in 33 graded responses</p>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 24px rgba(0,200,255,0.05); text-align: center;">
-          <p style="font-size: 48px; font-weight: 700; color: #4ecdc4; margin: 0 0 8px 0; font-family: 'JetBrains Mono', monospace;">5.4&times;</p>
-          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 14px;">cheaper on cross-cutting questions</p>
-        </div>
-      </div>
-      <div style="margin-top: 40px; padding: 24px 32px; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; background: rgba(255,255,255,0.02); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-        <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #4ecdc4; margin: 0 0 12px 0;">Stage 1 benchmark &middot; Databricks SDK &middot; May 2026</p>
-        <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 20px 0;">11 questions &times; 3 replicates, graded by a blind LLM judge. Both systems answer with the same model (Claude Sonnet 4.6) &mdash; so the gap is the compiled context, not the model.</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; font-size: 14px;">
-          <div>
-            <p style="color: #4ecdc4; margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">lakecode</p>
-            <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.6);">
-              <li style="padding: 3px 0;">Mean cost / question: <strong style="color: #e0e0e0;">$0.033</strong></li>
-              <li style="padding: 3px 0;">Correct: 32 / 33 <span style="color: rgba(255,255,255,0.4);">(+1 partial)</span></li>
-              <li style="padding: 3px 0;">Wrong answers: <strong style="color: #e0e0e0;">0</strong></li>
-            </ul>
-          </div>
-          <div>
-            <p style="color: rgba(255,255,255,0.4); margin: 0 0 8px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Claude Code</p>
-            <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.6);">
-              <li style="padding: 3px 0;">Mean cost / question: <strong style="color: #e0e0e0;">$0.113</strong></li>
-              <li style="padding: 3px 0;">Correct: 33 / 33</li>
-              <li style="padding: 3px 0;">Wrong answers: 0</li>
-            </ul>
-          </div>
-        </div>
-        <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin: 20px 0 0 0; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">Cheaper on <em>every</em> question &mdash; 2.6&times; on common APIs, 3.4&times; on library internals, 5.4&times; on cross-cutting questions that span the codebase.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. SKILLS -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Makes skills real</h2>
-        <p>Static skill files describe what to do. lakecode-backed skills know how your team actually does it.</p>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-        <div style="border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 28px; box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.4); margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">Static skill file</p>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.8;">
-            <div># How to add a new API endpoint</div>
-            <div>1. Create route in /routes</div>
-            <div>2. Add validation middleware</div>
-            <div>3. Write tests</div>
-            <div>4. Update OpenAPI spec</div>
-            <div>&nbsp;</div>
-            <div style="color: rgba(255,255,255,0.3);">// Generic. No team context.</div>
-            <div style="color: rgba(255,255,255,0.3);">// Stale after the first refactor.</div>
-          </div>
-        </div>
-        <div style="border: 1px solid rgba(78,205,196,0.2); border-radius: 8px; padding: 28px; box-shadow: 0 0 24px rgba(78,205,196,0.06);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4ecdc4; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">lakecode-backed skill</p>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8;">
-            <div># How to add a new API endpoint</div>
-            <div>+ route pattern from /routes/users.ts</div>
-            <div>+ zod validation (team convention)</div>
-            <div>+ test pattern from auth.test.ts</div>
-            <div>+ error codes from error-handling memo</div>
-            <div>&nbsp;</div>
-            <div style="color: #4ecdc4;">// Compiled from real code + memory.</div>
-            <div style="color: #4ecdc4;">// Updates as your codebase evolves.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. WEB UI -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2>Terminal-native for engineers. Web-native for team memory.</h2>
-        <p>Two interfaces, one memory layer.</p>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4ecdc4; letter-spacing: 0.5px;">TERMINAL (CLI)</h3>
-          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: rgba(255,255,255,0.6); font-size: 14px;">
-            <li style="padding: 6px 0;">Write code with compiled context</li>
-            <li style="padding: 6px 0;">Debug with memory of past findings</li>
-            <li style="padding: 6px 0;">Run skills backed by real conventions</li>
-            <li style="padding: 6px 0;">Capture new memories during sessions</li>
-            <li style="padding: 6px 0;">Natural language or slash commands</li>
-          </ul>
-        </div>
-        <div class="feature-card" style="border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <h3 style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4ecdc4; letter-spacing: 0.5px;">WEB DASHBOARD</h3>
-          <ul style="list-style: none; padding: 0; margin: 16px 0 0 0; color: rgba(255,255,255,0.6); font-size: 14px;">
-            <li style="padding: 6px 0;">Browse and search all team memories</li>
-            <li style="padding: 6px 0;">Edit, tag, and organize decisions</li>
-            <li style="padding: 6px 0;">Review memory usage and coverage</li>
-            <li style="padding: 6px 0;">Manage team access and permissions</li>
-            <li style="padding: 6px 0;">Track which memories drive the most value</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. ENTERPRISE -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Scales into governed engineering memory</h2>
-        <p>For teams that need control, compliance, and integration with existing infrastructure.</p>
+        <h2>Owned, not rented</h2>
+        <p>Your models are rented. Your memory is owned &mdash; and it compounds with use.</p>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;">
         <div>
           <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px;">
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Governed memory policies</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Control what gets remembered, who can access it, and how long it persists. Approval workflows for team-wide memories.</p>
+                <strong style="color: var(--text);">A compounding asset</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">Every session's exploration becomes the next session's prior. The discount and the correctness edge both grow with usage.</p>
               </div>
             </li>
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">SSO and SCIM provisioning</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Integrate with your identity provider. Automatic user provisioning and de-provisioning.</p>
+                <strong style="color: var(--text);">Write access &mdash; the difference vs RAG</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">Doc-RAG reads what was written. Revy writes what was <em>learned</em> &mdash; incident rationale, failed paths, conventions that never existed in any document.</p>
               </div>
             </li>
             <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
+              <span style="color: var(--green); font-size: 18px; line-height: 1.4;">&#10003;</span>
               <div>
-                <strong style="color: #e0e0e0;">Audit logging</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Full audit trail of memory access, creation, and compilation. Export to your SIEM.</p>
-              </div>
-            </li>
-            <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
-              <div>
-                <strong style="color: #e0e0e0;">Private deployment</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Run lakecode in your own infrastructure. Your data never leaves your environment.</p>
-              </div>
-            </li>
-            <li style="display: flex; gap: 12px; align-items: flex-start;">
-              <span style="color: #4ecdc4; font-size: 18px; line-height: 1.4;">&#10003;</span>
-              <div>
-                <strong style="color: #e0e0e0;">Custom model routing</strong>
-                <p style="color: rgba(255,255,255,0.5); margin: 4px 0 0 0; font-size: 14px;">Bring your own LLM endpoints. Route through your proxy. Use models approved by your security team.</p>
+                <strong style="color: var(--text);">Your data, exportable</strong>
+                <p style="color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">The substrate is the customer's data &mdash; always exportable. The product is what makes it compound: retrieval tuning, promotion governance, platform projection.</p>
               </div>
             </li>
           </ul>
         </div>
-        <div style="border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 32px; box-shadow: 0 0 20px rgba(0,200,255,0.03);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4ecdc4; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">Databricks-native</p>
-          <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 16px 0;">For Databricks customers, lakecode integrates directly with your lakehouse. Memory is stored in Unity Catalog. Access follows your existing governance model.</p>
-          <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.5); font-size: 14px;">
-            <li style="padding: 4px 0;">&#8594; Memory backed by Delta tables</li>
-            <li style="padding: 4px 0;">&#8594; Unity Catalog access controls</li>
-            <li style="padding: 4px 0;">&#8594; Workspace-level isolation</li>
-            <li style="padding: 4px 0;">&#8594; Integrates with MLflow tracking</li>
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 32px; background: var(--surface);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-cyan); margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px;">The Databricks edition</p>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 16px 0;">Grounded in your lakehouse. Governed in Unity Catalog. Revy ingests UC lineage and notebook graphs &mdash; and projects what your agents know back into UC, so your platform team governs agents with the tooling they already trust.</p>
+          <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); font-size: 14px;">
+            <li style="padding: 4px 0;">&#8594; Ingests UC metadata, lineage, notebooks</li>
+            <li style="padding: 4px 0;">&#8594; Agent knowledge projected into UC lineage &amp; audit</li>
+            <li style="padding: 4px 0;">&#8594; Ships as an in-workspace Databricks App</li>
           </ul>
           <div style="margin-top: 20px;">
-            <a href="/enterprise" class="btn btn-secondary" style="font-size: 14px;">Learn more</a>
+            <a href="/enterprise" class="btn btn-secondary" style="font-size: 14px;">The enterprise story</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 11. FINAL CTA -->
+  <!-- 12. FINAL CTA -->
   <section class="section cta-section">
     <div class="container">
-      <h2>Stop rebuilding context every session</h2>
-      <p>Install lakecode in 30 seconds. Start building memory that compounds.</p>
-      <div class="hero-install" style="margin-top: 32px;">
-        <div class="install-cmd" onclick="navigator.clipboard.writeText('npm install -g lakecode');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),2000)">
-          <code><span class="terminal-prompt">$</span> npm install -g lakecode</code>
-          <span class="copy-hint">click to copy</span>
-          <span class="copy-done">copied!</span>
-        </div>
-      </div>
-      <div class="hero-actions">
-        <a href="/signin" class="btn btn-primary">Get Started Free</a>
-        <a href="/docs" class="btn btn-secondary">View Docs</a>
+      <h2>Stop re-teaching your agent</h2>
+      <p>Revy is in private beta with design-partner teams. Your repo, your golden questions, the flywheel demo on your own code.</p>
+      <div class="hero-actions" style="margin-top: 32px;">
+        <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access" class="btn btn-primary">Request beta access</a>
+        <a href="/benchmarks" class="btn btn-secondary">See the proof</a>
       </div>
     </div>
   </section>
@@ -529,16 +517,15 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo"><img src="/logo-dark.png" alt="lakecode" class="logo-icon logo-dark"><img src="/logo-light.png" alt="lakecode" class="logo-icon logo-light"> lakecode</span>
-        <p>Terminal-native AI coding assistant powered by live engineering memory. It remembers your codebase, team findings, decisions, and tests &mdash; then compiles the right context for every task.</p>
+        <p>Revy &mdash; the coding agent with a governed, compounding memory. It learns your systems once, gets cheaper and more correct every session, and lets the org see and govern everything it knows.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
           <a href="#how-it-works">How it works</a>
-          <a href="#benchmarks">Benchmarks</a>
+          <a href="#benchmarks">Proof</a>
           <a href="/pricing">Pricing</a>
           <a href="/enterprise">Enterprise</a>
-          <a href="/dashboard">Dashboard</a>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
@@ -547,11 +534,10 @@
           <a href="mailto:hello@lakecode.ai">Contact</a>
         </div>
         <div class="footer-col">
-          <h4>Docs</h4>
-          <a href="/docs/getting-started">Getting started</a>
-          <a href="/docs/commands">Commands</a>
-          <a href="/docs/configuration">Configuration</a>
-          <a href="/docs/security">Safety</a>
+          <h4>Resources</h4>
+          <a href="/docs">Docs</a>
+          <a href="/benchmarks">Benchmarks &amp; method</a>
+          <a href="mailto:sachin@lakecode.ai?subject=Revy%20beta%20access">Beta access</a>
         </div>
       </div>
     </div>
