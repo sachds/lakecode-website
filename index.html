@@ -48,7 +48,7 @@
         lakecode is the coding agent with a governed, compounding memory. It learns your systems once, gets cheaper and more correct every session &mdash; and your org can see and govern everything it knows.
       </p>
       <div class="hero-actions">
-        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access" class="btn btn-primary">Request beta access</a>
+        <a href="mailto:sachin@lakecode.ai?subject=lakecode%20beta%20access" class="btn btn-primary">Request beta access &rarr;</a>
         <a href="#benchmarks" class="btn btn-secondary">See the proof</a>
       </div>
       <p style="color: var(--text-dim); font-size: 0.8125rem; margin-top: 16px;">Private beta &mdash; we onboard design-partner teams personally, one at a time.</p>
@@ -83,18 +83,21 @@
         <h2>Building is easy. Maintaining is hard.</h2>
         <p>Every team can ship v1. The hard part is year two &mdash; when the original authors have moved on, the docs are stale, and the only record of why things work is scattered across closed PRs and Slack threads. Coding agents make this worse, not better.</p>
       </div>
-      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="feature-card">
-          <h3 style="color: var(--red);">Amnesiac</h3>
-          <p style="color: var(--text-secondary);">Every session starts cold and re-derives your codebase's quirks, internal APIs, and conventions. You pay the same exploration cost in tokens and time, forever.</p>
+      <div class="num-row">
+        <div class="num-block">
+          <p class="num-n">01</p>
+          <h3>Amnesiac.</h3>
+          <p>Every session starts cold and re-derives your codebase's quirks, internal APIs, and conventions. You pay the same exploration cost in tokens and time, forever.</p>
         </div>
-        <div class="feature-card">
-          <h3 style="color: var(--signal-caution);">Confidently wrong</h3>
-          <p style="color: var(--text-secondary);">Why a constant is 4471. Which IDs are valid. What failed last quarter. The knowledge that decides correctness was never written anywhere a model can see &mdash; no context window, fine-tune, or doc-RAG reaches it.</p>
+        <div class="num-block">
+          <p class="num-n">02</p>
+          <h3>Confidently wrong.</h3>
+          <p>Why a constant is 4471. Which IDs are valid. What failed last quarter. The knowledge that decides correctness was never written anywhere a model can see &mdash; no context window, fine-tune, or doc-RAG reaches it.</p>
         </div>
-        <div class="feature-card">
-          <h3 style="color: var(--signal-info);">Ungovernable</h3>
-          <p style="color: var(--text-secondary);">What does the agent know? Where did it learn it? Who approved it? Black-box agent memory is a compliance non-starter &mdash; especially on a data platform.</p>
+        <div class="num-block">
+          <p class="num-n">03</p>
+          <h3>Ungovernable.</h3>
+          <p>What does the agent know? Where did it learn it? Who approved it? Black-box agent memory is a compliance non-starter &mdash; especially on a data platform.</p>
         </div>
       </div>
     </div>
@@ -107,34 +110,26 @@
         <h2>One loop: work &rarr; capture &rarr; govern &rarr; ground</h2>
         <p>Every session's exploration becomes the next session's prior. That's the whole product.</p>
       </div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h3>Work</h3>
-            <p>lakecode is a full coding agent in your terminal. It auto-primes from the substrate at session start &mdash; your org's decisions, constraints, findings, and failed paths &mdash; then gets to work.</p>
-          </div>
+      <div class="num-row num-row--4">
+        <div class="num-block">
+          <p class="num-n">01</p>
+          <h3>Work.</h3>
+          <p>lakecode is a full coding agent in your terminal. It auto-primes from the substrate at session start &mdash; your org's decisions, constraints, findings, and failed paths &mdash; then gets to work.</p>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h3>Capture</h3>
-            <p>What the session learns persists: findings, decisions, failed paths &mdash; and code-change rationale captured at commit time. Knowledge that never existed in any document.</p>
-          </div>
+        <div class="num-block">
+          <p class="num-n">02</p>
+          <h3>Capture.</h3>
+          <p>What the session learns persists: findings, decisions, failed paths &mdash; and code-change rationale captured at commit time. Knowledge that never existed in any document.</p>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h3>Govern</h3>
-            <p>Nothing becomes org truth silently. Claims carry provenance and confidence, flow through a review queue, and climb a promotion ladder: local &rarr; workspace &rarr; org.</p>
-          </div>
+        <div class="num-block">
+          <p class="num-n">03</p>
+          <h3>Govern.</h3>
+          <p>Nothing becomes org truth silently. Claims carry provenance and confidence, flow through a review queue, and climb a promotion ladder: local &rarr; workspace &rarr; org.</p>
         </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h3>Ground</h3>
-            <p>The next session &mdash; yours or a teammate's &mdash; starts already knowing. Cheaper where you'd already be right, correct where you'd be wrong. The loop compounds.</p>
-          </div>
+        <div class="num-block">
+          <p class="num-n">04</p>
+          <h3>Ground.</h3>
+          <p>The next session &mdash; yours or a teammate's &mdash; starts already knowing. Cheaper where you'd already be right, correct where you'd be wrong. The loop compounds.</p>
         </div>
       </div>
     </div>
@@ -353,38 +348,19 @@
     </div>
   </section>
 
-  <!-- 9. RETRIEVAL -->
+  <!-- 9. COMPILE, DON'T FETCH -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Not more context. Better context.</h2>
-        <p>Hybrid retrieval &mdash; vector, lexical, graph, rerank &mdash; selects only what matters for each task, measured on a frozen canonical bench.</p>
+        <span class="section-label">Compile, don't fetch</span>
+        <h2>Context is compiled, not searched for.</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-        <div class="feature-card">
-          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"add caching to the user service"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
-            <li style="padding: 4px 0;">&#8594; caching convention (Redis, 15m TTL)</li>
-            <li style="padding: 4px 0;">&#8594; user service architecture decision</li>
-            <li style="padding: 4px 0;">&#8594; existing cache utility code</li>
-          </ul>
+      <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;">
+        <div style="max-width: 48ch;">
+          <p style="color: var(--text-secondary); line-height: 1.7; margin: 0 0 20px 0;">Fetching searches when the question arrives &mdash; pull chunks, rank them, cram the window, hope. The discovery work happens at the worst possible moment, every time, at full price.</p>
+          <p style="color: var(--text-secondary); line-height: 1.7; margin: 0;">lakecode does that work ahead of time. Knowledge is committed as claims, connected, and kept current &mdash; hybrid retrieval over vector, lexical, and graph, measured on a frozen canonical bench &mdash; so when an agent asks, the context is already assembled. Compiled, attributed, exact.</p>
         </div>
-        <div class="feature-card">
-          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"fix the flaky order test"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
-            <li style="padding: 4px 0;">&#8594; known flaky-test finding (race condition)</li>
-            <li style="padding: 4px 0;">&#8594; order service test patterns</li>
-            <li style="padding: 4px 0;">&#8594; CI environment differences finding</li>
-          </ul>
-        </div>
-        <div class="feature-card">
-          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent-cyan); margin-bottom: 12px;">"refactor billing to use the new API"</p>
-          <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--text-secondary);">
-            <li style="padding: 4px 0;">&#8594; API migration decision + rationale</li>
-            <li style="padding: 4px 0;">&#8594; billing module dependency graph</li>
-            <li style="padding: 4px 0;">&#8594; error handling convention</li>
-          </ul>
-        </div>
+        <p class="kicker">Fetch guesses.<br>lakecode knows.</p>
       </div>
     </div>
   </section>
