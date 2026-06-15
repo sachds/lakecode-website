@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://lakecode.ai
+Sitemap: https://lakecode.ai/sitemap.xml

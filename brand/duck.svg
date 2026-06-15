@@ -1,0 +1,10 @@
+<svg width="96" height="64" viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="the lakecode duck">
+  <!-- the duck: the only warm color in the brand (#FFCA3A reserved) -->
+  <path d="M24 38 L17 29 L31 33 Z" fill="#FFCA3A"/>
+  <ellipse cx="44" cy="42" rx="21" ry="11" fill="#FFCA3A"/>
+  <circle cx="59" cy="23" r="11" fill="#FFCA3A"/>
+  <path d="M69 20 Q79 21.5 69 27 Q66.5 23.5 69 20 Z" fill="#F5A623"/>
+  <circle cx="62.5" cy="20" r="1.9" fill="#0B1220"/>
+  <!-- it floats on the lake: azure ripple, works on light and dark -->
+  <path d="M6 50 Q14 46 22 50 T38 50 T54 50 T70 50 T86 50" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+</svg>
